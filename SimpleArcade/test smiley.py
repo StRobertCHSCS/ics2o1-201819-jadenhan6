@@ -5,8 +5,9 @@ import arcade
 WIDTH = 640
 HEIGHT = 480
 
-x = 100
-y = 100
+player_x = WIDTH / 2
+player_y = HEIGHT / 2
+
 
 # FUNCTIONS / "def" defines the function
 
@@ -21,7 +22,10 @@ def on_draw():
     arcade.start_render()
     # Draw in here...
     # arcade.draw_shape_etc (x-coord, y-coord, radius, colour)
-    arcade.draw_circle_filled(100, 100, 25, arcade.color.BLUE)
+    arcade.draw_circle_filled(player_x, player_y, 200, arcade.color.YELLOW)
+    arcade.draw_ellipse_filled(255, 300, 20, 45, arcade.color.BLACK)
+    arcade.draw_ellipse_filled(395, 300, 20, 45, arcade.color.BLACK)
+    arcade.draw_xywh_rectangle_filled(265, 135, 120, 60, arcade.color.BLACK)
 
 
 # Key input function.
@@ -50,7 +54,6 @@ def setup():
     window.on_key_press = on_key_press
     window.on_key_release = on_key_release
     window.on_mouse_press = on_mouse_press
-
     arcade.run()
 
 

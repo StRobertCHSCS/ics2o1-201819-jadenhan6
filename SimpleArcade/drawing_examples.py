@@ -26,6 +26,8 @@ def on_draw():
     arcade.draw_text("draw_point", 3, 405, arcade.color.BLACK, 12)
     arcade.draw_point(60, 495, arcade.color.RED, 10)
 
+
+
     # Draw a set of points
     arcade.draw_text("draw_points", 123, 405, arcade.color.BLACK, 12)
     point_list = ((165, 495),

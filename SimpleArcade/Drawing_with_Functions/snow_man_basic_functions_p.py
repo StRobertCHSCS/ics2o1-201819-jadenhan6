@@ -20,10 +20,12 @@ def draw_snow_person(x, y):
     arcade.draw_circle_filled(300 + x, 200 + y, 60, arcade.color.WHITE)
     arcade.draw_circle_filled(300 + x, 280 + y, 50, arcade.color.WHITE)
     arcade.draw_circle_filled(300 + x, 340 + y, 40, arcade.color.WHITE)
+    arcade.draw_triangle_filled(300 + x, 330 + y, 295 + x, 345 + y, 305 + x, 345 + y, arcade.color.ORANGE)
 
     # Eyes
     arcade.draw_circle_filled(285 + x, 350 + y, 5, arcade.color.BLACK)
     arcade.draw_circle_filled(315 + x, 350 + y, 5, arcade.color.BLACK)
+
 
 def on_update(delta_time):
     pass

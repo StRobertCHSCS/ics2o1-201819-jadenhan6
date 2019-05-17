@@ -4,6 +4,9 @@ import arcade
 WIDTH = 800
 HEIGHT = 600
 
+# def + name of the thing(parameters)
+
+
 def draw_grass():
     """ Draw the ground """
     arcade.draw_lrtb_rectangle_filled(0, WIDTH, HEIGHT / 3, 0, arcade.color.AIR_SUPERIORITY_BLUE)
@@ -21,6 +24,9 @@ def draw_snow_person():
     arcade.draw_circle_filled(285, 350, 5, arcade.color.BLACK)
     arcade.draw_circle_filled(315, 350, 5, arcade.color.BLACK)
 
+    # Nose
+    arcade.draw_triangle_filled(300, 330, 295, 345, 305, 345, arcade.color.ORANGE)
+
 
 def on_update(delta_time):
     pass
@@ -28,8 +34,7 @@ def on_update(delta_time):
 
 def on_draw():
     arcade.start_render()
-    # Draw in here...
-    # Draw the ground
+    # Perform the two functions
     draw_grass()
     draw_snow_person()
 
