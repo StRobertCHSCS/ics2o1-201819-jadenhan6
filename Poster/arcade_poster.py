@@ -1,11 +1,8 @@
-# Basis for all Arcade programs; import the plugin to make it work.
 import arcade
 
-# Screen dimensions
 WIDTH = 640
 HEIGHT = 480
 
-# FUNCTIONS / "def" defines the function
 
 
 def on_update(delta_time):
