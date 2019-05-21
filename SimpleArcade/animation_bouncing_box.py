@@ -1,6 +1,5 @@
 import arcade
 
-
 WIDTH = 640
 HEIGHT = 480
 
@@ -11,8 +10,8 @@ RECT_HEIGHT = 50
 
 center_x = 100      # Initial x position
 center_y = 50       # Initial y position
-delta_x = 3       # change in x
-delta_y = 1      # change in y
+delta_x = 3         # change in x
+delta_y = 1         # change in y
 
 
 def on_update(delta_time):

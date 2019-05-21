@@ -6,7 +6,10 @@ HEIGHT = 600
 
 # x position of the snow person
 snow_person_x = 150
-snow_delta_x = 3
+snow_delta_x = 5
+snow_person_y = 50
+snow_delta_y = 2
+
 
 def draw_grass():
     """ Draw the ground """
@@ -17,25 +20,26 @@ def draw_snow_person(x, y):
     """ Draw a snow person """
 
     # Draw a point at x, y for reference
-    arcade.draw_point(x, y, arcade.color.RED, 5)
+    arcade.draw_point(snow_person_x, snow_person_y, arcade.color.RED, 5)
 
     # Snow
-    arcade.draw_circle_filled(300 + x, 200 + y, 60, arcade.color.RED_DEVIL)
-    arcade.draw_circle_filled(300 + x, 280 + y, 50, arcade.color.WHITE)
-    arcade.draw_circle_filled(300 + x, 340 + y, 40, arcade.color.ROYAL_BLUE)
+    arcade.draw_circle_filled(x, 200 + y, 60, arcade.color.RED_DEVIL)
+    arcade.draw_circle_filled(x, 280 + y, 50, arcade.color.WHITE)
+    arcade.draw_circle_filled(x, 340 + y, 40, arcade.color.ROYAL_BLUE)
 
     # Eyes
-    arcade.draw_circle_filled(285 + x, 350 + y, 5, arcade.color.YELLOW)
-    arcade.draw_circle_filled(315 + x, 350 + y, 5, arcade.color.YELLOW)
+    arcade.draw_circle_filled(-15 + x, 350 + y, 5, arcade.color.YELLOW)
+    arcade.draw_circle_filled(15 + x, 350 + y, 5, arcade.color.YELLOW)
 
 
 def on_update(delta_time):
-    global snow_person_x, snow_delta_x
+    global snow_person_x, snow_delta_x, snow_person_y, snow_delta_y
 
     # update position of snow person which each pass of the event loop
     snow_person_x += snow_delta_x
+    snow_person_y += snow_delta_y
 
-    if snow_person_x < 115 // 2 or snow_person_x > WIDTH - 15 // 2:
+    if snow_person_x - 30 < 30 or snow_person_x + 30 > WIDTH - 30:
         snow_delta_x *= -1
 
 
@@ -43,7 +47,7 @@ def on_draw():
     arcade.start_render()
 
     draw_grass()
-    draw_snow_person(snow_person_x, 50)
+    draw_snow_person(snow_person_x, snow_person_y)
 
     draw_snow_person(175, 50)
     draw_snow_person(325, 50)
