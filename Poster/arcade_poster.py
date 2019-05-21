@@ -5,9 +5,6 @@ import arcade
 WIDTH = 640
 HEIGHT = 480
 
-x = 100
-y = 100
-
 # FUNCTIONS / "def" defines the function
 
 
