@@ -4,7 +4,6 @@ WIDTH = 640
 HEIGHT = 480
 
 
-
 def on_update(delta_time):
     pass
 
