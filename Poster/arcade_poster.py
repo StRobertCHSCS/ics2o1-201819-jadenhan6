@@ -8,30 +8,22 @@ HEIGHT = 480
 # FUNCTIONS / "def" defines the function
 
 
-# Updating / Refreshing function.
 def on_update(delta_time):
     pass
 
 
-# Drawing function.
 def on_draw():
     arcade.start_render()
-    # Draw in here...
-    # arcade.draw_shape_etc (x-coord, y-coord, radius, colour)
-    arcade.draw_circle_filled(100, 100, 25, arcade.color.BLUE)
 
 
-# Key input function.
 def on_key_press(key, modifiers):
     pass
 
 
-# Key release function.
 def on_key_release(key, modifiers):
     pass
 
 
-# Mouse click function
 def on_mouse_press(x, y, button, modifiers):
     pass
 
