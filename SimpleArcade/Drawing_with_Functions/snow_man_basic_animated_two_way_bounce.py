@@ -72,11 +72,11 @@ def on_update(delta_time):
 
     if snow_person_x1 < 60 or snow_person_x1 > WIDTH - 60:
         snow_delta_x1 *= -1
-    if snow_person_y1 > HEIGHT - 380 or snow_person_y1 + 200 < 250:
+    if snow_person_y1 > HEIGHT - 380 or snow_person_y1 < 50:
         snow_delta_y1 *= -1
     if snow_person_x2 < 60 or snow_person_x2 > WIDTH - 60:
         snow_delta_x2 *= -1
-    if snow_person_y2 > HEIGHT - 380 or snow_person_y2 + 200 < 250:
+    if snow_person_y2 > HEIGHT - 380 or snow_person_y2 < 50:
         snow_delta_y2 *= -1
 
 
