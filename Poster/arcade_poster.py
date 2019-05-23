@@ -4,6 +4,7 @@ import arcade
 WIDTH = 740
 HEIGHT = 785
 
+# Define text and underline heights, then delta (change) rates.
 text_height = 1000
 delta_y_text = 3
 underline_height = 990
@@ -40,7 +41,7 @@ def draw_title_things():
     scale = 0.17
     arcade.draw_texture_rectangle(650, text_height, scale * texture_2.width, scale * texture_2.height,
                                   texture_2)
-
+    
 
 def on_draw():
     arcade.start_render()
