@@ -1,5 +1,6 @@
 import arcade
 
+
 # Set constants for screen height and width
 WIDTH = 1080
 HEIGHT = 785
@@ -110,18 +111,18 @@ def draw_ransomware_intro():
     arcade.draw_line(12, 580, 290, 580, arcade.color.DARK_BLUE, 3)
 
     # BULLET POINT AND TEXT 1
-    arcade.draw_circle_filled(25, 515, 5, arcade.color.BLACK)
+    arcade.draw_circle_filled(25, 515, 5, arcade.color.DARK_BLUE)
     arcade.draw_text("A malware that forcefully encrypts data, \nand demands ransom to \"save\" malware-led",
                      35, 505, arcade.color.BLACK, 14, 0)
     arcade.draw_text("data destruction.", 35, 487, arcade.color.DARK_RED, 14)
 
     # BULLET POINT AND TEXT 2
-    arcade.draw_circle_filled(25, 455, 5, arcade.color.BLACK)
+    arcade.draw_circle_filled(25, 455, 5, arcade.color.DARK_BLUE)
     arcade.draw_text("If ransom isn't paid, the data is destroyed. \nNo guarantee of decryption either.",
                      35, 440, arcade.color.BLACK, 14)
 
     # BULLET POINT AND TEXT 3
-    arcade.draw_circle_filled(25, 420, 5, arcade.color.BLACK)
+    arcade.draw_circle_filled(25, 420, 5, arcade.color.DARK_BLUE)
     arcade.draw_text("e.g. WannaCry, CryptoLocker, etc.", 35, 415, arcade.color.RED, 14)
 
     # EXAMPLE IMAGE
@@ -155,9 +156,9 @@ def draw_facts_and_stats():
     arcade.draw_text("doubled", 805, 495, arcade.color.DARK_RED, 15, align="center", bold=True)
 
     # FACT 2, revealed by BUTTON 2 movement:
-    arcade.draw_text("Damage in finances due to ransomware \n attacks is set to  hit             "
+    arcade.draw_text("Damage in finances due to ransomware \n attacks is set to hit             "
                      "        in 2021.", 780, 440, arcade.color.BLACK, 14, align="left", bold=True)
-    arcade.draw_text("$6 trillion", 925, 440, arcade.color.DARK_RED, 14, align="center", bold=True)
+    arcade.draw_text("$6 trillion", 920, 440, arcade.color.DARK_RED, 14, align="center", bold=True)
 
     # FACT 3, revealed by BUTTON 3 movement:
     arcade.draw_text("77% of Canadian victims paid the ransom. \n Little to no cases had data actually decrypted.",
@@ -196,6 +197,48 @@ def draw_buttons():
     arcade.draw_text("Click to reveal...", button_3[0] + 70, 385, arcade.color.BLACK, 20, bold=True)
 
 
+def ransomware_sources():
+    # TOP LINE: start_x, start_y, end_x, end_y
+    arcade.draw_line(0, 375, 350, 375, arcade.color.DARK_RED, 4)
+    # BOTTOM LINE: start_x, start_y, end_x, end_y
+    arcade.draw_line(0, 275, 300, 275, arcade.color.DARK_RED, 4)
+    # CONNECTOR LINE: start_x, start_y, end_x, end_y
+    arcade.draw_line(350, 375, 300, 275, arcade.color.DARK_RED, 4)
+
+    # FILL the lines; rectangle
+    arcade.draw_xywh_rectangle_filled(0, 275, 300, 100, arcade.color.LIGHT_RED_OCHRE)
+    # FILL the lines; triangle
+    arcade.draw_triangle_filled(350, 375, 300, 375, 300, 275, arcade.color.LIGHT_RED_OCHRE)
+
+    # Header: "Ransomware - Stats and Facts"
+    arcade.draw_text("Sources of Ransomware", 20, 315, arcade.color.DARK_RED, 22, 0,
+                     "center", 'ARIAL', True)
+    arcade.draw_line(20, 310, 295, 310, arcade.color.DARK_RED, 3)
+
+    # BULLET POINT AND TEXT 1
+    arcade.draw_circle_filled(25, 250, 5, arcade.color.DARK_RED)
+    arcade.draw_text("Fake e-mails that look legit. Harbours \n an .exe file that will         "
+                     "     the device if run.", 35, 230, arcade.color.BLACK, 14)
+    arcade.draw_text("infect", 180, 230, arcade.color.DARK_RED, 14)
+
+    # BULLET POINT AND TEXT 2
+    arcade.draw_circle_filled(25, 195, 5, arcade.color.DARK_RED)
+    arcade.draw_text("Computer vulnerabilites; older software \n is subject to a                "
+                     "                of infecton.", 35, 185, arcade.color.BLACK, 14)
+    arcade.draw_text("higher chance", 145, 185, arcade.color.DARK_RED, 14)
+
+    # BULLET POINT AND TEXT 3
+    arcade.draw_circle_filled(25, 145, 5, arcade.color.DARK_RED)
+    arcade.draw_text("Lack of               "
+                     "        ; cannot detect malware \n when they do infect the device.", 35, 135,
+                     arcade.color.BLACK, 14)
+    arcade.draw_text("antiviruses", 90, 154, arcade.color.DARK_RED, 14)
+
+    # IMAGE AT BOTTOM
+    malware_2 = arcade.load_texture("textures/malware_2.png")
+    arcade.draw_texture_rectangle(150, 70, 0.25*malware_2.width, 0.25*malware_2.height, malware_2)
+
+
 def on_draw():
     arcade.start_render()
     make_background()
@@ -203,6 +246,7 @@ def on_draw():
     draw_ransomware_intro()
     draw_facts_and_stats()
     draw_buttons()
+    ransomware_sources()
 
 
 def on_mouse_press(x, y, button, modifiers):
