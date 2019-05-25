@@ -24,11 +24,13 @@ move_button_3 = False
 button_3_moved = False
 delta_x_button_3 = 0
 
+# Set button list to unpack and use later.
 button_1 = [780, 490, 290, 50]
 button_2 = [780, 430, 290, 50]
 button_3 = [780, 370, 290, 50]
 
 
+# Deals with title animation and button movement.
 def on_update(delta_time):
     global text_height, delta_y_text, underline_height, delta_y_underline, delta_x_button_1, button_1_moved,\
         delta_x_button_2, button_2_moved, delta_x_button_3, button_3_moved
@@ -114,7 +116,7 @@ def draw_ransomware_intro():
     arcade.draw_circle_filled(25, 515, 5, arcade.color.DARK_BLUE)
     arcade.draw_text("A malware that forcefully encrypts data, \nand demands ransom to \"save\" malware-led",
                      35, 505, arcade.color.BLACK, 14, 0)
-    arcade.draw_text("data destruction.", 35, 487, arcade.color.DARK_RED, 14)
+    arcade.draw_text("data destruction.", 35, 487, arcade.color.DARK_RED, 14)      # fills in blank, w/ different colour
 
     # BULLET POINT AND TEXT 2
     arcade.draw_circle_filled(25, 455, 5, arcade.color.DARK_BLUE)
@@ -125,7 +127,7 @@ def draw_ransomware_intro():
     arcade.draw_circle_filled(25, 420, 5, arcade.color.DARK_BLUE)
     arcade.draw_text("e.g. WannaCry, CryptoLocker, etc.", 35, 415, arcade.color.RED, 14)
 
-    # EXAMPLE IMAGE
+    # EXAMPLE IMAGE - WannaCry virus
     ransomware_image = arcade.load_texture("textures/ransomware_image.png")
     arcade.draw_texture_rectangle(530, 525, 0.55*ransomware_image.width, 0.55*ransomware_image.height,
                                   ransomware_image)
@@ -156,15 +158,16 @@ def draw_facts_and_stats():
     arcade.draw_text("doubled", 805, 495, arcade.color.DARK_RED, 15, align="center", bold=True)
 
     # FACT 2, revealed by BUTTON 2 movement:
-    arcade.draw_text("Damage in finances due to ransomware \n attacks is set to hit             "
+    arcade.draw_text("Damage in finances due to ransomware \nattacks is set to hit             "
                      "        in 2021.", 780, 440, arcade.color.BLACK, 14, align="left", bold=True)
     arcade.draw_text("$6 trillion", 920, 440, arcade.color.DARK_RED, 14, align="center", bold=True)
 
     # FACT 3, revealed by BUTTON 3 movement:
-    arcade.draw_text("77% of Canadian victims paid the ransom. \n Little to no cases had data actually decrypted.",
+    arcade.draw_text("77% of Canadian victims paid the ransom. \nLittle to no cases had data actually decrypted.",
                      780, 390, arcade.color.BLACK, 12, align="left", bold=True)
 
 
+# Buttons that overlay the facts section. Disappears upon click.
 def draw_buttons():
     # Button 1 clickable area
     arcade.draw_xywh_rectangle_filled(button_1[0], button_1[1], button_1[2], button_1[3], arcade.color.GRAY)
@@ -196,7 +199,7 @@ def draw_buttons():
     arcade.draw_line(button_3[0] + 290, 420, button_3[0] + 290, 370, arcade.color.BLACK, 2)
     arcade.draw_text("Click to reveal...", button_3[0] + 70, 385, arcade.color.BLACK, 20, bold=True)
 
-
+# Draw sources of ransomware.
 def ransomware_sources():
     # TOP LINE: start_x, start_y, end_x, end_y
     arcade.draw_line(0, 375, 350, 375, arcade.color.DARK_RED, 4)
@@ -217,20 +220,20 @@ def ransomware_sources():
 
     # BULLET POINT AND TEXT 1
     arcade.draw_circle_filled(25, 250, 5, arcade.color.DARK_RED)
-    arcade.draw_text("Fake e-mails that look legit. Harbours \n an .exe file that will         "
+    arcade.draw_text("Fake e-mails that look legit. Harbours \nan .exe file that will         "
                      "     the device if run.", 35, 230, arcade.color.BLACK, 14)
     arcade.draw_text("infect", 180, 230, arcade.color.DARK_RED, 14)
 
     # BULLET POINT AND TEXT 2
     arcade.draw_circle_filled(25, 195, 5, arcade.color.DARK_RED)
-    arcade.draw_text("Computer vulnerabilites; older software \n is subject to a                "
+    arcade.draw_text("Computer vulnerabilites; older software \nis subject to a                "
                      "                of infection.", 35, 185, arcade.color.BLACK, 14)
     arcade.draw_text("higher chance", 145, 185, arcade.color.DARK_RED, 14)
 
     # BULLET POINT AND TEXT 3
     arcade.draw_circle_filled(25, 145, 5, arcade.color.DARK_RED)
     arcade.draw_text("Lack of               "
-                     "       ; cannot detect malware \n when they do infect the device.", 35, 135,
+                     "       ; cannot detect malware \nwhen they do infect the device.", 35, 135,
                      arcade.color.BLACK, 14)
     arcade.draw_text("antiviruses", 90, 154, arcade.color.DARK_RED, 14)
 
@@ -239,6 +242,7 @@ def ransomware_sources():
     arcade.draw_texture_rectangle(150, 70, 0.25*malware_2.width, 0.25*malware_2.height, malware_2)
 
 
+# Draw prevention techniques, which are derived off of the "ransomware_sources()" section (hence the arrows).
 def prevention_techniques():
     # RECTANGLE AND OUTLINE
     arcade.draw_lrtb_rectangle_filled(425, 700, 375, 275, arcade.color.YELLOW)
@@ -268,13 +272,27 @@ def prevention_techniques():
 
     # BULLET POINT AND TEXT 3
     arcade.draw_circle_filled(450, 155, 5, arcade.color.DARK_YELLOW)
-    arcade.draw_text("Invest in or download antiviruses \n for your computer.", 460, 140, arcade.color.BLACK, 14)
+    arcade.draw_text("Invest in or download antiviruses \nfor your computer.", 460, 140, arcade.color.BLACK, 14)
 
     # SUMMARY
-    arcade.draw_text("At the end, it all comes down to \n making SMART choices everyday!", 350, 50,
+    arcade.draw_text("At the end, it all comes down to \nmaking SMART choices everyday!", 350, 50,
                      arcade.color.BLACK, 24, align="center", bold=True)
+    star_custom = arcade.load_texture("textures/star_custom.png")
+    arcade.draw_texture_rectangle(310, 80, 0.8*star_custom.width, 0.8*star_custom.height, star_custom)
 
 
+# Draw two images for ghetto "pizzazz".
+def final_images():
+    antivirus = arcade.load_texture("textures/antivirus.png")
+    arcade.draw_texture_rectangle(925, 275, 0.5*antivirus.width, 0.5*antivirus.height, antivirus)
+
+    malware_3 = arcade.load_texture("textures/malware_3.png")
+    arcade.draw_texture_rectangle(925, 100, 0.3*malware_3.width, 0.3*malware_3.height, malware_3)
+
+    # DONE!
+
+
+# Draw all of the above.
 def on_draw():
     arcade.start_render()
     make_background()
@@ -284,9 +302,11 @@ def on_draw():
     draw_buttons()
     ransomware_sources()
     prevention_techniques()
+    final_images()
 
 
-def on_mouse_press(x, y):
+# Button click detection function
+def on_mouse_press(x, y, button, modifiers):
     global move_button_1, move_button_2, move_button_3
 
     # Buttons coordination and detection
@@ -306,8 +326,9 @@ def on_mouse_press(x, y):
         move_button_3 = True
 
 
+# Setup the program.
 def setup():
-    arcade.open_window(WIDTH, HEIGHT, "Computers and Society Poster")
+    arcade.open_window(WIDTH, HEIGHT, "Computers and Society Poster - Jaden Han")
     arcade.set_background_color(arcade.color.WHITE)
     arcade.schedule(on_update, 1/60)
 
@@ -318,5 +339,4 @@ def setup():
     arcade.run()
 
 
-if __name__ == '__main__':
-    setup()
+setup()
