@@ -255,7 +255,7 @@ def prevention_techniques():
     arcade.draw_text("Prevention Techniques", 440, 315, arcade.color.DARK_YELLOW, 20, bold=True)
     arcade.draw_line(440, 310, 680, 310, arcade.color.DARK_YELLOW, 4)
 
-    # ARROWS from ransomware_sources
+    # ARROWS
     arrow_custom = arcade.load_texture("textures/arrow_custom.png")
     arcade.draw_texture_rectangle(400, 250, 0.8*arrow_custom.width, 0.8*arrow_custom.height, arrow_custom)
     arcade.draw_texture_rectangle(400, 200, 0.8 * arrow_custom.width, 0.8 * arrow_custom.height, arrow_custom)
