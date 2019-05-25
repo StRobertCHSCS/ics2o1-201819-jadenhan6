@@ -224,19 +224,55 @@ def ransomware_sources():
     # BULLET POINT AND TEXT 2
     arcade.draw_circle_filled(25, 195, 5, arcade.color.DARK_RED)
     arcade.draw_text("Computer vulnerabilites; older software \n is subject to a                "
-                     "                of infecton.", 35, 185, arcade.color.BLACK, 14)
+                     "                of infection.", 35, 185, arcade.color.BLACK, 14)
     arcade.draw_text("higher chance", 145, 185, arcade.color.DARK_RED, 14)
 
     # BULLET POINT AND TEXT 3
     arcade.draw_circle_filled(25, 145, 5, arcade.color.DARK_RED)
     arcade.draw_text("Lack of               "
-                     "        ; cannot detect malware \n when they do infect the device.", 35, 135,
+                     "       ; cannot detect malware \n when they do infect the device.", 35, 135,
                      arcade.color.BLACK, 14)
     arcade.draw_text("antiviruses", 90, 154, arcade.color.DARK_RED, 14)
 
     # IMAGE AT BOTTOM
     malware_2 = arcade.load_texture("textures/malware_2.png")
     arcade.draw_texture_rectangle(150, 70, 0.25*malware_2.width, 0.25*malware_2.height, malware_2)
+
+
+def prevention_techniques():
+    # RECTANGLE AND OUTLINE
+    arcade.draw_lrtb_rectangle_filled(425, 700, 375, 275, arcade.color.YELLOW)
+    arcade.draw_line(425, 375, 425, 275, arcade.color.DARK_YELLOW, 4)
+    arcade.draw_line(425, 375, 700, 375, arcade.color.DARK_YELLOW, 4)
+    arcade.draw_line(425, 275, 700, 275, arcade.color.DARK_YELLOW, 4)
+    arcade.draw_line(700, 375, 700, 275, arcade.color.DARK_YELLOW, 4)
+
+    # TEXT AND UNDERLINE
+    arcade.draw_text("Prevention Techniques", 440, 315, arcade.color.DARK_YELLOW, 20, bold=True)
+    arcade.draw_line(440, 310, 680, 310, arcade.color.DARK_YELLOW, 4)
+
+    # ARROWS from ransomware_sources
+    arrow_custom = arcade.load_texture("textures/arrow_custom.png")
+    arcade.draw_texture_rectangle(400, 250, 0.8*arrow_custom.width, 0.8*arrow_custom.height, arrow_custom)
+    arcade.draw_texture_rectangle(400, 200, 0.8 * arrow_custom.width, 0.8 * arrow_custom.height, arrow_custom)
+    arcade.draw_texture_rectangle(400, 150, 0.8 * arrow_custom.width, 0.8 * arrow_custom.height, arrow_custom)
+
+    # BULLET POINT AND TEXT 1
+    arcade.draw_circle_filled(450, 255, 5, arcade.color.DARK_YELLOW)
+    arcade.draw_text("Avoid sketchy or unreliable websites, \nlinks, or unauthorized programs.", 460, 235,
+                     arcade.color.BLACK, 14)
+
+    # BULLET POINT AND TEXT 2
+    arcade.draw_circle_filled(450, 205, 5, arcade.color.DARK_YELLOW)
+    arcade.draw_text("Regularly update device!", 460, 198, arcade.color.BLACK, 14)
+
+    # BULLET POINT AND TEXT 3
+    arcade.draw_circle_filled(450, 155, 5, arcade.color.DARK_YELLOW)
+    arcade.draw_text("Invest in or download antiviruses \n for your computer.", 460, 140, arcade.color.BLACK, 14)
+
+    # SUMMARY
+    arcade.draw_text("At the end, it all comes down to \n making SMART choices everyday!", 350, 50,
+                     arcade.color.BLACK, 24, align="center", bold=True)
 
 
 def on_draw():
@@ -247,9 +283,10 @@ def on_draw():
     draw_facts_and_stats()
     draw_buttons()
     ransomware_sources()
+    prevention_techniques()
 
 
-def on_mouse_press(x, y, button, modifiers):
+def on_mouse_press(x, y):
     global move_button_1, move_button_2, move_button_3
 
     # Buttons coordination and detection
