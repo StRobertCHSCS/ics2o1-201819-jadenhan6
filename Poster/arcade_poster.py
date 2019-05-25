@@ -1,20 +1,19 @@
 import arcade
 
-
 # Set constants for screen height and width
 WIDTH = 1080
 HEIGHT = 785
 
 # Define text and underline heights, then delta (change) rates.
 text_height = 1000
-delta_y_text = 9
+delta_y_text = 15
 underline_height = 990
-delta_y_underline = 9
+delta_y_underline = 15
 
 # Button animation variables
 move_button_1 = False       # initiates button 1's movement sequence
 button_1_moved = False      # variable that checks if button 1 has been moved.
-delta_x_button_1 = 0        # change in the x-value of button 1.
+delta_x_button_1 = 0        # change in the x-value position of button 1.
 
 move_button_2 = False
 button_2_moved = False
@@ -35,7 +34,7 @@ def on_update(delta_time):
     global text_height, delta_y_text, underline_height, delta_y_underline, delta_x_button_1, button_1_moved,\
         delta_x_button_2, button_2_moved, delta_x_button_3, button_3_moved
 
-    # Animate title and underline; move down until in view; 9 pixels down per on_update recall aka every 1/60 seconds
+    # Animate title and underline; move down until in view; 15 pixels down per on_update() recall.
     text_height -= delta_y_text
     underline_height -= delta_y_underline
 
@@ -46,7 +45,7 @@ def on_update(delta_time):
         delta_y_underline = 0
 
     # Button 1; if movement sequence initiated and the button hasn't already
-    # been moved, move button 1 right by 1000 pixels; hence out of view.
+    # been moved, move button 1 right by 1000 pixels; hence out of view, revealing underlying content.
     if move_button_1 and not button_1_moved:
         delta_x_button_1 = 1000
         button_1[0] += delta_x_button_1
@@ -94,7 +93,7 @@ def draw_title_things():
                                   texture_2)
 
 
-# Draw "What is a ransomware" with WannaCry sample image
+# Draw "What is a ransomware" with WannaCry example image
 def draw_ransomware_intro():
     # TOP LINE: start_x, start_y, end_x, end_y
     arcade.draw_line(0, 650, 350, 650, arcade.color.DARK_BLUE, 4)
@@ -199,6 +198,7 @@ def draw_buttons():
     arcade.draw_line(button_3[0] + 290, 420, button_3[0] + 290, 370, arcade.color.BLACK, 2)
     arcade.draw_text("Click to reveal...", button_3[0] + 70, 385, arcade.color.BLACK, 20, bold=True)
 
+
 # Draw sources of ransomware.
 def ransomware_sources():
     # TOP LINE: start_x, start_y, end_x, end_y
@@ -221,14 +221,14 @@ def ransomware_sources():
     # BULLET POINT AND TEXT 1
     arcade.draw_circle_filled(25, 250, 5, arcade.color.DARK_RED)
     arcade.draw_text("Fake e-mails that look legit. Harbours \nan .exe file that will         "
-                     "     the device if run.", 35, 230, arcade.color.BLACK, 14)
+                     "      the device if run.", 35, 230, arcade.color.BLACK, 14)
     arcade.draw_text("infect", 180, 230, arcade.color.DARK_RED, 14)
 
     # BULLET POINT AND TEXT 2
     arcade.draw_circle_filled(25, 195, 5, arcade.color.DARK_RED)
     arcade.draw_text("Computer vulnerabilites; older software \nis subject to a                "
                      "                of infection.", 35, 185, arcade.color.BLACK, 14)
-    arcade.draw_text("higher chance", 145, 185, arcade.color.DARK_RED, 14)
+    arcade.draw_text("higher chance", 140, 185, arcade.color.DARK_RED, 14)
 
     # BULLET POINT AND TEXT 3
     arcade.draw_circle_filled(25, 145, 5, arcade.color.DARK_RED)
@@ -339,4 +339,5 @@ def setup():
     arcade.run()
 
 
+# Run.
 setup()
