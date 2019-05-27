@@ -47,6 +47,7 @@ def setup():
     # Override arcade window methods; uses our OWN functions
     window = arcade.get_window()
     window.on_draw = on_draw
+    window.on_update = on_update
     window.on_key_press = on_key_press
     window.on_key_release = on_key_release
     window.on_mouse_press = on_mouse_press
