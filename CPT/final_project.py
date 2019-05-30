@@ -33,7 +33,7 @@ def on_update(delta_time):
 
 def title_screen():
     if on_title:
-        background = arcade.load_texture("textures/1_title_screen/background_title.png")
+        background = arcade.load_texture("background_title.png", 0, 0, 1500, 1134)
         arcade.draw_texture_rectangle(WIDTH / 2, HEIGHT / 2, background.width, background.height, background)
         arcade.draw_text("TITLE SCREEN", 475, 490, arcade.color.BLACK, 60, align="center", font_name='calibri',
                          bold=True)
@@ -70,12 +70,6 @@ def fake_loading():
         on_topic_selection = True
 
 
-
-
-
-
-
-
 # Drawing function.
 def on_draw():
     arcade.start_render()
@@ -99,8 +93,8 @@ def on_mouse_press(x, y, button, modifiers):
     # Buttons coordination and detection
     title_button_x, title_button_y, title_button_w, title_button_h = title_button
 
-    if title_button_x < x < title_button_x + title_button_w and title_button_y < y < title_button_y + title_button_h and \
-            on_title:
+    if title_button_x < x < title_button_x + title_button_w and title_button_y < y < title_button_y + title_button_h \
+            and on_title:
         on_title = False
         on_fake_loading = True
 
@@ -119,5 +113,6 @@ def setup():
     window.on_mouse_press = on_mouse_press
 
     arcade.run()
+
 
 setup()
