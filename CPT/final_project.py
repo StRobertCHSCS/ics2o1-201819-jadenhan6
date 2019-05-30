@@ -1,7 +1,7 @@
 # Basis for all Arcade programs; import the plugin to make it work.
 import arcade
 import random
-import math
+import time
 
 # Screen dimensions
 WIDTH = 1450
@@ -9,8 +9,11 @@ HEIGHT = 795
 
 # Title screen variables
 on_title = True
-title_button = [500, 200, 400, 150]
 on_fake_loading = False
+title_button = [500, 200, 400, 150]
+
+# Fake loading screen variables
+on_topic_selection = False
 
 # Fake loading screen text
 text_1 = "Malware is software that damages your device in various ways."
@@ -18,7 +21,9 @@ text_2 = "Practicing good computer hygiene is important."
 text_3 = "Always update your devices!"
 text_4 = "It may be a good time to update your GPU if you have a slow rendering speed."
 text_5 = "It is recommended to invest in a better CPU if performance lags behind."
-text_6 = "a"
+text_6 = "Secure everything. Watch where you upload and submit data."
+text_7 = "lmao"
+display_text = random.randint(1, 7)
 
 
 # Updating / Refreshing function.
@@ -42,9 +47,31 @@ def title_screen():
         arcade.draw_text("START", title_button[0]+120, title_button[1]+50, arcade.color.BLACK, 46, align="center",
                          font_name='calibri', bold=True)
 
+
 def fake_loading():
+    global display_text, on_fake_loading, on_topic_selection
     if on_fake_loading:
-        arcade.draw_rectangle_filled(100, 100, 4000, 2000, arcade.color.BLACK)
+        if display_text == 1:
+            arcade.draw_text(text_1, 425, 200, arcade.color.WHITE, 24, align="center", font_name='arial', bold=True)
+        elif display_text == 2:
+            arcade.draw_text(text_2, 425, 200, arcade.color.WHITE, 24, align="center", font_name='arial', bold=True)
+        elif display_text == 3:
+            arcade.draw_text(text_3, 425, 200, arcade.color.WHITE, 24, align="center", font_name='arial', bold=True)
+        elif display_text == 4:
+            arcade.draw_text(text_4, 425, 200, arcade.color.WHITE, 24, align="center", font_name='arial', bold=True)
+        elif display_text == 5:
+            arcade.draw_text(text_5, 425, 200, arcade.color.WHITE, 24, align="center", font_name='arial', bold=True)
+        elif display_text == 6:
+            arcade.draw_text(text_6, 425, 200, arcade.color.WHITE, 24, align="center", font_name='arial', bold=True)
+        elif display_text == 7:
+            arcade.draw_text(text_7, 425, 200, arcade.color.WHITE, 24, align="center", font_name='arial', bold=True)
+        time.sleep(6.5)
+        on_fake_loading = False
+        on_topic_selection = True
+
+
+
+
 
 
 
@@ -72,15 +99,15 @@ def on_mouse_press(x, y, button, modifiers):
     # Buttons coordination and detection
     title_button_x, title_button_y, title_button_w, title_button_h = title_button
 
-    # If button 1 has been clicked, and it hasn't already been clicked before, initiate button 1's moving sequence
-    if (title_button_x < x < title_button_x + title_button_w and title_button_y < y < title_button_y + title_button_h):
+    if title_button_x < x < title_button_x + title_button_w and title_button_y < y < title_button_y + title_button_h and \
+            on_title:
         on_title = False
         on_fake_loading = True
 
 
 def setup():
     arcade.open_window(WIDTH, HEIGHT, "???")
-    arcade.set_background_color(arcade.color.WHITE)
+    arcade.set_background_color(arcade.color.BLACK)
     arcade.schedule(on_update, 1/60)
 
     # Override arcade window methods; uses our OWN functions
@@ -93,6 +120,4 @@ def setup():
 
     arcade.run()
 
-
-if __name__ == '__main__':
-    setup()
+setup()
