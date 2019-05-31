@@ -30,6 +30,8 @@ on_compsci_screen = False
 select_button_click = arcade.load_sound("select_button_click.wav")
 
 science_button = [250, 450, 364, 95]
+math_button = [735, 450, 364, 95]
+compsci_button = [1220, 450, 364, 95]
 
 # Fake loading screen objects
 class Shape:
@@ -134,7 +136,7 @@ def on_update(delta_time):
 
 def title_screen():
     if on_title:
-        background = arcade.load_texture("background_title.png", 0, 0, 1500, 1134)
+        background = arcade.load_texture("background/background_title.png", 0, 0, 1500, 1134)
         arcade.draw_texture_rectangle(WIDTH / 2, HEIGHT / 2, background.width, background.height, background)
         arcade.draw_text("TITLE SCREEN", 475, 490, arcade.color.BLACK, 60, align="center", font_name='calibri',
                          bold=True)
@@ -191,18 +193,46 @@ def fake_loading():
 
 def topic_selection():
     if on_topic_selection:
-        background = arcade.load_texture("background_selection.png")
+        background = arcade.load_texture("background/background_selection.png")
         arcade.draw_texture_rectangle(WIDTH/2, HEIGHT/2, 1.7*background.width, 1.7*background.height, background)
 
-        science_button = arcade.load_texture("science_button.png")
+        # Science Button and explanation render ----------------------------------------------------------------------
+        science_button = arcade.load_texture("buttons/science_button.png")
         arcade.draw_texture_rectangle(250, 450, science_button.width, science_button.height, science_button)
+        arcade.draw_text(" - Mini-programs that deal with optic formulae. \n - As well, biological drawings of "
+                         "different \n organisms with explanations upon clicked.", 50, 325, arcade.color.BLACK, 18,
+                         align="left", font_name='CALIBRI', bold=True)
 
-        math_button = arcade.load_texture("math_button.png")
+        science_deco_1 = arcade.load_texture("decoration/science_button_deco_1.png")
+        arcade.draw_texture_rectangle(150, 215, 0.7*science_deco_1.width, 0.7*science_deco_1.height, science_deco_1)
+
+        science_deco_2 = arcade.load_texture("decoration/science_button_deco_2.png")
+        arcade.draw_texture_rectangle(270, 70, 0.8*science_deco_2.width, 0.8*science_deco_2.height, science_deco_2)
+
+        # Math Button and explanation render -------------------------------------------------------------------------
+        math_button = arcade.load_texture("buttons/math_button.png")
+        arcade.draw_texture_rectangle(735, 450, math_button.width, math_button.height, math_button)
+        arcade.draw_text(" - A bunch of formulae that makes life easier. \n - Support for CAST rules, trigonometry,"
+                         "\n sequences, series, and more.", 535, 325, arcade.color.BLACK, 18,
+                         align="left", font_name='CALIBRI', bold=True)
+
+        math_deco_1 = arcade.load_texture("decoration/math_button_deco_1.png")
+        arcade.draw_texture_rectangle(765, 225, 0.8*math_deco_1.width, 0.8*math_deco_1.height, math_deco_1)
+
+        math_deco_2 = arcade.load_texture("decoration/math_button_deco_2.png")
+        arcade.draw_texture_rectangle(635, 70, 0.7*math_deco_2.width, 0.7*math_deco_2.height, math_deco_2)
+
+        # Computer Science Button and explanation render --------------------------------------------------------------
+        compsci_button = arcade.load_texture("buttons/compsci_button.png")
+        arcade.draw_texture_rectangle(1220, 450, compsci_button.width, compsci_button.height, compsci_button)
+        arcade.draw_text(" - Automated code generator, maybe? \n - As well, maybe an odd game \n in here somewhere.",
+                         1045, 325, arcade.color.BLACK, 18, align="left", font_name='CALIBRI', bold=True)
 
 
-
-
-
+def science_screen():
+    if on_science_screen:
+        background = arcade.load_texture("background/background_selection.png")
+        arcade.draw_texture_rectangle(WIDTH/2, HEIGHT/2, 1.7*background.width, 1.7*background.height, background)
 
 
 def on_draw():
@@ -210,6 +240,7 @@ def on_draw():
     title_screen()
     fake_loading()
     topic_selection()
+    science_screen()
 
 
 def on_key_press(key, modifiers):
@@ -221,10 +252,13 @@ def on_key_release(key, modifiers):
 
 
 def on_mouse_press(x, y, button, modifiers):
-    global on_title, on_fake_loading, on_topic_selection, on_science_screen
+    global on_title, on_fake_loading, on_topic_selection, on_science_screen, on_math_screen, on_compsci_screen
+
     # Buttons coordination and detection
     title_button_x, title_button_y, title_button_w, title_button_h = title_button
     science_button_x, science_button_y, science_button_w, science_button_h = science_button
+    math_button_x, math_button_y, math_button_w, math_button_h = math_button
+    compsci_button_x, compsci_button_y, compsci_button_w, compsci_button_h = compsci_button
 
     if title_button_x < x < title_button_x + title_button_w and title_button_y < y < title_button_y + title_button_h \
             and on_title:
@@ -233,11 +267,25 @@ def on_mouse_press(x, y, button, modifiers):
         on_title = False
         on_fake_loading = True
 
-    if science_button_x < x < science_button_x + science_button_w and science_button_y < y < science_button_y + \
-        science_button_h and on_topic_selection:
+    if science_button_x - 364/2 < x < (science_button_x - 364/2) + science_button_w and science_button_y - 95/2 \
+            < y < (science_button_y - 95/2) + science_button_h and on_topic_selection:
         arcade.play_sound(select_button_click)
         on_topic_selection = False
         on_science_screen = True
+
+
+    if math_button_x - 364/2 < x < (math_button_x - 364/2) + math_button_w and math_button_y - 95/2 < y < \
+            (math_button_y - 95/2) + math_button_h and on_topic_selection:
+        arcade.play_sound(select_button_click)
+        on_topic_selection = False
+        on_math_screen = True
+
+
+    if compsci_button_x - 364/2 < x < (compsci_button_x - 364/2) + compsci_button_w and compsci_button_y - 95/2 \
+            < y < (compsci_button_y - 95/2) + compsci_button_h and on_topic_selection:
+        arcade.play_sound(select_button_click)
+        on_topic_selection = False
+        on_compsci_screen = True
 
 
 
