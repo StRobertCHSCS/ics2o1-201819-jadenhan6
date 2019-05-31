@@ -13,14 +13,23 @@ on_title = True
 on_fake_loading = False
 title_button = [500, 200, 400, 150]
 
+
 # Fake loading screen variables
 on_topic_selection = False
 loading_counter = 0
 shapes_list = []
-show_character_left = True          # show the loading screen character's left?
+show_character_left = True          # show the loading screen character?
 character_counter = 0
-show_character_right = False        # show the loading screen character's right?
+show_character_right = False        # show the loading screen character's mirrored version?
+transition_alpha = 0
 
+# Selection screen variables
+on_science_screen = False
+on_math_screen = False
+on_compsci_screen = False
+select_button_click = arcade.load_sound("select_button_click.wav")
+
+science_button = [250, 450, 364, 95]
 
 # Fake loading screen objects
 class Shape:
@@ -100,20 +109,27 @@ display_text = random.randint(1, 8)
 
 def on_update(delta_time):
     global loading_counter, on_fake_loading, on_topic_selection, character_counter, show_character_left, \
-        show_character_right
+        show_character_right, transition_alpha
 
     if on_fake_loading:
         loading_counter += delta_time
-        if loading_counter >= 5.5:
+        if loading_counter >= 8.5:
             on_fake_loading = False
             on_topic_selection = True
         character_counter += delta_time
         if 2.3 <= character_counter <= 5.0:
             show_character_left = False
             show_character_right = True
-        if character_counter >= 5.1:
+        if 5.1 <= character_counter <= 7.4:
             show_character_left = True
             show_character_right = False
+        if character_counter >= 7.5:
+            show_character_left = False
+            show_character_right = True
+        if character_counter >= 5.3 and transition_alpha <= 256:
+            transition_alpha += 170*delta_time
+            if transition_alpha >= 256:
+                transition_alpha -= 170*delta_time
 
 
 def title_screen():
@@ -159,6 +175,7 @@ def fake_loading():
 
         loading_character_left = arcade.load_texture("game_n_watch_loading.png")
         loading_character_right = arcade.load_texture("game_n_watch_loading.png", mirrored=True)
+        transition_screen = arcade.load_texture("transition.png")
 
         if show_character_left:
             arcade.draw_texture_rectangle(700, 450, 0.6*loading_character_left.width, 0.6*loading_character_left.height,
@@ -168,11 +185,31 @@ def fake_loading():
             arcade.draw_texture_rectangle(700, 450, 0.6*loading_character_right.width,
                                           0.6*loading_character_right.height, loading_character_right)
 
+        arcade.draw_texture_rectangle(700, 500, transition_screen.width, transition_screen.height,
+                                      transition_screen, alpha=transition_alpha)
+
+
+def topic_selection():
+    if on_topic_selection:
+        background = arcade.load_texture("background_selection.png")
+        arcade.draw_texture_rectangle(WIDTH/2, HEIGHT/2, 1.7*background.width, 1.7*background.height, background)
+
+        science_button = arcade.load_texture("science_button.png")
+        arcade.draw_texture_rectangle(250, 450, science_button.width, science_button.height, science_button)
+
+        math_button = arcade.load_texture("math_button.png")
+
+
+
+
+
+
 
 def on_draw():
     arcade.start_render()
     title_screen()
     fake_loading()
+    topic_selection()
 
 
 def on_key_press(key, modifiers):
@@ -184,9 +221,10 @@ def on_key_release(key, modifiers):
 
 
 def on_mouse_press(x, y, button, modifiers):
-    global on_title, on_fake_loading
+    global on_title, on_fake_loading, on_topic_selection, on_science_screen
     # Buttons coordination and detection
     title_button_x, title_button_y, title_button_w, title_button_h = title_button
+    science_button_x, science_button_y, science_button_w, science_button_h = science_button
 
     if title_button_x < x < title_button_x + title_button_w and title_button_y < y < title_button_y + title_button_h \
             and on_title:
@@ -194,6 +232,13 @@ def on_mouse_press(x, y, button, modifiers):
         arcade.play_sound(title_button_click)
         on_title = False
         on_fake_loading = True
+
+    if science_button_x < x < science_button_x + science_button_w and science_button_y < y < science_button_y + \
+        science_button_h and on_topic_selection:
+        arcade.play_sound(select_button_click)
+        on_topic_selection = False
+        on_science_screen = True
+
 
 
 def setup():
