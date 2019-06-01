@@ -7,7 +7,7 @@ import math
 WIDTH = 1450
 HEIGHT = 795
 
-# cheat variable
+# cheat variable. if pressed, skips the loading screen. meant to be used only in development only
 W_pressed = False
 
 # Set variable that will collect data from various computing functions in program.
@@ -72,17 +72,22 @@ button_eight = [1100, 275, 75, 75]
 button_nine = [1200, 275, 75, 75]
 button_zero = [1000, 175, 75, 75]
 button_decimal = [1100, 175, 75, 75]
+button_negative = [1000, 575, 75, 75]
 button_AC = [1200, 575, 75, 75]
 button_ENTER = [1200, 175, 75, 75]
 
-# Determines if decimal, in any calculator (of any function in program), has been placed.
+# Determines if decimal or a negative has been placed.
 decimal_placed = False
+negative_placed = False
 
 # Variables for calculation.
-object_distance = 0
-image_distance = 0
-focal_length = 0
+input_variable_1 = 0
+input_variable_2 = 0
+result_1 = 0
+result_2 = 0
 
+# Show answer variable.
+answer_drawn = False
 
 # Fake loading screen objects
 class Shape:
@@ -148,6 +153,20 @@ for i in range(35):
     # uploads newly created shape to the shapes_list specificed above.
     shapes_list.append(Shape)
 
+
+class Instructions:
+    def __init__(self, text, x, y, color, size, bold):
+        self.text = text
+        self.x = x
+        self.y = y
+        self.color = color
+        self.size = size
+        self.bold = bold
+
+    def draw_instructions(self):
+        arcade.draw_text(self.text, self.x, self.y, self.color, self.size, bold=self.bold)
+
+
 # Fake loading screen text
 text_1 = "Malware is software that damages your device in various ways."
 text_2 = "Practicing good computer \"hygiene\" is important."
@@ -164,6 +183,107 @@ display_text = random.randint(1, 8)
 
 
 # FUNCTIONS -----------------------------------------------------------------------------------------------------------
+
+# "Calculator" function that will appear where user-input and computation is needed.
+def draw_calculator():
+    # Draw calculator background.
+    arcade.draw_xywh_rectangle_filled(950, 150, 375, 625, arcade.color.GRAY)
+    arcade.draw_xywh_rectangle_outline(950, 150, 375, 625, arcade.color.BLACK, 3)
+    arcade.draw_xywh_rectangle_filled(1000, 670, 275, 90, arcade.color.WHITE)
+    arcade.draw_xywh_rectangle_outline(1000, 670, 275, 90, arcade.color.BLACK, 3)
+    arcade.draw_text(user_input, 1130, 705, arcade.color.BLACK, 22)  # Displays user_input variable to screen.
+
+    # Button "1". The coordinate sets are defined above, as well.
+    arcade.draw_xywh_rectangle_filled(1000, 475, 75, 75, arcade.color.BLACK)
+    arcade.draw_xywh_rectangle_outline(1000, 475, 75, 75, arcade.color.WHITE, 2)
+    arcade.draw_text("1", 1032.5, 503, arcade.color.WHITE, 22, bold=True)
+
+    # Button "2". Draws the "button", and so on...
+    arcade.draw_xywh_rectangle_filled(1100, 475, 75, 75, arcade.color.BLACK)
+    arcade.draw_xywh_rectangle_outline(1100, 475, 75, 75, arcade.color.WHITE, 2)
+    arcade.draw_text("2", 1132.5, 503, arcade.color.WHITE, 22, bold=True)
+
+    # Button "3"
+    arcade.draw_xywh_rectangle_filled(1200, 475, 75, 75, arcade.color.BLACK)
+    arcade.draw_xywh_rectangle_outline(1200, 475, 75, 75, arcade.color.WHITE, 2)
+    arcade.draw_text("3", 1232.5, 503, arcade.color.WHITE, 22, bold=True)
+
+    # Button "4"
+    arcade.draw_xywh_rectangle_filled(1000, 375, 75, 75, arcade.color.BLACK)
+    arcade.draw_xywh_rectangle_outline(1000, 375, 75, 75, arcade.color.WHITE, 2)
+    arcade.draw_text("4", 1032.5, 403, arcade.color.WHITE, 22, bold=True)
+
+    # Button "5"
+    arcade.draw_xywh_rectangle_filled(1100, 375, 75, 75, arcade.color.BLACK)
+    arcade.draw_xywh_rectangle_outline(1100, 375, 75, 75, arcade.color.WHITE, 2)
+    arcade.draw_text("5", 1132.5, 403, arcade.color.WHITE, 22, bold=True)
+
+    # Button "6"
+    arcade.draw_xywh_rectangle_filled(1200, 375, 75, 75, arcade.color.BLACK)
+    arcade.draw_xywh_rectangle_outline(1200, 375, 75, 75, arcade.color.WHITE, 2)
+    arcade.draw_text("6", 1232.5, 403, arcade.color.WHITE, 22, bold=True)
+
+    # Button "7"
+    arcade.draw_xywh_rectangle_filled(1000, 275, 75, 75, arcade.color.BLACK)
+    arcade.draw_xywh_rectangle_outline(1000, 275, 75, 75, arcade.color.WHITE, 2)
+    arcade.draw_text("7", 1032.5, 303, arcade.color.WHITE, 22, bold=True)
+
+    # Button "8"
+    arcade.draw_xywh_rectangle_filled(1100, 275, 75, 75, arcade.color.BLACK)
+    arcade.draw_xywh_rectangle_outline(1100, 275, 75, 75, arcade.color.WHITE, 2)
+    arcade.draw_text("8", 1132.5, 303, arcade.color.WHITE, 22, bold=True)
+
+    # Button "9"
+    arcade.draw_xywh_rectangle_filled(1200, 275, 75, 75, arcade.color.BLACK)
+    arcade.draw_xywh_rectangle_outline(1200, 275, 75, 75, arcade.color.WHITE, 2)
+    arcade.draw_text("9", 1232.5, 303, arcade.color.WHITE, 22, bold=True)
+
+    # Button "0"
+    arcade.draw_xywh_rectangle_filled(1000, 175, 75, 75, arcade.color.BLACK)
+    arcade.draw_xywh_rectangle_outline(1000, 175, 75, 75, arcade.color.WHITE, 2)
+    arcade.draw_text("0", 1032.5, 203, arcade.color.WHITE, 22, bold=True)
+
+    # Button "."
+    arcade.draw_xywh_rectangle_filled(1100, 175, 75, 75, arcade.color.BLACK)
+    arcade.draw_xywh_rectangle_outline(1100, 175, 75, 75, arcade.color.WHITE, 2)
+    arcade.draw_text(".", 1132.5, 203, arcade.color.WHITE, 22, bold=True)
+
+    # Button "-"
+    arcade.draw_xywh_rectangle_filled(1000, 575, 75, 75, arcade.color.BLACK)
+    arcade.draw_xywh_rectangle_outline(1000, 575, 75, 75, arcade.color.WHITE, 2)
+    arcade.draw_text("-", 1032.5, 603, arcade.color.WHITE, 22, bold=True)
+
+    # Button "ENTER"
+    arcade.draw_xywh_rectangle_filled(1200, 175, 75, 75, arcade.color.BLACK)
+    arcade.draw_xywh_rectangle_outline(1200, 175, 75, 75, arcade.color.WHITE, 2)
+    arcade.draw_text("ENTER", 1215, 205, arcade.color.WHITE, 14, bold=True)
+
+    # Button "AC"
+    arcade.draw_xywh_rectangle_filled(1200, 575, 75, 75, arcade.color.BLACK)
+    arcade.draw_xywh_rectangle_outline(1200, 575, 75, 75, arcade.color.WHITE, 2)
+    arcade.draw_text("AC", 1217.5, 603, arcade.color.WHITE, 22, bold=True)
+
+
+# Back_button function. Will be called at almost every screen.
+def draw_back_button():
+    back_button = arcade.load_texture("buttons/back_button.png")
+    arcade.draw_texture_rectangle(100, 725, 0.4 * back_button.width, 0.4 * back_button.height, back_button)
+
+
+# Reset variables functions when user exits calculator environment.
+def reset_all_variables():
+    global decimal_placed, user_input, input_variable_1, input_variable_2, result_1, result_2, answer_drawn
+    global negative_placed
+
+    decimal_placed = False
+    negative_placed = False
+    user_input = " "
+    input_variable_1 = 0
+    input_variable_2 = 0
+    result_1 = 0
+    result_2 = 0
+    answer_drawn = False
+
 
 # Animation, timer, cooldown functions, etc.
 def on_update(delta_time):
@@ -329,9 +449,7 @@ def science_screen():
         background = arcade.load_texture("background/background_selection.png")
         arcade.draw_texture_rectangle(WIDTH/2, HEIGHT/2, 1.7*background.width, 1.7*background.height, background)
 
-        # Render the back button.
-        back_button = arcade.load_texture("buttons/back_button.png")
-        arcade.draw_texture_rectangle(100, 725, 0.4*back_button.width, 0.4*back_button.height, back_button)
+        draw_back_button()
 
         # Render the biology button.
         bio_button = arcade.load_texture("buttons/bio_button.png")
@@ -349,7 +467,10 @@ def science_screen():
 # Render the biology screen.
 def bio_screen():
     if on_bio_screen:
-        print(user_input)
+        background = arcade.load_texture("background/background_bio.png")
+        arcade.draw_texture_rectangle(WIDTH/2, HEIGHT/2, 1.7*background.width, 1.7*background.height, background)
+
+        draw_back_button()
 
 
 # Render the optics screen.
@@ -358,8 +479,7 @@ def optics_screen():
         background = arcade.load_texture("background/background_optics.png")
         arcade.draw_texture_rectangle(WIDTH/2, HEIGHT/2, 1.7*background.width, 1.7*background.height, background)
 
-        back_button = arcade.load_texture("buttons/back_button.png")                # Draw back button
-        arcade.draw_texture_rectangle(100, 725, 0.4 * back_button.width, 0.4 * back_button.height, back_button)
+        draw_back_button()
 
         # Draw button that paths to Mirror and Magnification
         mirror_button = arcade.load_texture("buttons/mirror_button.png")
@@ -373,85 +493,92 @@ def optics_screen():
 
 # Render the mirror and magnification screen.
 def mirror_screen():
+    global answer_drawn, mirror_outputs
+
     if on_mirror_screen:
         background = arcade.load_texture("background/background_optics.png")
         arcade.draw_texture_rectangle(WIDTH / 2, HEIGHT / 2, 1.7 * background.width, 1.7 * background.height,
                                       background)
 
-        back_button = arcade.load_texture("buttons/back_button.png")
-        arcade.draw_texture_rectangle(100, 725, 0.4 * back_button.width, 0.4 * back_button.height, back_button)
+        draw_back_button()
 
-        # Draw calculator background.
-        arcade.draw_xywh_rectangle_filled(950, 150, 375, 625, arcade.color.GRAY)
-        arcade.draw_xywh_rectangle_outline(950, 150, 375, 625, arcade.color.BLACK, 3)
-        arcade.draw_xywh_rectangle_filled(1000, 670, 275, 90, arcade.color.WHITE)
-        arcade.draw_xywh_rectangle_outline(1000, 670, 275, 90, arcade.color.BLACK, 3)
-        arcade.draw_text(user_input, 1130, 705, arcade.color.BLACK, 22)       # Displays user_input variable to screen.
+        draw_calculator()
 
-        # Button "1". The coordinate sets are defined above, as well.
-        arcade.draw_xywh_rectangle_filled(1000, 475, 75, 75, arcade.color.BLACK)
-        arcade.draw_xywh_rectangle_outline(1000, 475, 75, 75, arcade.color.WHITE, 2)
-        arcade.draw_text("1", 1032.5, 503, arcade.color.WHITE, 22, bold=True)
+        formula_1 = arcade.load_texture("formula/mirror_formula.png")
+        arcade.draw_texture_rectangle(400, 500, formula_1.width, formula_1.height, formula_1)
+        formula_2 = arcade.load_texture("formula/magnification_formula.png")
+        arcade.draw_texture_rectangle(600, 500, formula_2.width, formula_2.height, formula_2)
 
-        # Button "2". Draws the "button", and so on...
-        arcade.draw_xywh_rectangle_filled(1100, 475, 75, 75, arcade.color.BLACK)
-        arcade.draw_xywh_rectangle_outline(1100, 475, 75, 75, arcade.color.WHITE, 2)
-        arcade.draw_text("2", 1132.5, 503, arcade.color.WHITE, 22, bold=True)
 
-        # Button "3"
-        arcade.draw_xywh_rectangle_filled(1200, 475, 75, 75, arcade.color.BLACK)
-        arcade.draw_xywh_rectangle_outline(1200, 475, 75, 75, arcade.color.WHITE, 2)
-        arcade.draw_text("3", 1232.5, 503, arcade.color.WHITE, 22, bold=True)
 
-        # Button "4"
-        arcade.draw_xywh_rectangle_filled(1000, 375, 75, 75, arcade.color.BLACK)
-        arcade.draw_xywh_rectangle_outline(1000, 375, 75, 75, arcade.color.WHITE, 2)
-        arcade.draw_text("4", 1032.5, 403, arcade.color.WHITE, 22, bold=True)
 
-        # Button "5"
-        arcade.draw_xywh_rectangle_filled(1100, 375, 75, 75, arcade.color.BLACK)
-        arcade.draw_xywh_rectangle_outline(1100, 375, 75, 75, arcade.color.WHITE, 2)
-        arcade.draw_text("5", 1132.5, 403, arcade.color.WHITE, 22, bold=True)
+        intro_mirror = Instructions("This screen deals with mirror and magnification equations. \nIs one-way; does"
+                                    " not support ho or hi, or finding di or do yet."
+                                    "\n Only calculates f and m in this case, given do and di.", 300, 600,
+                                    arcade.color.BLACK, 18, False)
 
-        # Button "6"
-        arcade.draw_xywh_rectangle_filled(1200, 375, 75, 75, arcade.color.BLACK)
-        arcade.draw_xywh_rectangle_outline(1200, 375, 75, 75, arcade.color.WHITE, 2)
-        arcade.draw_text("6", 1232.5, 403, arcade.color.WHITE, 22, bold=True)
+        step_one_mirror = Instructions("1. Enter do first, then di.", 300, 400, arcade.color.BLACK, 18, True)
+        step_two_mirror = Instructions("2. Remember only five-characters long inputs are supported.", 300, 350,
+                                       arcade.color.BLACK, 18, True)
+        step_three_mirror = Instructions("3. Program will output focal length and magnification factor \n"
+                                         "derived off the formulae. \n \n Note that entering the same value for both "
+                                         "variables \n won't yield results.", 300, 230, arcade.color.BLACK, 18, True)
 
-        # Button "7"
-        arcade.draw_xywh_rectangle_filled(1000, 275, 75, 75, arcade.color.BLACK)
-        arcade.draw_xywh_rectangle_outline(1000, 275, 75, 75, arcade.color.WHITE, 2)
-        arcade.draw_text("7", 1032.5, 303, arcade.color.WHITE, 22, bold=True)
+        if answer_drawn:
+            mirror_outputs = Instructions("The focal length is " + str(round(result_1, 2)) + ", and the magnification "
+                                          "factor is " + str(round(result_2, 2)) + ". \n Press AC to try another"
+                                          " calculation!", 200, 100, arcade.color.BLACK, 22, False)
+        if not answer_drawn:
+            mirror_outputs = Instructions(" ", 200, 100, arcade.color.BLACK, 22, False)
 
-        # Button "8"
-        arcade.draw_xywh_rectangle_filled(1100, 275, 75, 75, arcade.color.BLACK)
-        arcade.draw_xywh_rectangle_outline(1100, 275, 75, 75, arcade.color.WHITE, 2)
-        arcade.draw_text("8", 1132.5, 303, arcade.color.WHITE, 22, bold=True)
+        intro_mirror.draw_instructions()
+        step_one_mirror.draw_instructions()
+        step_two_mirror.draw_instructions()
+        step_three_mirror.draw_instructions()
+        mirror_outputs.draw_instructions()
 
-        # Button "9"
-        arcade.draw_xywh_rectangle_filled(1200, 275, 75, 75, arcade.color.BLACK)
-        arcade.draw_xywh_rectangle_outline(1200, 275, 75, 75, arcade.color.WHITE, 2)
-        arcade.draw_text("9", 1232.5, 303, arcade.color.WHITE, 22, bold=True)
 
-        # Button "0"
-        arcade.draw_xywh_rectangle_filled(1000, 175, 75, 75, arcade.color.BLACK)
-        arcade.draw_xywh_rectangle_outline(1000, 175, 75, 75, arcade.color.WHITE, 2)
-        arcade.draw_text("0", 1032.5, 203, arcade.color.WHITE, 22, bold=True)
+# Render the refraction screen.
+def refraction_screen():
+    global answer_drawn, refraction_output
 
-        # Button "."
-        arcade.draw_xywh_rectangle_filled(1100, 175, 75, 75, arcade.color.BLACK)
-        arcade.draw_xywh_rectangle_outline(1100, 175, 75, 75, arcade.color.WHITE, 2)
-        arcade.draw_text(".", 1132.5, 203, arcade.color.WHITE, 22, bold=True)
+    if on_refraction_screen:
+        background = arcade.load_texture("background/background_optics.png")
+        arcade.draw_texture_rectangle(WIDTH / 2, HEIGHT / 2, 1.7 * background.width, 1.7 * background.height,
+                                      background)
 
-        # Button "ENTER"
-        arcade.draw_xywh_rectangle_filled(1200, 175, 75, 75, arcade.color.BLACK)
-        arcade.draw_xywh_rectangle_outline(1200, 175, 75, 75, arcade.color.WHITE, 2)
-        arcade.draw_text("ENTER", 1215, 205, arcade.color.WHITE, 14, bold=True)
+        draw_back_button()
 
-        # Button "AC"
-        arcade.draw_xywh_rectangle_filled(1200, 575, 75, 75, arcade.color.BLACK)
-        arcade.draw_xywh_rectangle_outline(1200, 575, 75, 75, arcade.color.WHITE, 2)
-        arcade.draw_text("AC", 1217.5, 603, arcade.color.WHITE, 22, bold=True)
+        draw_calculator()
+
+        formula = arcade.load_texture("formula/refraction_formula.png")
+        arcade.draw_texture_rectangle(500, 520, formula.width, formula.height, formula)
+
+        intro_refraction = Instructions("Calculates indices of refraction, given speed of light \n in two different"
+                                        " media. Only able to calculate n, not c or v.", 300, 600, arcade.color.BLACK,
+                                        18, False)
+
+        step_one_refraction = Instructions("1. Enter speed of light in a specific medium aka v. \n Unit is understood "
+                                           "to be 10^8 metres per second.", 300, 400,
+                                           arcade.color.BLACK, 18, True)
+
+        step_two_refraction = Instructions("2. Program will spit out index of refraction or n, through n = c/v. \n "
+                                           "c is given; 3.00 x 10^8 m/s. \n"
+                                           "Ensure your value of v does NOT end with a decimal!!", 300,
+                                           300, arcade.color.BLACK, 18, True)
+
+        if answer_drawn:
+            refraction_output = Instructions("The index of refraction is about " + str(round(result_1, 2)) + "."
+                                             "\n Press AC to try another calculation.", 200, 200,
+                                             arcade.color.BLACK, 22, True)
+
+        if not answer_drawn:
+            refraction_output = Instructions(" ", 200, 100, arcade.color.BLACK, 22, False)
+
+        intro_refraction.draw_instructions()
+        step_one_refraction.draw_instructions()
+        step_two_refraction.draw_instructions()
+        refraction_output.draw_instructions()
 
 
 # Draw all the above.
@@ -464,6 +591,7 @@ def on_draw():
     bio_screen()
     optics_screen()
     mirror_screen()
+    refraction_screen()
 
 
 def on_key_press(key, modifiers):
@@ -480,11 +608,133 @@ def on_key_release(key, modifiers):
     if key == arcade.key.W:
         W_pressed = False
 
+
+# Custom calculator - button input logic. Will be called upon in all future screens and functions, namely in
+# on_mouse_press().
+def calc_input(x, y):
+    global user_input, decimal_placed, on_mirror_screen, input_variable_1, input_variable_2
+    global answer_drawn, negative_placed
+
+    # Unpack button variables into readable data.
+    button_one_x, button_one_y, button_one_w, button_one_h = button_one
+    button_two_x, button_two_y, button_two_w, button_two_h = button_two
+    button_three_x, button_three_y, button_three_w, button_three_h = button_three
+    button_four_x, button_four_y, button_four_w, button_four_h = button_four
+    button_five_x, button_five_y, button_five_w, button_five_h = button_five
+    button_six_x, button_six_y, button_six_w, button_six_h = button_six
+    button_seven_x, button_seven_y, button_seven_w, button_seven_h = button_seven
+    button_eight_x, button_eight_y, button_eight_w, button_eight_h = button_eight
+    button_nine_x, button_nine_y, button_nine_w, button_nine_h = button_nine
+    button_zero_x, button_zero_y, button_zero_w, button_zero_h = button_zero
+    button_decimal_x, button_decimal_y, button_decimal_w, button_decimal_h = button_decimal
+    button_negative_x, button_negative_y, button_negative_w, button_negative_h = button_negative
+    button_AC_x, button_AC_y, button_AC_w, button_AC_h = button_AC
+
+    if on_mirror_screen or on_refraction_screen:      # Add more screen variables later
+        # The Mirror + Mag screen requires TWO variables. Take in one if not on that screen. Take two if ON that screen.
+        if (len(user_input) <= 5 and input_variable_1 == 0 and not on_mirror_screen) or (len(user_input) <= 5 and
+                                                                                         input_variable_1 == 0 or
+                                                                                         input_variable_2 == 0 and
+                                                                                         on_mirror_screen):
+
+            # If button_one has been clicked (on the calculator), add "1" to the user_input string, and so on.
+            if button_one_x < x < button_one_x + button_one_w and button_one_y < y < button_one_y + button_one_h \
+                    and button_cooldown < 0:
+                arcade.play_sound(select_button_click)
+                user_input += "1"
+
+            if button_two_x < x < button_two_x + button_two_w and button_two_y < y < button_two_y + button_two_h \
+                    and button_cooldown < 0:
+                arcade.play_sound(select_button_click)
+                user_input += "2"
+
+            if button_three_x < x < button_three_x + button_three_w and button_three_y < y < \
+                    button_three_y + button_three_h and button_cooldown < 0:
+                arcade.play_sound(select_button_click)
+                user_input += "3"
+
+            if button_four_x < x < button_four_x + button_four_w and button_four_y < y < button_four_y + \
+                    button_four_h and button_cooldown < 0:
+                arcade.play_sound(select_button_click)
+                user_input += "4"
+
+            if button_five_x < x < button_five_x + button_five_w and button_five_y < y < button_five_y + \
+                    button_five_h and button_cooldown < 0:
+                arcade.play_sound(select_button_click)
+                user_input += "5"
+
+            if button_six_x < x < button_six_x + button_six_w and button_six_y < y < button_six_y + button_six_h \
+                    and button_cooldown < 0:
+                arcade.play_sound(select_button_click)
+                user_input += "6"
+
+            if button_seven_x < x < button_seven_x + button_seven_w and button_seven_y < y < button_seven_y + \
+                    button_seven_h and button_cooldown < 0:
+                arcade.play_sound(select_button_click)
+                user_input += "7"
+
+            if button_eight_x < x < button_eight_x + button_eight_w and button_eight_y < y < button_eight_y + \
+                    button_eight_h and button_cooldown < 0:
+                arcade.play_sound(select_button_click)
+                user_input += "8"
+
+            if button_nine_x < x < button_nine_x + button_nine_w and button_nine_y < y < button_nine_y + button_nine_h \
+                    and button_cooldown < 0:
+                arcade.play_sound(select_button_click)
+                user_input += "9"
+
+            # Only render in zeros, if the character before it is a decimal (...and user_input[-1] == ".":)
+            if button_zero_x < x < button_zero_x + button_zero_w and button_zero_y < y < button_zero_y + button_zero_h \
+                    and button_cooldown < 0 and not (user_input[-1] == "0" and not decimal_placed):
+                arcade.play_sound(select_button_click)
+                user_input += "0"
+
+            # Only render in decimals if it hasn't been placed before in the same string (...and not decimal_placed:)
+            if button_decimal_x < x < button_decimal_x + button_decimal_w and button_decimal_y < y < button_decimal_y \
+                    + button_decimal_h and button_cooldown < 0 and not decimal_placed and user_input != " ":
+                arcade.play_sound(select_button_click)
+                user_input += "."
+                decimal_placed = True  # If it has been placed, prohibit further placement.
+
+            # Only render in negatives if it's the first character; and has not been placed before.
+            # As well, prohibit negative placement where not required (aka speed, time, indices, etc.)
+            if button_negative_x < x < button_negative_x + button_negative_w and button_negative_y < y < \
+                    button_negative_y + button_negative_h and button_cooldown < 0 and \
+                    not negative_placed and user_input == " " and not on_refraction_screen:
+                arcade.play_sound(select_button_click)
+                user_input += "-"
+                negative_placed = True
+
+            # Automatic decimal placement
+            if on_refraction_screen and len(user_input) > 1 and user_input[1] != " " and not decimal_placed:
+                user_input += "."
+                decimal_placed = True
+
+        if button_AC_x < x < button_AC_x + button_AC_w and button_AC_y < y < button_AC_y + button_AC_h \
+                and button_cooldown < 0:
+            arcade.play_sound(select_button_click)
+            # When "reset" hit, reset the user_input string, and decimal_placed variable.
+            user_input = " "
+            decimal_placed = False
+            negative_placed = False
+
+            # If AC is hit with the calculation already complete, reset all variables.
+            if on_mirror_screen:
+                if result_1 != 0 and result_2 != 0:
+                    reset_all_variables()
+
+            # If AC is hit with the calculation already complete, reset all variables.
+            if on_refraction_screen:
+                if result_1 != 0:
+                    reset_all_variables()
+
+
 # Clicking logic.
 def on_mouse_press(x, y, button, modifiers):
     global on_title, on_fake_loading, on_topic_selection, on_science_screen, on_math_screen, on_compsci_screen
     global on_bio_screen, on_optics_screen, on_mirror_screen, on_refraction_screen, button_cooldown
-    global user_input, decimal_placed, object_distance, image_distance, focal_length
+    global user_input, decimal_placed, input_variable_1, input_variable_2, result_1, result_2
+    global answer_drawn, negative_placed
 
     # Buttons coordination; all coordinate sets above are unpacked into a single variable.
     title_button_x, title_button_y, title_button_w, title_button_h = title_button
@@ -498,20 +748,7 @@ def on_mouse_press(x, y, button, modifiers):
     mirror_button_x, mirror_button_y, mirror_button_w, mirror_button_h = mirror_button
     refraction_button_x, refraction_button_y, refraction_button_w, refraction_button_h = refraction_button
 
-    # UNIVERSAL CALCULATOR BUTTON LOGIC
-    button_one_x, button_one_y, button_one_w, button_one_h = button_one
-    button_two_x, button_two_y, button_two_w, button_two_h = button_two
-    button_three_x, button_three_y, button_three_w, button_three_h = button_three
-    button_four_x, button_four_y, button_four_w, button_four_h = button_four
-    button_five_x, button_five_y, button_five_w, button_five_h = button_five
-    button_six_x, button_six_y, button_six_w, button_six_h = button_six
-    button_seven_x, button_seven_y, button_seven_w, button_seven_h = button_seven
-    button_eight_x, button_eight_y, button_eight_w, button_eight_h = button_eight
-    button_nine_x, button_nine_y, button_nine_w, button_nine_h = button_nine
-    button_zero_x, button_zero_y, button_zero_w, button_zero_h = button_zero
-    button_decimal_x, button_decimal_y, button_decimal_w, button_decimal_h = button_decimal
     button_ENTER_x, button_ENTER_y, button_ENTER_w, button_ENTER_h, = button_ENTER
-    button_AC_x, button_AC_y, button_AC_w, button_AC_h = button_AC
 
     # TITLE BUTTON CLICK DETECTION
     if title_button_x < x < title_button_x + title_button_w and title_button_y < y < title_button_y + title_button_h \
@@ -553,114 +790,66 @@ def on_mouse_press(x, y, button, modifiers):
         on_mirror_screen = True
         button_cooldown = 0.4
 
-
-
     # MIRROR AND MAGNIFICATION CALCULATION - Uses button detection to enter data into user_input.
     if on_mirror_screen:
-        # If length of string is less than 5 characters, with until both needed variables are NOT zeros...
-        if len(user_input) <= 5 and (object_distance == 0 or image_distance == 0):
-            # If button_one has been clicked (on the calculator), add "1" to the user_input string, and so on.
-            if button_one_x < x < button_one_x + button_one_w and button_one_y < y < button_one_y + button_one_h and \
-                    on_mirror_screen and button_cooldown < 0:
-                arcade.play_sound(select_button_click)
-                user_input += "1"
-
-            if button_two_x < x < button_two_x + button_two_w and button_two_y < y < button_two_y + button_two_h and \
-                    on_mirror_screen and button_cooldown < 0:
-                arcade.play_sound(select_button_click)
-                user_input += "2"
-
-            if button_three_x < x < button_three_x + button_three_w and button_three_y < y < \
-                    button_three_y + button_three_h and on_mirror_screen and button_cooldown < 0:
-                arcade.play_sound(select_button_click)
-                user_input += "3"
-
-            if button_four_x < x < button_four_x + button_four_w and button_four_y < y < button_four_y + \
-                    button_four_h and on_mirror_screen and button_cooldown < 0:
-                arcade.play_sound(select_button_click)
-                user_input += "4"
-
-            if button_five_x < x < button_five_x + button_five_w and button_five_y < y < button_five_y + \
-                    button_five_h and on_mirror_screen and button_cooldown < 0:
-                arcade.play_sound(select_button_click)
-                user_input += "5"
-
-            if button_six_x < x < button_six_x + button_six_w and button_six_y < y < button_six_y + button_six_h and \
-                    on_mirror_screen and button_cooldown < 0:
-                arcade.play_sound(select_button_click)
-                user_input += "6"
-
-            if button_seven_x < x < button_seven_x + button_seven_w and button_seven_y < y < button_seven_y + \
-                    button_seven_h and on_mirror_screen and button_cooldown < 0:
-                arcade.play_sound(select_button_click)
-                user_input += "7"
-
-            if button_eight_x < x < button_eight_x + button_eight_w and button_eight_y < y < button_eight_y + \
-                    button_eight_h and on_mirror_screen and button_cooldown < 0:
-                arcade.play_sound(select_button_click)
-                user_input += "8"
-
-            if button_nine_x < x < button_nine_x + button_nine_w and button_nine_y < y < button_nine_y + button_nine_h \
-                    and on_mirror_screen and button_cooldown < 0:
-                arcade.play_sound(select_button_click)
-                user_input += "9"
-
-            # Only render in zeros, if the character before it is a decimal (...and user_input[-1] == ".":)
-            if button_zero_x < x < button_zero_x + button_zero_w and button_zero_y < y < button_zero_y + button_zero_h \
-                    and on_mirror_screen and button_cooldown < 0 and user_input[-1] == ".":
-                arcade.play_sound(select_button_click)
-                user_input += "0"
-
-            # Only render in decimals if it hasn't been placed before in the same string (...and not decimal_placed:)
-            if button_decimal_x < x < button_decimal_x + button_decimal_w and button_decimal_y < y < button_decimal_y \
-                    + button_decimal_h and on_mirror_screen and button_cooldown < 0 and not decimal_placed:
-                arcade.play_sound(select_button_click)
-                user_input += "."
-                decimal_placed = True       # If it has been placed, prohibit further placement.
-
-        if button_AC_x < x < button_AC_x + button_AC_w and button_AC_y < y < button_AC_y + button_AC_h and \
-                on_mirror_screen and button_cooldown < 0:
-            arcade.play_sound(select_button_click)
-            # When "reset" hit, reset the user_input string, and decimal_placed variable.
-            user_input = " "
-            decimal_placed = False
+        calc_input(x, y)
 
         if button_ENTER_x < x < button_ENTER_x + button_ENTER_w and button_ENTER_y < y < button_ENTER_y + \
                 button_ENTER_h and on_mirror_screen and button_cooldown < 0:
 
-            # Assigns first input to object_distance, which is one of the variables needed in the Mirror Equation
+            # Assigns first input to input_variable_1; as TWO are required in the Mirror / Mag Equations
             # 1/f = 1/do + 1/di
-            if object_distance == 0:
-                object_distance = float(user_input)         # Converts user_input to float for calculation
+            # m = -di/do
+
+            if input_variable_1 == 0:                 # This variable (in this equation) is "object distance' or do.
+                input_variable_1 = float(user_input)        # Converts user_input to float for calculation
                 user_input = " "                            # Resets user_input and decimal_placed
                 decimal_placed = False
+                negative_placed = False
 
-            # If object_distance is not zero (aka one user_input has been entered), enter another to the 2nd variable.
-            elif image_distance == 0:
-                image_distance = float(user_input)
+            # If first variable is not zero (aka one user_input has been entered), enter another to the 2nd variable.
+            elif input_variable_2 == 0:                     # In this case, this variable is "image distance" or di.
+                input_variable_2 = float(user_input)
                 user_input = " "
                 decimal_placed = False
+                negative_placed = False
 
-    # If both needed variables are not empty:
-    if object_distance != 0 and image_distance != 0:
-        print("Calculating focal length...")
-        focal_length = (1/image_distance + 1/object_distance) ** -1     # FORMULA for Mirror, shown in line 633.
-        print("The focal length is about", round(focal_length, 2))      # Round final answer.
-
-        object_distance = 0                                             # Reset all variables.
-        image_distance = 0
-        user_input = " "
-        decimal_placed = False
-
+        # If both needed variables are not empty:
+        if input_variable_1 != 0 and input_variable_2 != 0:
+            result_1 = (1/input_variable_2 - 1/input_variable_1) ** -1      # FORMULA for Mirror, shown in line 653.
+            result_2 = (input_variable_2 * -1) / input_variable_1        # FORMULA for Magnification, shown in line 654.
+            answer_drawn = True
 
     # REFRACTION BUTTON DETECTION
-    if refraction_button_x - 596.4/2 < x < (refraction_button_x - 596.4/2) + refraction_button_w and \
-            refraction_button_y - 100.8/2 < y < (refraction_button_y - 100.8/2) + refraction_button_h and \
+    if refraction_button_x - 596.4 / 2 < x < (refraction_button_x - 596.4 / 2) + refraction_button_w and \
+            refraction_button_y - 100.8 / 2 < y < (refraction_button_y - 100.8 / 2) + refraction_button_h and \
             on_optics_screen and button_cooldown < 0:
         arcade.play_sound(select_button_click)
         on_optics_screen = False
         on_refraction_screen = True
         button_cooldown = 0.4
+
+    # REFRACTION CALCULATION - Uses button detection to enter data into user_input.
+    if on_refraction_screen:
+        calc_input(x, y)
+
+        if button_ENTER_x < x < button_ENTER_x + button_ENTER_w and button_ENTER_y < y < button_ENTER_y + \
+                button_ENTER_h and on_refraction_screen and button_cooldown < 0:
+
+            # Assigns first and only input to variable_1, which is v. c is given.
+            # n = c / v.
+
+            if input_variable_1 == 0:  # This variable (in this equation) is "object distance' or do.
+                input_variable_1 = float(user_input)  # Converts user_input to float for calculation
+                user_input = " "  # Resets user_input and decimal_placed
+                decimal_placed = False
+                negative_placed = False
+
+        # If needed variable is  not empty:
+        if input_variable_1 != 0:
+            result_1 = 3.00 / input_variable_1
+            answer_drawn = True
+
 
     # MATH BUTTON DETECTION
     if math_button_x - 364/2 < x < (math_button_x - 364/2) + math_button_w and math_button_y - 95/2 < y < \
@@ -699,8 +888,19 @@ def on_mouse_press(x, y, button, modifiers):
         on_mirror_screen = False
         on_optics_screen = True
         button_cooldown = 0.4
-        user_input = " "                # As user is exiting out of a calculator environment, reset all variables.
-        decimal_placed = False
+
+        reset_all_variables()
+
+    # BACK BUTTON; Refraction --> Optics
+    if back_button_x - 102.4 / 2 < x < (
+            back_button_x - 102.4 / 2) + back_button_w and back_button_y - 102.4 / 2 < y < \
+            back_button_y - 120.4 / 2 + back_button_h and on_refraction_screen and button_cooldown < 0:
+        arcade.play_sound(back_button_click)
+        on_refraction_screen = False
+        on_optics_screen = True
+        button_cooldown = 0.4
+
+        reset_all_variables()
 
 
 # Setup the thing
