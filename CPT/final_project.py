@@ -703,7 +703,7 @@ def on_mouse_press(x, y, button, modifiers):
         decimal_placed = False
 
 
-# Setup the monstrosity
+# Setup the thing
 def setup():
     arcade.open_window(WIDTH, HEIGHT, "???")
     arcade.set_background_color(arcade.color.BLACK)
