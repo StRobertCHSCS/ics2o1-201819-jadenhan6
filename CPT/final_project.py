@@ -13,7 +13,9 @@ W_pressed = False
 # Set variable that will collect data from various computing functions in program.
 user_input = " "
 
+
 # PRE-SET VARIABLES AND OBJECTS ---------------------------------------------------------------------------------------
+
 
 # Set back_button's click sound and coordinate set.
 back_button = [100, 725, 102.4, 102.4]
@@ -74,6 +76,7 @@ on_money_screen = False
 
 cast_button = [250, 450, 262, 61]
 seq_series_button = [710, 450, 262, 61]
+money_button = [1200, 450, 262, 61]
 
 
 # CAST screen variables
@@ -85,12 +88,23 @@ sin_button = [290, 450, 254, 65]
 cos_button = [720, 450, 254, 65]
 tan_button = [1170, 450, 254, 65]
 
+
 # Sequences screen variables
 on_arith_seq_screen = False
 on_geo_seq_screen = False
 on_arith_series_screen = False
 on_geo_series_screen = False
 
+arith_seq_button = [310, 450, 418, 68]
+geo_seq_button = [310, 300, 418, 68]
+arith_series_button = [1170, 450, 418, 68]
+geo_series_button = [1170, 300, 418, 68]
+
+
+# Money screen variables
+on_simple_interest_screen = False
+on_compound_interest_screen = False
+on_present_value_screen = False
 
 # Calculator - button coordinate sets
 button_one = [1000, 475, 75, 75]
@@ -108,9 +122,11 @@ button_negative = [1000, 575, 75, 75]
 button_AC = [1200, 575, 75, 75]
 button_ENTER = [1200, 175, 75, 75]
 
+
 # Determines if decimal or a negative has been placed.
 decimal_placed = False
 negative_placed = False
+
 
 # Variables for calculation.
 input_variable_1 = 0
@@ -121,6 +137,7 @@ result_2 = 0
 
 # Show answer variable.
 answer_drawn = False
+
 
 # Fake loading screen objects
 class Shape:
@@ -217,7 +234,7 @@ display_text = random.randint(1, 8)
 
 # FUNCTIONS -----------------------------------------------------------------------------------------------------------
 
-# "Calculator" function that will appear where user-input and computation is needed.
+# "Calculator" function that will appear where user-input and computation is needed. Click logic is stored below.
 def draw_calculator():
     # Draw calculator background.
     arcade.draw_xywh_rectangle_filled(950, 150, 375, 625, arcade.color.GRAY)
@@ -549,8 +566,11 @@ def mirror_screen():
 
         if answer_drawn:
             mirror_outputs = Instructions("The focal length is " + str(round(result_1, 2)) + ", and the magnification "
-                                          "factor is " + str(round(result_2, 2)) + ". \n Press AC to try another"
-                                          " calculation!", 200, 100, arcade.color.BLACK, 22, False)
+                                          "factor is " + str(round(result_2, 2)) + ", \n when object distance is "
+                                          + str(input_variable_1) + " and image distance is " + str(input_variable_2) +
+                                          ". \n Press AC to try another calculation!", 200, 100, arcade.color.BLACK, 22,
+                                          False)
+
         if not answer_drawn:
             mirror_outputs = Instructions(" ", 200, 100, arcade.color.BLACK, 22, False)
 
@@ -590,9 +610,10 @@ def refraction_screen():
                                            300, arcade.color.BLACK, 18, True)
 
         if answer_drawn:
-            refraction_output = Instructions("The index of refraction is about " + str(round(result_1, 2)) + "."
-                                             "\n Press AC to try another calculation.", 200, 200,
-                                             arcade.color.BLACK, 22, True)
+            refraction_output = Instructions("The index of refraction is about " + str(round(result_1, 2)) +
+                                             ", \n when the speed of light in your medium (v) is " +
+                                             str(input_variable_1) + " 10^8m/s. \n Press AC to try another calculation."
+                                             , 200, 180, arcade.color.BLACK, 22, True)
 
         if not answer_drawn:
             refraction_output = Instructions(" ", 200, 100, arcade.color.BLACK, 22, False)
@@ -658,10 +679,10 @@ def sin_screen():
         draw_back_button()
         draw_calculator()
 
-        formula_1 = arcade.load_texture("formula/mirror_formula.png")
-        arcade.draw_texture_rectangle(400, 500, formula_1.width, formula_1.height, formula_1)
-        formula_2 = arcade.load_texture("formula/magnification_formula.png")
-        arcade.draw_texture_rectangle(600, 500, formula_2.width, formula_2.height, formula_2)
+        formula_1 = arcade.load_texture("formula/cast_formula.png")
+        arcade.draw_texture_rectangle(400, 505, 0.4*formula_1.width, 0.4*formula_1.height, formula_1)
+        formula_2 = arcade.load_texture("formula/cast_image.png")
+        arcade.draw_texture_rectangle(720, 510, 0.9*formula_2.width, 0.9*formula_2.height, formula_2)
 
         intro_sin = Instructions("This screen deals with finding TWO angles, given a SINE ratio."
                                  "\n Make sure your value is between -1 and 1, not including 0. \n "
@@ -676,8 +697,10 @@ def sin_screen():
                                          arcade.color.BLACK, 18, True)
 
         if answer_drawn:
-            sin_outputs = Instructions("For your given sine ratio, two angles exist: " + str(result_1) + " and "
-                                       + str(result_2) + ". \nBoth in degrees.", 200, 170, arcade.color.BLACK, 22, False)
+            # Reconvert input_variable to the RATIO, not the angle, as input_variable is computed to be the ANGLE once answer is inputted.
+            sin_outputs = Instructions("If sinθ is " + str(input_variable_1) +
+                                       " two angles exist: " + str(result_1) + " and " + str(result_2) +
+                                       ". \nBoth in degrees.", 200, 170, arcade.color.BLACK, 22, False)
 
         if not answer_drawn:
             sin_outputs = Instructions(" ", 200, 100, arcade.color.BLACK, 22, False)
@@ -701,10 +724,10 @@ def cos_screen():
         draw_back_button()
         draw_calculator()
 
-        formula_1 = arcade.load_texture("formula/mirror_formula.png")
-        arcade.draw_texture_rectangle(400, 500, formula_1.width, formula_1.height, formula_1)
-        formula_2 = arcade.load_texture("formula/magnification_formula.png")
-        arcade.draw_texture_rectangle(600, 500, formula_2.width, formula_2.height, formula_2)
+        formula_1 = arcade.load_texture("formula/cast_formula.png")
+        arcade.draw_texture_rectangle(400, 505, 0.4 * formula_1.width, 0.4 * formula_1.height, formula_1)
+        formula_2 = arcade.load_texture("formula/cast_image.png")
+        arcade.draw_texture_rectangle(720, 510, 0.9 * formula_2.width, 0.9 * formula_2.height, formula_2)
 
         intro_cos = Instructions("This screen deals with finding TWO angles, given a COSINE ratio."
                                  "\n Make sure your value is between -1 and 1, not including 0. \n "
@@ -719,8 +742,9 @@ def cos_screen():
                                          arcade.color.BLACK, 18, True)
 
         if answer_drawn:
-            cos_outputs = Instructions("For your given cosine ratio, two angles exist: " + str(result_1) + " and "
-                                       + str(result_2) + ". \nBoth in degrees.", 200, 170, arcade.color.BLACK, 22, False)
+            cos_outputs = Instructions("If cosθ is " + str(input_variable_1) +
+                                       " two angles exist: " + str(result_1) + " and " + str(result_2) +
+                                       ". \nBoth in degrees.", 200, 170, arcade.color.BLACK, 22, False)
 
         if not answer_drawn:
             cos_outputs = Instructions(" ", 200, 100, arcade.color.BLACK, 22, False)
@@ -744,10 +768,10 @@ def tan_screen():
         draw_back_button()
         draw_calculator()
 
-        formula_1 = arcade.load_texture("formula/mirror_formula.png")
-        arcade.draw_texture_rectangle(400, 500, formula_1.width, formula_1.height, formula_1)
-        formula_2 = arcade.load_texture("formula/magnification_formula.png")
-        arcade.draw_texture_rectangle(600, 500, formula_2.width, formula_2.height, formula_2)
+        formula_1 = arcade.load_texture("formula/cast_formula.png")
+        arcade.draw_texture_rectangle(400, 505, 0.4 * formula_1.width, 0.4 * formula_1.height, formula_1)
+        formula_2 = arcade.load_texture("formula/cast_image.png")
+        arcade.draw_texture_rectangle(720, 510, 0.9 * formula_2.width, 0.9 * formula_2.height, formula_2)
 
         intro_tan = Instructions("This screen deals with finding TWO angles, given a TANGENT ratio."
                                  "\n Make sure your value is between -1 and 1, not including 0. \n "
@@ -762,9 +786,9 @@ def tan_screen():
                                          arcade.color.BLACK, 18, True)
 
         if answer_drawn:
-            tan_outputs = Instructions("For your given tangent ratio, two angles exist: " + str(result_1) + " and "
-                                       + str(result_2) + ". \nBoth in degrees.", 200, 170, arcade.color.BLACK, 22, False)
-
+            tan_outputs = Instructions("If tanθ is " + str(input_variable_1) +
+                                       " two angles exist: " + str(result_1) + " and " + str(result_2) +
+                                       ". \nBoth in degrees.", 200, 170, arcade.color.BLACK, 22, False)
         if not answer_drawn:
             tan_outputs = Instructions(" ", 200, 100, arcade.color.BLACK, 22, False)
 
@@ -784,6 +808,26 @@ def sequences_screen():
 
         draw_back_button()
 
+        # Draw button that paths to arithmetic sequence
+        arith_seq_button = arcade.load_texture("buttons/arith_seq_button.png")
+        arcade.draw_texture_rectangle(310, 450, 1.4 * arith_seq_button.width, 1.4 * arith_seq_button.height,
+                                      arith_seq_button)
+
+        # Draw button that paths to geometric sequence
+        geo_seq_button = arcade.load_texture("buttons/geo_seq_button.png")
+        arcade.draw_texture_rectangle(310, 300, 1.4 * geo_seq_button.width, 1.4 * geo_seq_button.height, geo_seq_button)
+
+        # Draw button that paths to arithmetic series
+        arith_series_button = arcade.load_texture("buttons/arith_series_button.png")
+        arcade.draw_texture_rectangle(1170, 450, 1.4 * arith_series_button.width, 1.4 * arith_series_button.height,
+                                      arith_series_button)
+
+        # Draw button that paths to geometric series
+        geo_series_button = arcade.load_texture("buttons/geo_series_button.png")
+        arcade.draw_texture_rectangle(1170, 300, 1.4 * geo_series_button.width, 1.4 * geo_series_button.height,
+                                      geo_series_button)
+
+
 # Render the arithmetic sequences screen
 def arithmetic_sequence():
     global answer_drawn, arith_seq_output
@@ -796,6 +840,197 @@ def arithmetic_sequence():
         draw_back_button()
         draw_calculator()
 
+        formula_1 = arcade.load_texture("formula/cast_formula.png")
+        arcade.draw_texture_rectangle(400, 505, 0.4 * formula_1.width, 0.4 * formula_1.height, formula_1)
+        formula_2 = arcade.load_texture("formula/cast_image.png")
+        arcade.draw_texture_rectangle(720, 510, 0.9 * formula_2.width, 0.9 * formula_2.height, formula_2)
+
+        intro_arith_seq = Instructions("Calculates a TERM of an arithmetic sequence, given the 1st term, \n"
+                                       "the common difference, and the number of the term."
+                                       "\n -> The number of term MUST be an integer; \n cannot have a \"2.7th\" "
+                                       "term of a sequence.", 300, 600, arcade.color.BLACK, 18, False)
+
+        step_one_arith_seq = Instructions("1. Enter a (first term), d (common difference), THEN n (term number)", 300,
+                                          375, arcade.color.BLACK, 18, True)
+        step_two_arith_seq = Instructions("2. INPUT IN ORDER!! a -> d -> n \n Refrain from entering 0 on any of them. "
+                                          "\nAlso, refrain from having your answer be 0 as well, somehow",
+                                          300, 295, arcade.color.BLACK, 18, True)
+        step_three_arith_seq = Instructions("3. Program will output the nth term of your arithmetic sequence.", 300,
+                                            250,arcade.color.BLACK, 18, True)
+
+        if answer_drawn:
+            arith_seq_output = Instructions("If the first term of your sequence (a) is " + str(input_variable_1) +
+                                            ", with your common \n difference (d) being " + str(input_variable_2) +
+                                            ", the " + str(input_variable_3) + "th term of this sequence is " +
+                                            str(result_1) + ".", 200, 100, arcade.color.BLACK, 22, True)
+
+        if not answer_drawn:
+            arith_seq_output = Instructions(" ", 200, 100, arcade.color.BLACK, 22, False)
+
+        intro_arith_seq.draw_instructions()
+        step_one_arith_seq.draw_instructions()
+        step_two_arith_seq.draw_instructions()
+        step_three_arith_seq.draw_instructions()
+        arith_seq_output.draw_instructions()
+
+
+# Render the geometric sequences screen
+def geometric_sequence():
+    global answer_drawn, geo_seq_output
+
+    if on_geo_seq_screen:
+        background = arcade.load_texture("background/background_math.png")
+        arcade.draw_texture_rectangle(WIDTH / 2, HEIGHT / 2, 1.7 * background.width, 1.7 * background.height,
+                                      background)
+
+        draw_back_button()
+        draw_calculator()
+
+        formula_1 = arcade.load_texture("formula/cast_formula.png")
+        arcade.draw_texture_rectangle(400, 505, 0.4 * formula_1.width, 0.4 * formula_1.height, formula_1)
+        formula_2 = arcade.load_texture("formula/cast_image.png")
+        arcade.draw_texture_rectangle(720, 510, 0.9 * formula_2.width, 0.9 * formula_2.height, formula_2)
+
+        intro_geo_seq = Instructions("Calculates a TERM of an arithmetic sequence, given the 1st term, \n" 
+                                     "the common ratio, and the number of the term. "
+                                     "\n -> The number of term MUST be an integer; \n cannot have a \"2.7th\" "
+                                     "term of a sequence.", 300, 600, arcade.color.BLACK, 18, False)
+
+        step_one_geo_seq = Instructions("1. Enter a (first term), r (common ratio), THEN n (term number)", 300,
+                                        375, arcade.color.BLACK, 18, True)
+        step_two_geo_seq = Instructions("2. INPUT IN ORDER!! a -> r -> n \n Refrain from entering 0 on any of them. "
+                                        "\nAlso, refrain from having your answer be 0 as well, somehow",
+                                        300, 295, arcade.color.BLACK, 18, True)
+        step_three_geo_seq = Instructions("3. Program will output the nth term of your geometric sequence.", 300,
+                                         250, arcade.color.BLACK, 18, True)
+
+        if answer_drawn:
+            geo_seq_output = Instructions("If the first term of your sequence (a) is " + str(input_variable_1) +
+                                          ", with your common \n ratio (r) being " + str(input_variable_2) +
+                                          ", the " + str(input_variable_3) + "th term of this sequence is " +
+                                          str(result_1) + ".", 200, 100, arcade.color.BLACK, 22, True)
+
+        if not answer_drawn:
+            geo_seq_output = Instructions(" ", 200, 100, arcade.color.BLACK, 22, False)
+
+        intro_geo_seq.draw_instructions()
+        step_one_geo_seq.draw_instructions()
+        step_two_geo_seq.draw_instructions()
+        step_three_geo_seq.draw_instructions()
+        geo_seq_output.draw_instructions()
+
+
+# Render the arithmetic series screen
+def arithmetic_series():
+    global answer_drawn, arith_series_output
+
+    if on_arith_series_screen:
+        background = arcade.load_texture("background/background_math.png")
+        arcade.draw_texture_rectangle(WIDTH / 2, HEIGHT / 2, 1.7 * background.width, 1.7 * background.height,
+                                      background)
+
+        draw_back_button()
+        draw_calculator()
+
+        formula_1 = arcade.load_texture("formula/cast_formula.png")
+        arcade.draw_texture_rectangle(400, 505, 0.4 * formula_1.width, 0.4 * formula_1.height, formula_1)
+        formula_2 = arcade.load_texture("formula/cast_image.png")
+        arcade.draw_texture_rectangle(720, 510, 0.9 * formula_2.width, 0.9 * formula_2.height, formula_2)
+
+        intro_arith_series = Instructions("Calculates a SUM of the nth term of an arithmetic sequence, \ngiven the 1st "
+                                          "term, the common difference, and the number of \n terms added."
+                                          "\n\n -> The number of terms MUST be an integer; \n cannot add \"1.4\" "
+                                          "terms of a sequence.", 300, 600, arcade.color.BLACK, 18, False)
+
+        step_one_arith_series = Instructions("1. Enter a (first term), d (common difference), THEN n (no. of terms)",
+                                             300, 375, arcade.color.BLACK, 18, True)
+        step_two_arith_series = Instructions("2. INPUT IN ORDER!! a -> d -> n \n Refrain from entering 0. "
+                                             "\nAlso, refrain from having your answer be 0 as well, somehow",
+                                             300, 295, arcade.color.BLACK, 18, True)
+        step_three_arith_series = Instructions("3. Program will output the nth sum of your arithmetic sequence.", 300,
+                                              250,arcade.color.BLACK, 18, True)
+
+        if answer_drawn:
+            arith_series_output = Instructions("If the first term of your sequence (a) is " + str(input_variable_1) +
+                                               ", with your common \ndifference (d) being " + str(input_variable_2) +
+                                               ", the " + str(input_variable_3) + "th series (sum) of this sequence is "
+                                               + str(result_1) + ".", 200, 100, arcade.color.BLACK, 22, True)
+
+        if not answer_drawn:
+            arith_series_output = Instructions(" ", 200, 100, arcade.color.BLACK, 22, False)
+
+        intro_arith_series.draw_instructions()
+        step_one_arith_series.draw_instructions()
+        step_two_arith_series.draw_instructions()
+        step_three_arith_series.draw_instructions()
+        arith_series_output.draw_instructions()
+
+
+# Render the geometric series screen
+def geometric_series():
+    global answer_drawn, geo_series_output
+
+    if on_geo_series_screen:
+        background = arcade.load_texture("background/background_math.png")
+        arcade.draw_texture_rectangle(WIDTH / 2, HEIGHT / 2, 1.7 * background.width, 1.7 * background.height,
+                                      background)
+
+        draw_back_button()
+        draw_calculator()
+
+        formula_1 = arcade.load_texture("formula/cast_formula.png")
+        arcade.draw_texture_rectangle(400, 505, 0.4 * formula_1.width, 0.4 * formula_1.height, formula_1)
+        formula_2 = arcade.load_texture("formula/cast_image.png")
+        arcade.draw_texture_rectangle(720, 510, 0.9 * formula_2.width, 0.9 * formula_2.height, formula_2)
+
+        intro_geo_series = Instructions("Calculates a SUM of the nth term of an geometric sequence, \ngiven the 1st "
+                                        "term, the common ratio, and the number of \n terms added."
+                                        "\n\n -> The number of terms MUST be an integer; \n cannot add \"1.4\" "
+                                        "terms of a sequence.", 300, 600, arcade.color.BLACK, 18, False)
+
+        step_one_geo_series = Instructions("1. Enter a (first term), r (common ratio), THEN n (no. of terms)",
+                                           300, 375, arcade.color.BLACK, 18, True)
+        step_two_geo_series = Instructions("2. INPUT IN ORDER!! a -> r -> n \n Refrain from entering 0. "
+                                           "\nAlso, refrain from having your answer be 0 as well, somehow",
+                                             300, 295, arcade.color.BLACK, 18, True)
+        step_three_geo_series = Instructions("3. Program will output the nth sum of your geometric sequence.", 300,
+                                             250,arcade.color.BLACK, 18, True)
+
+        if answer_drawn:
+            geo_series_output = Instructions("If the first term of your sequence (a) is " + str(input_variable_1) +
+                                             ", with your common \nratio (r) being " + str(input_variable_2) +
+                                             ", the " + str(input_variable_3) + "th series (sum) of this sequence is "
+                                             + str(result_1) + ".", 200, 100, arcade.color.BLACK, 22, True)
+
+        if not answer_drawn:
+            geo_series_output = Instructions(" ", 200, 100, arcade.color.BLACK, 22, False)
+
+        intro_geo_series.draw_instructions()
+        step_one_geo_series.draw_instructions()
+        step_two_geo_series.draw_instructions()
+        step_three_geo_series.draw_instructions()
+        geo_series_output.draw_instructions()
+
+
+# Render the financial applications screen.
+def money_screen():
+    if on_money_screen:
+        background = arcade.load_texture("background/background_math.png")
+        arcade.draw_texture_rectangle(WIDTH/2, HEIGHT/2, 1.7*background.width, 1.7*background.height, background)
+
+        draw_back_button()
+
+        # Draw button that paths to sin ratio conversion
+        sin_button = arcade.load_texture("buttons/sin_button.png")
+        arcade.draw_texture_rectangle(290, 450, 1.4*sin_button.width, 1.4*sin_button.height, sin_button)
+
+        # Draw button that paths to cos ratio conversion
+        cos_button = arcade.load_texture("buttons/cos_button.png")
+        arcade.draw_texture_rectangle(725, 450, 1.4*cos_button.width, 1.4*cos_button.height, cos_button)
+
+        # Draw button that paths to tan ratio conversion
+        tan_button = arcade.load_texture("buttons/tan_button.png")
+        arcade.draw_texture_rectangle(1170, 450, 1.4*tan_button.width, 1.4*tan_button.height, tan_button)
 
 # Draw all the above.
 def on_draw():
@@ -815,6 +1050,10 @@ def on_draw():
     tan_screen()
     sequences_screen()
     arithmetic_sequence()
+    geometric_sequence()
+    arithmetic_series()
+    geometric_series()
+    money_screen()
 
 
 def on_key_press(key, modifiers):
@@ -834,7 +1073,7 @@ def on_key_release(key, modifiers):
 # Custom calculator - button input logic. Will be called upon in all future screens and functions, namely in
 # on_mouse_press().
 def calc_input(x, y):
-    global user_input, decimal_placed, on_mirror_screen, input_variable_1, input_variable_2, input_variable_3
+    global user_input, decimal_placed, input_variable_1, input_variable_2, input_variable_3
     global answer_drawn, negative_placed
 
     # Unpack button variables into readable data.
@@ -852,18 +1091,23 @@ def calc_input(x, y):
     button_negative_x, button_negative_y, button_negative_w, button_negative_h = button_negative
     button_AC_x, button_AC_y, button_AC_w, button_AC_h = button_AC
 
-    if on_mirror_screen or on_refraction_screen or on_sin_screen or on_cos_screen or on_tan_screen:
+
+    # ADD SCREEN VARIABLES!!!!!!!!!!!!!!!!!!!!!!!
+    if on_mirror_screen or on_refraction_screen or on_sin_screen or on_cos_screen or on_tan_screen or \
+            on_arith_seq_screen or on_geo_seq_screen or on_arith_series_screen or on_geo_series_screen or \
+            on_simple_interest_screen or on_compound_interest_screen or on_present_value_screen:
 
         # The Mirror + Mag screen requires TWO variables. Take in one if not on that screen. Take two if ON that screen.
         # CAST rules need seven (max) digit characters. Take seven if on those screens.
         # Seq + Series screens need THREE inputs. Take three inputs if on those.
-        if (len(user_input) <= 5 and input_variable_1 == 0 and not on_mirror_screen) or (len(user_input) <= 5 and
-                                                                                         (input_variable_1 == 0 or
-                                                                                          input_variable_2 == 0) and
-                                                                                         on_mirror_screen) or \
+        # Interest screens also need THREE inputs; take three on these screens.
+        if (len(user_input) <= 5 and input_variable_1 == 0 and not on_mirror_screen) \
+                or (len(user_input) <= 5 and (input_variable_1 == 0 or input_variable_2 == 0) and on_mirror_screen) or \
                 (len(user_input) <= 7 and input_variable_1 == 0 and (on_sin_screen or on_cos_screen or on_tan_screen)) \
-                or (len(user_input) <= 3 and (input_variable_1 == 0 and input_variable_2 == 0 and input_variable_3 == 0)
-                    and (on_arith_seq_screen or on_geo_seq_screen or on_arith_series_screen or on_geo_series_screen)):
+                or (len(user_input) <= 4 and (input_variable_1 == 0 or input_variable_2 == 0 or input_variable_3 == 0)
+                    and (on_arith_seq_screen or on_geo_seq_screen or on_arith_series_screen or on_geo_series_screen)) \
+                or (len(user_input) <= 7 and (input_variable_1 == 0 or input_variable_2 == 0 or input_variable_3 == 0)
+                    and (on_simple_interest_screen or on_compound_interest_screen or on_present_value_screen)):
 
             # If button_one has been clicked (on the calculator), add "1" to the user_input string, and so on.
             if button_one_x < x < button_one_x + button_one_w and button_one_y < y < button_one_y + button_one_h \
@@ -918,9 +1162,9 @@ def calc_input(x, y):
                 user_input += "0"
 
             # Only render in decimals if it hasn't been placed before in the same string (...and not decimal_placed:)
-            # Prohibit decimals in sequence and series term screens.
+            # Prohibit decimals in sequence and series screens, if asking for NUMBER OF TERMS.
             if button_decimal_x < x < button_decimal_x + button_decimal_w and button_decimal_y < y < button_decimal_y \
-                    + button_decimal_h and button_cooldown < 0 and not decimal_placed and user_input != " " and \
+                    + button_decimal_h and button_cooldown < 0 and not decimal_placed and user_input != " " and not \
                     ((on_arith_seq_screen or on_arith_series_screen or on_geo_seq_screen or on_geo_series_screen)
                      and (input_variable_1 == 0 or input_variable_2 == 0)):
 
@@ -931,28 +1175,27 @@ def calc_input(x, y):
             # Only render in negatives if it's the first character; and has not been placed before.
             # As well, prohibit negative placement where not required (aka speed, time, indices, etc.)
             # As well, prohibit them when asking for the number of terms in sequence / series screens.
+            # Prohibit negatives in all money-related screens.
             if button_negative_x < x < button_negative_x + button_negative_w and button_negative_y < y < \
                     button_negative_y + button_negative_h and button_cooldown < 0 and not negative_placed \
                     and user_input == " " and not on_refraction_screen and \
                     ((on_arith_seq_screen or on_arith_series_screen or on_geo_seq_screen or on_geo_series_screen)
-                     and (input_variable_1 == 0 or input_variable_2 == 0)):
+                     and (input_variable_1 == 0 or input_variable_2 == 0)) and not \
+                    (on_simple_interest_screen or on_compound_interest_screen or on_present_value_screen):
 
                 arcade.play_sound(select_button_click)
                 user_input += "-"
                 negative_placed = True
-
 
             # Automatic decimal placement - refraction. Will always follow the first character.
             if on_refraction_screen and len(user_input) > 1 and user_input[1] != " " and not decimal_placed:
                 user_input += "."
                 decimal_placed = True
 
-
             # Automatic decimal placement - angle ratios. Will always follow a zero.
             if (on_sin_screen or on_cos_screen or on_tan_screen) and user_input[-1] == "0" and not decimal_placed:
                 user_input += "."
                 decimal_placed = True
-
 
         if button_AC_x < x < button_AC_x + button_AC_w and button_AC_y < y < button_AC_y + button_AC_h \
                 and button_cooldown < 0:
@@ -980,14 +1223,22 @@ def calc_input(x, y):
                 if result_1 != 0:
                     reset_all_variables()
 
+            if on_simple_interest_screen or on_compound_interest_screen or on_present_value_screen:
+                if result_1 != 0:
+                    reset_all_variables()
+
 
 # Clicking logic. -----------------------------------------------------------------------------------------------------
 def on_mouse_press(x, y, button, modifiers):
     global button_cooldown
+
     global on_title, on_fake_loading, on_topic_selection, on_science_screen, on_math_screen, on_compsci_screen
     global on_bio_screen, on_optics_screen, on_mirror_screen, on_refraction_screen
     global on_cast_screen, on_sequences_screen, on_money_screen
     global on_sin_screen, on_cos_screen, on_tan_screen
+    global on_arith_seq_screen, on_geo_seq_screen, on_arith_series_screen, on_geo_series_screen
+    global on_simple_interest_screen, on_compound_interest_screen, on_present_value_screen
+
     global user_input, decimal_placed, input_variable_1, input_variable_2, input_variable_3, result_1, result_2
     global answer_drawn, negative_placed
 
@@ -1009,6 +1260,13 @@ def on_mouse_press(x, y, button, modifiers):
     tan_button_x, tan_button_y, tan_button_w, tan_button_h = tan_button
 
     seq_series_button_x, seq_series_button_y, seq_series_button_w, seq_series_button_h = seq_series_button
+    arith_seq_button_x, arith_seq_button_y, arith_seq_button_w, arith_seq_button_h = arith_seq_button
+    geo_seq_button_x, geo_seq_button_y, geo_seq_button_w, geo_seq_button_h = geo_seq_button
+    arith_series_button_x, arith_series_button_y, arith_series_button_w, arith_series_button_h = arith_series_button
+    geo_series_button_x, geo_series_button_y, geo_series_button_w, geo_series_button_h = geo_series_button
+
+    money_button_x, money_button_y, money_button_w, money_button_h = money_button
+
 
     button_ENTER_x, button_ENTER_y, button_ENTER_w, button_ENTER_h, = button_ENTER
 
@@ -1157,7 +1415,7 @@ def on_mouse_press(x, y, button, modifiers):
         calc_input(x, y)
 
         if button_ENTER_x < x < button_ENTER_x + button_ENTER_w and button_ENTER_y < y < button_ENTER_y + \
-                    button_ENTER_h and (on_sin_screen or on_cos_screen or on_tan_screen) and button_cooldown < 0:
+                button_ENTER_h and (on_sin_screen or on_cos_screen or on_tan_screen) and button_cooldown < 0:
 
             if input_variable_1 == 0:  # This variable represents the trigonometric ratio of two angles.
                 input_variable_1 = float(user_input)  # Converts user_input to float for calculation
@@ -1167,42 +1425,36 @@ def on_mouse_press(x, y, button, modifiers):
 
         # If needed variable is not empty:
         if input_variable_1 != 0:
-            if input_variable_1 < -1 or input_variable_1 > 1 or input_variable_1:
+            if input_variable_1 < -1 or input_variable_1 > 1:
                 reset_all_variables()
 
             if 0 < input_variable_1 <= 1:
                 if on_sin_screen:
-                    input_variable_1 = round(math.degrees(math.asin(input_variable_1)))
-                    result_1 = input_variable_1
-                    result_2 = 180 - input_variable_1
+                    result_1 = round(math.degrees(math.asin(input_variable_1)))
+                    result_2 = 180 - round(math.degrees(math.asin(input_variable_1)))
 
                 if on_cos_screen:
-                    input_variable_1 = round(math.degrees(math.acos(input_variable_1)))
-                    result_1 = input_variable_1
-                    result_2 = 360 - input_variable_1
+                    result_1 = round(math.degrees(math.asin(input_variable_1)))
+                    result_2 = 360 - round(math.degrees(math.asin(input_variable_1)))
 
                 if on_tan_screen:
-                    input_variable_1 = round(math.degrees(math.atan(input_variable_1)))
-                    result_1 = input_variable_1
-                    result_2 = 180 + input_variable_1
+                    result_1 = round(math.degrees(math.asin(input_variable_1)))
+                    result_2 = 180 + round(math.degrees(math.asin(input_variable_1)))
 
                 answer_drawn = True
 
             if -1 < input_variable_1 < 0:
                 if on_sin_screen:
-                    input_variable_1 = round(math.degrees(math.asin(-1*input_variable_1)))
-                    result_1 = 180 + input_variable_1
-                    result_2 = 360 - input_variable_1
+                    result_1 = 180 + round(math.degrees(math.asin(input_variable_1)))
+                    result_2 = 360 - round(math.degrees(math.asin(input_variable_1)))
 
                 if on_cos_screen:
-                    input_variable_1 = round(math.degrees(math.acos(-1*on_cos_screen)))
-                    result_1 = 180 - input_variable_1
-                    result_2 = 180 + input_variable_1
+                    result_1 = 180 - round(math.degrees(math.asin(input_variable_1)))
+                    result_2 = 180 + round(math.degrees(math.asin(input_variable_1)))
 
                 if on_tan_screen:
-                    input_variable_1 = round(math.degrees(math.atan(-1*on_tan_screen)))
-                    result_1 = 180 - input_variable_1
-                    result_2 = 360 - input_variable_1
+                    result_1 = 180 - round(math.degrees(math.asin(input_variable_1)))
+                    result_2 = 360 - round(math.degrees(math.asin(input_variable_1)))
 
                 answer_drawn = True
 
@@ -1215,12 +1467,49 @@ def on_mouse_press(x, y, button, modifiers):
         on_sequences_screen = True
         button_cooldown = 0/4
 
+    # ARITHMETIC SEQUENCE BUTTON DETECTION
+    if arith_seq_button_x - 418 / 2 < x < (arith_seq_button_x - 418 / 2) + arith_seq_button_w and \
+            arith_seq_button_y - 68 / 2 < y < (arith_seq_button_y - 68 / 2) + arith_seq_button_h \
+            and on_sequences_screen and button_cooldown < 0:
+        arcade.play_sound(select_button_click)
+        on_sequences_screen = False
+        on_arith_seq_screen = True
+        button_cooldown = 0.4
+
+    # GEOMETRIC SEQUENCE BUTTON DETECTION
+    if geo_seq_button_x - 418 / 2 < x < (geo_seq_button_x - 418 / 2) + geo_seq_button_w and \
+            geo_seq_button_y - 68 / 2 < y < (geo_seq_button_y - 68 / 2) + geo_seq_button_h \
+            and on_sequences_screen and button_cooldown < 0:
+        arcade.play_sound(select_button_click)
+        on_sequences_screen = False
+        on_geo_seq_screen = True
+        button_cooldown = 0.4
+
+    # ARITHMETIC SERIES BUTTON DETECTION
+    if arith_series_button_x - 418 / 2 < x < (arith_series_button_x - 418 / 2) + arith_series_button_w and \
+            arith_series_button_y - 68 / 2 < y < (arith_series_button_y - 68 / 2) + arith_series_button_h \
+            and on_sequences_screen and button_cooldown < 0:
+        arcade.play_sound(select_button_click)
+        on_sequences_screen = False
+        on_arith_series_screen = True
+        button_cooldown = 0.4
+
+    # GEOMETRIC SEQUENCE BUTTON DETECTION
+    if geo_series_button_x - 418 / 2 < x < (geo_series_button_x - 418 / 2) + geo_series_button_w and \
+            geo_series_button_y - 68 / 2 < y < (geo_series_button_y - 68 / 2) + geo_series_button_h \
+            and on_sequences_screen and button_cooldown < 0:
+        arcade.play_sound(select_button_click)
+        on_sequences_screen = False
+        on_geo_series_screen = True
+        button_cooldown = 0.4
+
     # ARITHMETIC SEQUENCES CALCULATION - Uses button detection to enter data into user_input. --------------------------
     if on_arith_seq_screen or on_arith_series_screen or on_geo_seq_screen or on_geo_series_screen:
         calc_input(x, y)
 
         if button_ENTER_x < x < button_ENTER_x + button_ENTER_w and button_ENTER_y < y < button_ENTER_y + \
-                    button_ENTER_h and (on_sin_screen or on_cos_screen or on_tan_screen) and button_cooldown < 0:
+                button_ENTER_h and (on_arith_seq_screen or on_geo_seq_screen or on_arith_series_screen or
+                                    on_geo_series_screen) and button_cooldown < 0:
 
             if input_variable_1 == 0:  # This variable represents the trigonometric ratio of two angles.
                 input_variable_1 = float(user_input)  # Converts user_input to float for calculation
@@ -1253,6 +1542,14 @@ def on_mouse_press(x, y, button, modifiers):
 
             answer_drawn = True
 
+    # FINANCIAL CALCULATORS BUTTON DETECTION
+    if money_button_x - 262 / 2 < x < (money_button_x - 262 / 2) + money_button_w and \
+            money_button_y - 61 / 2 < y < (money_button_y - 61 / 2) + money_button_h \
+            and on_math_screen and button_cooldown < 0:
+        arcade.play_sound(select_button_click)
+        on_math_screen = False
+        on_money_screen = True
+        button_cooldown = 0.4
 
     # COMPSCI BUTTON DETECTION
     if compsci_button_x - 364/2 < x < (compsci_button_x - 364/2) + compsci_button_w and compsci_button_y - 95/2 \
@@ -1333,6 +1630,22 @@ def on_mouse_press(x, y, button, modifiers):
         on_cos_screen = False
         on_tan_screen = False
         on_cast_screen = True
+        button_cooldown = 0.4
+
+        reset_all_variables()
+
+    # BACK BUTTON; any sequences or series --> Sequence Selection Screen
+    if back_button_x - 102.4 / 2 < x < (
+            back_button_x - 102.4 / 2) + back_button_w and back_button_y - 102.4 / 2 < y < \
+            back_button_y - 120.4 / 2 + back_button_h and (on_arith_seq_screen or on_geo_seq_screen
+                                                           or on_arith_series_screen or on_geo_series_screen) \
+            and button_cooldown < 0:
+        arcade.play_sound(back_button_click)
+        on_arith_seq_screen = False
+        on_geo_seq_screen = False
+        on_arith_series_screen = False
+        on_geo_series_screen = False
+        on_sequences_screen = True
         button_cooldown = 0.4
 
         reset_all_variables()
