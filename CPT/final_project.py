@@ -710,6 +710,8 @@ def sin_screen():
         step_three_sin.draw_instructions()
         sin_outputs.draw_instructions()
 
+        # help
+
 # Draw all the above.
 def on_draw():
     arcade.start_render()
