@@ -19,13 +19,16 @@ user_input = " "
 back_button = [100, 725, 102.4, 102.4]
 back_button_click = arcade.load_sound("sounds/back_button_click.wav")
 
+
 # Title screen variables; including the button's coordinate set.
 on_title = True                             # Boolean to see if program is on title.
 on_fake_loading = False                     # Boolean to see if program is on loading.
 title_button = [500, 200, 400, 150]
 
+
 # Variable that regulates inadvertent (or user-instigated) button spamming.
 button_cooldown = 0.4
+
 
 # Fake loading screen variables
 on_topic_selection = False          # Boolean to see if program is on topic selection
@@ -35,6 +38,7 @@ show_character_left = True          # show the loading screen character?
 character_counter = 0               # counts down character's time on screen
 show_character_right = False        # show the loading screen character's mirrored version?
 transition_alpha = 0                # tracks visibility of transition screen.
+
 
 # Selection screen variables
 on_science_screen = False
@@ -46,6 +50,7 @@ science_button = [250, 450, 364, 95]
 math_button = [735, 450, 364, 95]
 compsci_button = [1220, 450, 364, 95]
 
+
 # Science screen variables
 on_bio_screen = False
 on_optics_screen = False
@@ -53,12 +58,37 @@ on_optics_screen = False
 bio_button = [250, 450, 408.8, 138.6]
 optics_button = [1150, 450, 408.8, 138.6]
 
+
 # Optics screen variables
 on_mirror_screen = False
 on_refraction_screen = False
 
 mirror_button = [350, 450, 596.4, 100.8]
 refraction_button = [1050, 450, 596.4, 100.8]
+
+
+# Math screen variables
+on_cast_screen = False
+on_sequences_screen = False
+on_money_screen = False
+
+cast_button = [250, 450, 262, 61]
+
+
+# CAST screen variables
+on_sin_screen = False
+on_cos_screen = False
+on_tan_screen = False
+
+sin_button = [290, 450, 254, 65]
+
+
+
+# Sequences screen variables
+on_arith_seq_screen = False
+on_geo_seq_screen = False
+on_arith_series_screen = False
+on_geo_series_screen = False
 
 # Calculator - button coordinate sets
 button_one = [1000, 475, 75, 75]
@@ -270,7 +300,7 @@ def draw_back_button():
     arcade.draw_texture_rectangle(100, 725, 0.4 * back_button.width, 0.4 * back_button.height, back_button)
 
 
-# Reset variables functions when user exits calculator environment.
+# Reset variables function when user exits calculator environment.
 def reset_all_variables():
     global decimal_placed, user_input, input_variable_1, input_variable_2, result_1, result_2, answer_drawn
     global negative_placed
@@ -290,6 +320,8 @@ def on_update(delta_time):
     global loading_counter, on_fake_loading, on_topic_selection, character_counter
     global show_character_left, show_character_right, transition_alpha
     global button_cooldown, on_science_screen, on_title
+
+    global on_math_screen
 
     # Fake loading screen updates
     if on_fake_loading:
@@ -319,6 +351,7 @@ def on_update(delta_time):
 
     # To combat this, button_cooldown has been introduced; at every new screen, count down the 0.4s delay to
     # clicking buttons; by -1/60s. (aka delta_time)
+    """
     if on_topic_selection:
         button_cooldown -= delta_time
     if on_science_screen:
@@ -331,10 +364,24 @@ def on_update(delta_time):
         button_cooldown -= delta_time
     if on_refraction_screen:
         button_cooldown -= delta_time
+    if on_math_screen:
+        button_cooldown -= delta_time
+    if on_cast_screen:
+        button_cooldown - delta_time
+    if on_sequences_screen:
+        button_cooldown -= delta_time
+    if on_money_screen:
+        button_cooldown -= delta_time
+    if on_sin_screen:
+        button_cooldown -= delta_time
+    """
+
+    button_cooldown -= delta_time
+
 
     if W_pressed:
         on_title = False
-        on_science_screen = True
+        on_math_screen = True
 
 
 # Render title screen
@@ -509,9 +556,6 @@ def mirror_screen():
         formula_2 = arcade.load_texture("formula/magnification_formula.png")
         arcade.draw_texture_rectangle(600, 500, formula_2.width, formula_2.height, formula_2)
 
-
-
-
         intro_mirror = Instructions("This screen deals with mirror and magnification equations. \nIs one-way; does"
                                     " not support ho or hi, or finding di or do yet."
                                     "\n Only calculates f and m in this case, given do and di.", 300, 600,
@@ -581,6 +625,91 @@ def refraction_screen():
         refraction_output.draw_instructions()
 
 
+# Render the math screen.
+def math_screen():
+    if on_math_screen:
+        background = arcade.load_texture("background/background_math.png")
+        arcade.draw_texture_rectangle(WIDTH/2, HEIGHT/2, 1.7*background.width, 1.7*background.height, background)
+
+        draw_back_button()
+
+        # Draw button that paths to CAST
+        cast_button = arcade.load_texture("buttons/CAST_button.png")
+        arcade.draw_texture_rectangle(250, 450, 1.4*cast_button.width, 1.4*cast_button.height, cast_button)
+
+        # Draw button that paths to Sequences and Series
+        seq_series_button = arcade.load_texture("buttons/seq_series_button.png")
+        arcade.draw_texture_rectangle(710, 450, 1.4*seq_series_button.width, 1.4*seq_series_button.height,
+                                      seq_series_button)
+
+        # Draw button that paths to Finances
+        money_button = arcade.load_texture("buttons/money_button.png")
+        arcade.draw_texture_rectangle(1200, 450, 1.4*money_button.width, 1.4*money_button.height, money_button)
+
+
+# Render the optics screen.
+def cast_screen():
+    if on_cast_screen:
+        background = arcade.load_texture("background/background_math.png")
+        arcade.draw_texture_rectangle(WIDTH/2, HEIGHT/2, 1.7*background.width, 1.7*background.height, background)
+
+        draw_back_button()
+
+        # Draw button that paths to sin ratio conversion
+        sin_button = arcade.load_texture("buttons/sin_button.png")
+        arcade.draw_texture_rectangle(290, 450, 1.4*sin_button.width, 1.4*sin_button.height, sin_button)
+
+        # Draw button that paths to cos ratio conversion
+        cos_button = arcade.load_texture("buttons/cos_button.png")
+        arcade.draw_texture_rectangle(725, 450, 1.4*cos_button.width, 1.4*cos_button.height, cos_button)
+
+        # Draw button that paths to tan ratio conversion
+        tan_button = arcade.load_texture("buttons/tan_button.png")
+        arcade.draw_texture_rectangle(1170, 450, 1.4*tan_button.width, 1.4*tan_button.height, tan_button)
+
+
+# Render the mirror and magnification screen.
+def sin_screen():
+    global answer_drawn, sin_outputs
+
+    if on_sin_screen:
+        background = arcade.load_texture("background/background_math.png")
+        arcade.draw_texture_rectangle(WIDTH / 2, HEIGHT / 2, 1.7 * background.width, 1.7 * background.height,
+                                      background)
+
+        draw_back_button()
+
+        draw_calculator()
+
+        formula_1 = arcade.load_texture("formula/mirror_formula.png")
+        arcade.draw_texture_rectangle(400, 500, formula_1.width, formula_1.height, formula_1)
+        formula_2 = arcade.load_texture("formula/magnification_formula.png")
+        arcade.draw_texture_rectangle(600, 500, formula_2.width, formula_2.height, formula_2)
+
+        intro_sin = Instructions("This screen deals with finding TWO angles, given a SINE ratio."
+                                 "\n Make sure your value is between -1 and 1, not including 0. \n "
+                                 "Not done in radians; degrees only!", 300, 600, arcade.color.BLACK, 18, False)
+
+        step_one_sin = Instructions("1. Enter a four-digit sine ratio number.", 300, 400, arcade.color.BLACK, 18, True)
+        step_two_sin = Instructions("2. Negatives are supported.", 300, 350,
+                                       arcade.color.BLACK, 18, True)
+        step_three_sin = Instructions("3. Program will output the two angles for your SINE ratio \n"
+                                         "that exist within a 0 degrees to \n360 degrees domain.", 300, 250,
+                                         arcade.color.BLACK, 18, True)
+
+        if answer_drawn:
+            sin_outputs = Instructions("For your given sine ratio, two angles exist: " + str(result_1) + " and "
+                                       + str(result_2) + ". \nBoth in degrees.", 200, 170, arcade.color.BLACK, 22, False)
+
+        if not answer_drawn:
+            sin_outputs = Instructions(" ", 200, 100, arcade.color.BLACK, 22, False)
+
+        intro_sin.draw_instructions()
+        step_one_sin.draw_instructions()
+        step_two_sin.draw_instructions()
+        step_three_sin.draw_instructions()
+        sin_outputs.draw_instructions()
+
 # Draw all the above.
 def on_draw():
     arcade.start_render()
@@ -592,6 +721,9 @@ def on_draw():
     optics_screen()
     mirror_screen()
     refraction_screen()
+    math_screen()
+    cast_screen()
+    sin_screen()
 
 
 def on_key_press(key, modifiers):
@@ -630,12 +762,16 @@ def calc_input(x, y):
     button_negative_x, button_negative_y, button_negative_w, button_negative_h = button_negative
     button_AC_x, button_AC_y, button_AC_w, button_AC_h = button_AC
 
-    if on_mirror_screen or on_refraction_screen:      # Add more screen variables later
+    if on_mirror_screen or on_refraction_screen or on_sin_screen:      # Add more screen variables later
+
         # The Mirror + Mag screen requires TWO variables. Take in one if not on that screen. Take two if ON that screen.
+        # CAST rules need seven (max) digit characters. Take seven if on those screens.
         if (len(user_input) <= 5 and input_variable_1 == 0 and not on_mirror_screen) or (len(user_input) <= 5 and
-                                                                                         input_variable_1 == 0 or
-                                                                                         input_variable_2 == 0 and
-                                                                                         on_mirror_screen):
+                                                                                         (input_variable_1 == 0 or
+                                                                                          input_variable_2 == 0) and
+                                                                                         on_mirror_screen) or \
+                (len(user_input) <= 7 and input_variable_1 == 0 and (on_sin_screen or on_cos_screen or on_tan_screen)):
+
 
             # If button_one has been clicked (on the calculator), add "1" to the user_input string, and so on.
             if button_one_x < x < button_one_x + button_one_w and button_one_y < y < button_one_y + button_one_h \
@@ -705,10 +841,18 @@ def calc_input(x, y):
                 user_input += "-"
                 negative_placed = True
 
-            # Automatic decimal placement
+
+            # Automatic decimal placement - refraction. Will always follow the first character.
             if on_refraction_screen and len(user_input) > 1 and user_input[1] != " " and not decimal_placed:
                 user_input += "."
                 decimal_placed = True
+
+
+            # Automatic decimal placement - angle ratios. Will always follow a zero.
+            if (on_sin_screen or on_cos_screen or on_tan_screen) and user_input[-1] == "0" and not decimal_placed:
+                user_input += "."
+                decimal_placed = True
+
 
         if button_AC_x < x < button_AC_x + button_AC_w and button_AC_y < y < button_AC_y + button_AC_h \
                 and button_cooldown < 0:
@@ -728,11 +872,18 @@ def calc_input(x, y):
                 if result_1 != 0:
                     reset_all_variables()
 
+            if on_sin_screen or on_cos_screen or on_tan_screen:
+                if result_1 != 0 and result_2 != 0:
+                    reset_all_variables()
+
 
 # Clicking logic.
 def on_mouse_press(x, y, button, modifiers):
+    global button_cooldown
     global on_title, on_fake_loading, on_topic_selection, on_science_screen, on_math_screen, on_compsci_screen
-    global on_bio_screen, on_optics_screen, on_mirror_screen, on_refraction_screen, button_cooldown
+    global on_bio_screen, on_optics_screen, on_mirror_screen, on_refraction_screen
+    global on_cast_screen, on_sequences_screen, on_money_screen
+    global on_sin_screen, on_cos_screen, on_tan_screen
     global user_input, decimal_placed, input_variable_1, input_variable_2, result_1, result_2
     global answer_drawn, negative_placed
 
@@ -747,6 +898,9 @@ def on_mouse_press(x, y, button, modifiers):
     optics_button_x, optics_button_y, optics_button_w, optics_button_h = optics_button
     mirror_button_x, mirror_button_y, mirror_button_w, mirror_button_h = mirror_button
     refraction_button_x, refraction_button_y, refraction_button_w, refraction_button_h = refraction_button
+
+    cast_button_x, cast_button_y, cast_button_w, cast_button_h = cast_button
+    sin_button_x, sin_button_y, sin_button_w, sin_button_h = sin_button
 
     button_ENTER_x, button_ENTER_y, button_ENTER_w, button_ENTER_h, = button_ENTER
 
@@ -790,7 +944,7 @@ def on_mouse_press(x, y, button, modifiers):
         on_mirror_screen = True
         button_cooldown = 0.4
 
-    # MIRROR AND MAGNIFICATION CALCULATION - Uses button detection to enter data into user_input.
+    # MIRROR AND MAGNIFICATION CALCULATION - Uses button detection to enter data into user_input. ----------------------
     if on_mirror_screen:
         calc_input(x, y)
 
@@ -829,7 +983,7 @@ def on_mouse_press(x, y, button, modifiers):
         on_refraction_screen = True
         button_cooldown = 0.4
 
-    # REFRACTION CALCULATION - Uses button detection to enter data into user_input.
+    # REFRACTION CALCULATION - Uses button detection to enter data into user_input. ------------------------------------
     if on_refraction_screen:
         calc_input(x, y)
 
@@ -845,18 +999,90 @@ def on_mouse_press(x, y, button, modifiers):
                 decimal_placed = False
                 negative_placed = False
 
-        # If needed variable is  not empty:
+        # If needed variable is not empty:
         if input_variable_1 != 0:
             result_1 = 3.00 / input_variable_1
             answer_drawn = True
 
-
     # MATH BUTTON DETECTION
     if math_button_x - 364/2 < x < (math_button_x - 364/2) + math_button_w and math_button_y - 95/2 < y < \
-            (math_button_y - 95/2) + math_button_h and on_topic_selection:
+            (math_button_y - 95/2) + math_button_h and on_topic_selection and button_cooldown < 0:
         arcade.play_sound(select_button_click)
         on_topic_selection = False
         on_math_screen = True
+        button_cooldown = 0/4
+
+    # CAST BUTTON DETECTION
+    if cast_button_x - 262 / 2 < x < (cast_button_x - 262 / 2) + cast_button_w and cast_button_y - 61 / 2 < y < \
+            (cast_button_y - 61 / 2) + cast_button_h and on_math_screen and button_cooldown < 0:
+        arcade.play_sound(select_button_click)
+        on_math_screen = False
+        on_cast_screen = True
+        button_cooldown = 0.4
+
+    # SIN BUTTON DETECTION
+    if sin_button_x - 254/2 < x < (sin_button_x - 254/2) + sin_button_w and sin_button_y - 65/2 < y < sin_button_y - \
+            65/2 + sin_button_h and on_cast_screen and button_cooldown < 0:
+        arcade.play_sound(select_button_click)
+        on_cast_screen = False
+        on_sin_screen = True
+        button_cooldown = 0/4
+
+    # CAST RULE CALCULATION - Uses button detection to enter data into user_input. ------------------------------------
+    if on_sin_screen or on_cos_screen or on_tan_screen:
+        calc_input(x, y)
+
+        if button_ENTER_x < x < button_ENTER_x + button_ENTER_w and button_ENTER_y < y < button_ENTER_y + \
+                    button_ENTER_h and (on_sin_screen or on_cos_screen or on_tan_screen) and button_cooldown < 0:
+
+            if input_variable_1 == 0:  # This variable (in this equation) is "object distance' or do.
+                input_variable_1 = float(user_input)  # Converts user_input to float for calculation
+                user_input = " "  # Resets user_input and decimal_placed
+                decimal_placed = False
+                negative_placed = False
+
+        # If needed variable is not empty:
+        if input_variable_1 != 0:
+            if input_variable_1 < -1 or input_variable_1 > 1:
+                print("dumbass lol")
+                reset_all_variables()
+            if 0 < input_variable_1 < 1:
+                if on_sin_screen:
+                    input_variable_1 = round(math.degrees(math.asin(input_variable_1)))
+                    result_1 = input_variable_1
+                    result_2 = 180 - input_variable_1
+
+                if on_cos_screen:
+                    input_variable_1 = round(math.degrees(math.acos(input_variable_1)))
+                    result_1 = input_variable_1
+                    result_2 = 360 - input_variable_1
+
+                if on_tan_screen:
+                    input_variable_1 = round(math.degrees(math.atan(input_variable_1)))
+                    result_1 = input_variable_1
+                    result_2 = 180 + input_variable_1
+
+                answer_drawn = True
+
+            if -1 < input_variable_1 < 0:
+                if on_sin_screen:
+                    input_variable_1 = round(math.degrees(math.asin(-1*input_variable_1)))
+                    result_1 = 180 + input_variable_1
+                    result_2 = 360 - input_variable_1
+
+                if on_cos_screen:
+                    input_variable_1 = round(math.degrees(math.acos(-1*on_cos_screen)))
+                    result_1 = 180 - input_variable_1
+                    result_2 = 180 + input_variable_1
+
+                if on_tan_screen:
+                    input_variable_1 = round(math.degrees(math.atan(-1*on_tan_screen)))
+                    result_1 = 180 - input_variable_1
+                    result_2 = 360 - input_variable_1
+
+                answer_drawn = True
+
+
 
     # COMPSCI BUTTON DETECTION
     if compsci_button_x - 364/2 < x < (compsci_button_x - 364/2) + compsci_button_w and compsci_button_y - 95/2 \
@@ -901,6 +1127,40 @@ def on_mouse_press(x, y, button, modifiers):
         button_cooldown = 0.4
 
         reset_all_variables()
+
+    # BACK BUTTON; Math --> Topic
+    if back_button_x - 102.4/2 < x < (back_button_x - 102.4/2) + back_button_w and back_button_y - 102.4/2 < y < \
+            back_button_y - 120.4/2 + back_button_h and on_math_screen and button_cooldown < 0:
+        arcade.play_sound(back_button_click)
+        on_math_screen = False
+        on_topic_selection = True
+        button_cooldown = 0.4
+
+    # BACK BUTTON; CAST --> Math
+    if back_button_x - 102.4/2 < x < (back_button_x - 102.4/2) + back_button_w and back_button_y - 102.4/2 < y < \
+            back_button_y - 120.4/2 + back_button_h and on_cast_screen and button_cooldown < 0:
+        arcade.play_sound(back_button_click)
+        on_cast_screen = False
+        on_math_screen = True
+        button_cooldown = 0.4
+
+    # BACK BUTTON; any angle ratio --> CAST
+    if back_button_x - 102.4 / 2 < x < (
+            back_button_x - 102.4 / 2) + back_button_w and back_button_y - 102.4 / 2 < y < \
+            back_button_y - 120.4 / 2 + back_button_h and (on_sin_screen or on_cos_screen or on_tan_screen) \
+            and button_cooldown < 0:
+        arcade.play_sound(back_button_click)
+        on_sin_screen = False
+        on_cos_screen = False
+        on_tan_screen = False
+        on_cast_screen = True
+        button_cooldown = 0.4
+
+        reset_all_variables()
+
+
+
+
 
 
 # Setup the thing
