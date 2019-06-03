@@ -635,7 +635,7 @@ def refraction_screen():
         refraction_output.draw_instructions()
 
 
-# Render the math screen.
+# Render the MCR3U screen.
 def math_screen():
     if on_math_screen:
         background = arcade.load_texture("background/background_math.png")
@@ -1065,7 +1065,7 @@ def simple_interest_screen():
         formula_2 = arcade.load_texture("formula/cast_image.png")
         arcade.draw_texture_rectangle(720, 510, 0.9 * formula_2.width, 0.9 * formula_2.height, formula_2)
 
-        intro_simple_interest = Instructions("Calculates a SIMPLE INTEREST given the principle, \n"
+        intro_simple_interest = Instructions("Calculates SIMPLE INTEREST given the principle, \n"
                                              "the interest rate, and the amount of YEARS passed."
                                              "\n -> The interest rate is also per annum only.", 300, 600,
                                              arcade.color.BLACK, 18, False)
@@ -1083,10 +1083,10 @@ def simple_interest_screen():
         if answer_drawn:
             simple_interest_output = Instructions("If your principle is " + str(input_variable_1) +
                                                   " dollars, your interest rate " + str(input_variable_2) +
-                                                  " \nand it has been" + str(input_variable_3) +
-                                                  " years, your amount is " + str(result_1) + "; \nyour interest is " +
-                                                  str(result_1 - input_variable_1) + " dollars.", 200, 75,
-                                                  arcade.color.BLACK, 22, True)
+                                                  " \nand it has been " + str(input_variable_3) +
+                                                  " years, your amount is " + str(round(result_1, 2)) +
+                                                  "; \nyour interest is " + str(round(result_1 - input_variable_1, 2))
+                                                  + " dollars.", 200, 75, arcade.color.BLACK, 22, True)
 
         if not answer_drawn:
             simple_interest_output = Instructions(" ", 200, 100, arcade.color.BLACK, 22, False)
@@ -1096,6 +1096,105 @@ def simple_interest_screen():
         step_two_simple_interest.draw_instructions()
         step_three_simple_interest.draw_instructions()
         simple_interest_output.draw_instructions()
+
+
+# Render the compound interest screen
+def compound_interest_screen():
+    global answer_drawn, compound_interest_output
+
+    if on_compound_interest_screen:
+        background = arcade.load_texture("background/background_math.png")
+        arcade.draw_texture_rectangle(WIDTH / 2, HEIGHT / 2, 1.7 * background.width, 1.7 * background.height,
+                                      background)
+
+        draw_back_button()
+        draw_calculator()
+
+        formula_1 = arcade.load_texture("formula/cast_formula.png")
+        arcade.draw_texture_rectangle(400, 505, 0.4 * formula_1.width, 0.4 * formula_1.height, formula_1)
+        formula_2 = arcade.load_texture("formula/cast_image.png")
+        arcade.draw_texture_rectangle(720, 510, 0.9 * formula_2.width, 0.9 * formula_2.height, formula_2)
+
+        intro_compound_interest = Instructions("Calculates COMPOUND INTEREST given the principle, \n"
+                                               "the interest rate, and the amount of YEARS passed."
+                                               "\n -> The interest rate is also per annum only.", 300, 600,
+                                               arcade.color.BLACK, 18, False)
+
+        step_one_compound_interest = Instructions("1. Enter P (principle), r (interest rate per year), "
+                                                  "\n THEN t (amount of years passed)", 300,
+                                                  375, arcade.color.BLACK, 18, True)
+        step_two_compound_interest = Instructions("2. INPUT IN ORDER!! P -> r -> t \n Refrain from entering 0 on any "
+                                                  "of them. \nAlso, refrain from having your answer be 0 as well, "
+                                                  "somehow \n As well, input interest rate in DECIMALS (8% -> 0.08)"
+                                                  , 300, 250, arcade.color.BLACK, 18, True)
+        step_three_compound_interest = Instructions("3. Program will output both TOTAL AMOUNT and interest.", 300,
+                                                    200, arcade.color.BLACK, 18, True)
+
+        if answer_drawn:
+            compound_interest_output = Instructions("If your principle is " + str(input_variable_1) +
+                                                    " dollars, your interest rate " + str(input_variable_2) +
+                                                    " \n and it has been " + str(input_variable_3) +
+                                                    " years, your amount is " + str(round(result_1, 2)) +
+                                                    "; \nyour interest is " + str(round(result_1 - input_variable_1, 2))
+                                                    + " dollars.", 200, 75, arcade.color.BLACK, 22, True)
+
+        if not answer_drawn:
+            compound_interest_output = Instructions(" ", 200, 100, arcade.color.BLACK, 22, False)
+
+        intro_compound_interest.draw_instructions()
+        step_one_compound_interest.draw_instructions()
+        step_two_compound_interest.draw_instructions()
+        step_three_compound_interest.draw_instructions()
+        compound_interest_output.draw_instructions()
+
+
+# Render the present value screen
+def present_value_screen():
+    global answer_drawn, present_value_output
+
+    if on_present_value_screen:
+        background = arcade.load_texture("background/background_math.png")
+        arcade.draw_texture_rectangle(WIDTH / 2, HEIGHT / 2, 1.7 * background.width, 1.7 * background.height,
+                                      background)
+
+        draw_back_button()
+        draw_calculator()
+
+        formula_1 = arcade.load_texture("formula/cast_formula.png")
+        arcade.draw_texture_rectangle(400, 505, 0.4 * formula_1.width, 0.4 * formula_1.height, formula_1)
+        formula_2 = arcade.load_texture("formula/cast_image.png")
+        arcade.draw_texture_rectangle(720, 510, 0.9 * formula_2.width, 0.9 * formula_2.height, formula_2)
+
+        intro_present_value = Instructions("Calculates the principle needed to fulfill a future amount, \n"
+                                           "given the future amount, the rate and years passed."
+                                           "\n -> The interest rate is per annum only.", 300, 600,
+                                           arcade.color.BLACK, 18, False)
+
+        step_one_present_value = Instructions("1. Enter A (future amount), r (interest rate), "
+                                              "\n THEN t (amount of years passed)", 300,
+                                              375, arcade.color.BLACK, 18, True)
+        step_two_present_value = Instructions("2. INPUT IN ORDER!! A -> r -> t \n Refrain from entering 0 on any "
+                                              "of them. \nAlso, refrain from having your answer be 0 as well, somehow"
+                                              "\n As well, input interest rate in DECIMALS (8% -> 0.08)", 300, 250,
+                                              arcade.color.BLACK, 18, True)
+        step_three_present_value = Instructions("3. Program will output the present value or principle.", 300,
+                                                200, arcade.color.BLACK, 18, True)
+
+        if answer_drawn:
+            present_value_output = Instructions("If your desired future amount is " + str(input_variable_1) +
+                                                " dollars, your interest rate " + str(input_variable_2) +
+                                                " \nand it will be " + str(input_variable_3) +
+                                                " years since, your principle needs to be " + str(round(result_1, 2))
+                                                + " dollars.", 200, 70, arcade.color.BLACK, 22, True)
+
+        if not answer_drawn:
+            present_value_output = Instructions(" ", 200, 100, arcade.color.BLACK, 22, False)
+
+        intro_present_value.draw_instructions()
+        step_one_present_value.draw_instructions()
+        step_two_present_value.draw_instructions()
+        step_three_present_value.draw_instructions()
+        present_value_output.draw_instructions()
 
 
 # Draw all the above.
@@ -1121,6 +1220,8 @@ def on_draw():
     geometric_series()
     money_screen()
     simple_interest_screen()
+    compound_interest_screen()
+    present_value_screen()
 
 
 def on_key_press(key, modifiers):
@@ -1704,6 +1805,14 @@ def on_mouse_press(x, y, button, modifiers):
         arcade.play_sound(back_button_click)
         on_science_screen = False
         on_topic_selection = True
+        button_cooldown = 0.4
+
+    # BACK BUTTON; Biology --> Science
+    if back_button_x - 102.4/2 < x < (back_button_x - 102.4/2) + back_button_w and back_button_y - 102.4/2 < y < \
+            back_button_y - 120.4/2 + back_button_h and on_bio_screen and button_cooldown < 0:
+        arcade.play_sound(back_button_click)
+        on_bio_screen = False
+        on_science_screen = True
         button_cooldown = 0.4
 
     # BACK BUTTON; Optics --> Science
