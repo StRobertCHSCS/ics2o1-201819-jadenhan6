@@ -1,3 +1,10 @@
+# TODO: finish money functions
+#   test button functionality; some are a bit wonkier than others.
+#   can leave out the first of each function type... they probably have been verified.
+#   - include formulae for sequences, series and money
+
+
+
 # Import necessary modules.
 import arcade
 import random
@@ -105,6 +112,10 @@ geo_series_button = [1170, 300, 418, 68]
 on_simple_interest_screen = False
 on_compound_interest_screen = False
 on_present_value_screen = False
+
+simple_interest_button = [260, 450, 334, 68]
+compound_interest_button = [710, 450, 390, 68]
+present_value_button = [1200, 450, 316, 68]
 
 # Calculator - button coordinate sets
 button_one = [1000, 475, 75, 75]
@@ -1020,17 +1031,72 @@ def money_screen():
 
         draw_back_button()
 
-        # Draw button that paths to sin ratio conversion
-        sin_button = arcade.load_texture("buttons/sin_button.png")
-        arcade.draw_texture_rectangle(290, 450, 1.4*sin_button.width, 1.4*sin_button.height, sin_button)
+        # Draw button that paths to simple interest calculator
+        simple_interest_button = arcade.load_texture("buttons/simple_interest_button.png")
+        arcade.draw_texture_rectangle(260, 450, 1.2*simple_interest_button.width, 1.2*simple_interest_button.height,
+                                      simple_interest_button)
 
-        # Draw button that paths to cos ratio conversion
-        cos_button = arcade.load_texture("buttons/cos_button.png")
-        arcade.draw_texture_rectangle(725, 450, 1.4*cos_button.width, 1.4*cos_button.height, cos_button)
+        # Draw button that paths to compound interest calculator
+        compound_interest_button = arcade.load_texture("buttons/compound_interest_button.png")
+        arcade.draw_texture_rectangle(725, 450, 1.2*compound_interest_button.width, 1.2*compound_interest_button.height,
+                                      compound_interest_button)
 
-        # Draw button that paths to tan ratio conversion
-        tan_button = arcade.load_texture("buttons/tan_button.png")
-        arcade.draw_texture_rectangle(1170, 450, 1.4*tan_button.width, 1.4*tan_button.height, tan_button)
+
+        # Draw button that paths to present value calculator
+        present_value_button = arcade.load_texture("buttons/present_value_button.png")
+        arcade.draw_texture_rectangle(1185, 450, 1.2*present_value_button.width, 1.2*present_value_button.height,
+                                      present_value_button)
+
+
+# Render the simple interest screen
+def simple_interest_screen():
+    global answer_drawn, simple_interest_output
+
+    if on_simple_interest_screen:
+        background = arcade.load_texture("background/background_math.png")
+        arcade.draw_texture_rectangle(WIDTH / 2, HEIGHT / 2, 1.7 * background.width, 1.7 * background.height,
+                                      background)
+
+        draw_back_button()
+        draw_calculator()
+
+        formula_1 = arcade.load_texture("formula/cast_formula.png")
+        arcade.draw_texture_rectangle(400, 505, 0.4 * formula_1.width, 0.4 * formula_1.height, formula_1)
+        formula_2 = arcade.load_texture("formula/cast_image.png")
+        arcade.draw_texture_rectangle(720, 510, 0.9 * formula_2.width, 0.9 * formula_2.height, formula_2)
+
+        intro_simple_interest = Instructions("Calculates a SIMPLE INTEREST given the principle, \n"
+                                             "the interest rate, and the amount of YEARS passed."
+                                             "\n -> The interest rate is also per annum only.", 300, 600,
+                                             arcade.color.BLACK, 18, False)
+
+        step_one_simple_interest = Instructions("1. Enter P (principle), r (interest rate per year), "
+                                                "\n THEN t (amount of years passed)", 300,
+                                                375, arcade.color.BLACK, 18, True)
+        step_two_simple_interest = Instructions("2. INPUT IN ORDER!! P -> r -> t \n Refrain from entering 0 on any "
+                                                "of them. \nAlso, refrain from having your answer be 0 as well, somehow"
+                                                "\n As well, input interest rate in DECIMALS (8% -> 0.08)"
+                                                , 300, 250, arcade.color.BLACK, 18, True)
+        step_three_simple_interest = Instructions("3. Program will output both TOTAL AMOUNT and interest.", 300,
+                                                  200, arcade.color.BLACK, 18, True)
+
+        if answer_drawn:
+            simple_interest_output = Instructions("If your principle is " + str(input_variable_1) +
+                                                  " dollars, your interest rate " + str(input_variable_2) +
+                                                  " \nand it has been" + str(input_variable_3) +
+                                                  " years, your amount is " + str(result_1) + "; \nyour interest is " +
+                                                  str(result_1 - input_variable_1) + " dollars.", 200, 75,
+                                                  arcade.color.BLACK, 22, True)
+
+        if not answer_drawn:
+            simple_interest_output = Instructions(" ", 200, 100, arcade.color.BLACK, 22, False)
+
+        intro_simple_interest.draw_instructions()
+        step_one_simple_interest.draw_instructions()
+        step_two_simple_interest.draw_instructions()
+        step_three_simple_interest.draw_instructions()
+        simple_interest_output.draw_instructions()
+
 
 # Draw all the above.
 def on_draw():
@@ -1054,6 +1120,7 @@ def on_draw():
     arithmetic_series()
     geometric_series()
     money_screen()
+    simple_interest_screen()
 
 
 def on_key_press(key, modifiers):
@@ -1157,7 +1224,7 @@ def calc_input(x, y):
 
             # Only render in zeros, if the character before it is a decimal (...and user_input[-1] == ".":)
             if button_zero_x < x < button_zero_x + button_zero_w and button_zero_y < y < button_zero_y + button_zero_h \
-                    and button_cooldown < 0 and not (user_input[-1] == "0" and not decimal_placed):
+                    and button_cooldown < 0:
                 arcade.play_sound(select_button_click)
                 user_input += "0"
 
@@ -1193,7 +1260,7 @@ def calc_input(x, y):
                 decimal_placed = True
 
             # Automatic decimal placement - angle ratios. Will always follow a zero.
-            if (on_sin_screen or on_cos_screen or on_tan_screen) and user_input[-1] == "0" and not decimal_placed:
+            if len(user_input) <= 2 and user_input[-1] == "0" and not decimal_placed:
                 user_input += "."
                 decimal_placed = True
 
@@ -1267,6 +1334,14 @@ def on_mouse_press(x, y, button, modifiers):
 
     money_button_x, money_button_y, money_button_w, money_button_h = money_button
 
+    simple_interest_button_x, simple_interest_button_y, simple_interest_button_w, simple_interest_button_h = \
+        simple_interest_button
+
+    compound_interest_button_x, compound_interest_button_y, compound_interest_button_w, compound_interest_button_h = \
+        compound_interest_button
+
+    present_value_button_x, present_value_button_y, present_value_button_w, present_value_button_h = \
+        present_value_button
 
     button_ENTER_x, button_ENTER_y, button_ENTER_w, button_ENTER_h, = button_ENTER
 
@@ -1315,7 +1390,7 @@ def on_mouse_press(x, y, button, modifiers):
         calc_input(x, y)
 
         if button_ENTER_x < x < button_ENTER_x + button_ENTER_w and button_ENTER_y < y < button_ENTER_y + \
-                button_ENTER_h and on_mirror_screen and button_cooldown < 0:
+                button_ENTER_h and button_cooldown < 0:
 
             # Assigns first input to input_variable_1; as TWO are required in the Mirror / Mag Equations
             # 1/f = 1/do + 1/di
@@ -1354,7 +1429,7 @@ def on_mouse_press(x, y, button, modifiers):
         calc_input(x, y)
 
         if button_ENTER_x < x < button_ENTER_x + button_ENTER_w and button_ENTER_y < y < button_ENTER_y + \
-                button_ENTER_h and on_refraction_screen and button_cooldown < 0:
+                button_ENTER_h and button_cooldown < 0:
 
             # Assigns first and only input to variable_1, which is v. c is given.
             # n = c / v.
@@ -1415,7 +1490,7 @@ def on_mouse_press(x, y, button, modifiers):
         calc_input(x, y)
 
         if button_ENTER_x < x < button_ENTER_x + button_ENTER_w and button_ENTER_y < y < button_ENTER_y + \
-                button_ENTER_h and (on_sin_screen or on_cos_screen or on_tan_screen) and button_cooldown < 0:
+                button_ENTER_h and button_cooldown < 0:
 
             if input_variable_1 == 0:  # This variable represents the trigonometric ratio of two angles.
                 input_variable_1 = float(user_input)  # Converts user_input to float for calculation
@@ -1503,13 +1578,12 @@ def on_mouse_press(x, y, button, modifiers):
         on_geo_series_screen = True
         button_cooldown = 0.4
 
-    # ARITHMETIC SEQUENCES CALCULATION - Uses button detection to enter data into user_input. --------------------------
+    # SEQUENCES AND SERIES CALCULATION - Uses button detection to enter data into user_input. --------------------------
     if on_arith_seq_screen or on_arith_series_screen or on_geo_seq_screen or on_geo_series_screen:
         calc_input(x, y)
 
         if button_ENTER_x < x < button_ENTER_x + button_ENTER_w and button_ENTER_y < y < button_ENTER_y + \
-                button_ENTER_h and (on_arith_seq_screen or on_geo_seq_screen or on_arith_series_screen or
-                                    on_geo_series_screen) and button_cooldown < 0:
+                button_ENTER_h and button_cooldown < 0:
 
             if input_variable_1 == 0:  # This variable represents the trigonometric ratio of two angles.
                 input_variable_1 = float(user_input)  # Converts user_input to float for calculation
@@ -1550,6 +1624,72 @@ def on_mouse_press(x, y, button, modifiers):
         on_math_screen = False
         on_money_screen = True
         button_cooldown = 0.4
+
+    # SIMPLE INTEREST BUTTON DETECTION
+    if simple_interest_button_x - 262 / 2 < x < (simple_interest_button_x - 262 / 2) + simple_interest_button_w and \
+            simple_interest_button_y - 61 / 2 < y < (simple_interest_button_y - 61 / 2) + simple_interest_button_h \
+            and on_money_screen and button_cooldown < 0:
+        arcade.play_sound(select_button_click)
+        on_money_screen = False
+        on_simple_interest_screen = True
+        button_cooldown = 0.4
+
+    # COMPOUND INTEREST BUTTON DETECTION
+    if compound_interest_button_x - 262 / 2 < x < (compound_interest_button_x - 262 / 2) + compound_interest_button_w \
+            and compound_interest_button_y - 61 / 2 < y < (compound_interest_button_y - 61 / 2) + \
+            compound_interest_button_h and on_money_screen and button_cooldown < 0:
+        arcade.play_sound(select_button_click)
+        on_money_screen = False
+        on_compound_interest_screen = True
+        button_cooldown = 0.4
+
+    # PRESENT VALUE BUTTON DETECTION
+    if present_value_button_x - 262 / 2 < x < (present_value_button_x - 262 / 2) + present_value_button_w and \
+            present_value_button_y - 61 / 2 < y < (present_value_button_y - 61 / 2) + present_value_button_h \
+            and on_money_screen and button_cooldown < 0:
+        arcade.play_sound(select_button_click)
+        on_money_screen = False
+        on_present_value_screen = True
+        button_cooldown = 0.4
+
+    # FINANCIAL THINGS CALCULATION - Uses button detection to enter data into user_input. ------------------------------
+    if on_simple_interest_screen or on_compound_interest_screen or on_present_value_screen:
+        calc_input(x, y)
+
+        if button_ENTER_x < x < button_ENTER_x + button_ENTER_w and button_ENTER_y < y < button_ENTER_y + \
+                button_ENTER_h and button_cooldown < 0:
+
+            if input_variable_1 == 0:  # For interest screens, this is P. For present value, this is A.
+                input_variable_1 = float(user_input)
+                user_input = " "
+                decimal_placed = False
+                negative_placed = False
+
+            elif input_variable_2 == 0: # Represents interest rate PER ANNUM
+                input_variable_2 = float(user_input)
+                user_input = " "
+                decimal_placed = False
+                negative_placed = False
+
+            elif input_variable_3 == 0: # Represents time elapsed, in YEARS
+                input_variable_3 = int(user_input)
+                user_input = " "
+                decimal_placed = False
+                negative_placed = False
+
+        # If needed variables are not empty:
+        if input_variable_1 != 0 and input_variable_2 != 0 and input_variable_3 != 0:
+            # A = P + (Prt)
+            if on_simple_interest_screen:
+                result_1 = input_variable_1 + (input_variable_1 * input_variable_2 * input_variable_3)
+            # A = P(1 + r)^t
+            elif on_compound_interest_screen:
+                result_1 = input_variable_1 * ((1 + input_variable_2) ** input_variable_3)
+            # PV = A / (1 + r)^t OR A(1 + r)^-t
+            elif on_present_value_screen:
+                result_1 = input_variable_1 / ((1 + input_variable_2) ** input_variable_3)
+
+            answer_drawn = True
 
     # COMPSCI BUTTON DETECTION
     if compsci_button_x - 364/2 < x < (compsci_button_x - 364/2) + compsci_button_w and compsci_button_y - 95/2 \
@@ -1611,18 +1751,24 @@ def on_mouse_press(x, y, button, modifiers):
         on_math_screen = True
         button_cooldown = 0.4
 
-    # BACK BUTTON; sequences --> Math
-    if back_button_x - 102.4 / 2 < x < (
-            back_button_x - 102.4 / 2) + back_button_w and back_button_y - 102.4 / 2 < y < \
+    # BACK BUTTON; Sequences Selection Screen --> Math
+    if back_button_x - 102.4 / 2 < x < (back_button_x - 102.4 / 2) + back_button_w and back_button_y - 102.4 / 2 < y < \
             back_button_y - 120.4 / 2 + back_button_h and on_sequences_screen and button_cooldown < 0:
         arcade.play_sound(back_button_click)
         on_sequences_screen = False
         on_math_screen = True
         button_cooldown = 0.4
 
+    # BACK BUTTON; Money Selection Screen --> Math
+    if back_button_x - 102.4/2 < x < (back_button_x - 102.4/2) + back_button_w and back_button_y - 102.4/2 < y < \
+            back_button_y - 120.4/2 + back_button_h and on_money_screen and button_cooldown < 0:
+        arcade.play_sound(back_button_click)
+        on_money_screen = False
+        on_math_screen = True
+        button_cooldown = 0.4
+
     # BACK BUTTON; any angle ratio --> CAST
-    if back_button_x - 102.4 / 2 < x < (
-            back_button_x - 102.4 / 2) + back_button_w and back_button_y - 102.4 / 2 < y < \
+    if back_button_x - 102.4 / 2 < x < (back_button_x - 102.4 / 2) + back_button_w and back_button_y - 102.4 / 2 < y < \
             back_button_y - 120.4 / 2 + back_button_h and (on_sin_screen or on_cos_screen or on_tan_screen) \
             and button_cooldown < 0:
         arcade.play_sound(back_button_click)
@@ -1635,8 +1781,7 @@ def on_mouse_press(x, y, button, modifiers):
         reset_all_variables()
 
     # BACK BUTTON; any sequences or series --> Sequence Selection Screen
-    if back_button_x - 102.4 / 2 < x < (
-            back_button_x - 102.4 / 2) + back_button_w and back_button_y - 102.4 / 2 < y < \
+    if back_button_x - 102.4 / 2 < x < (back_button_x - 102.4 / 2) + back_button_w and back_button_y - 102.4 / 2 < y < \
             back_button_y - 120.4 / 2 + back_button_h and (on_arith_seq_screen or on_geo_seq_screen
                                                            or on_arith_series_screen or on_geo_series_screen) \
             and button_cooldown < 0:
@@ -1650,6 +1795,18 @@ def on_mouse_press(x, y, button, modifiers):
 
         reset_all_variables()
 
+    # BACK BUTTON; any money calculators --> Money Selection Screen
+    if back_button_x - 102.4 / 2 < x < (back_button_x - 102.4 / 2) + back_button_w and back_button_y - 102.4 / 2 < y < \
+            back_button_y - 120.4 / 2 + back_button_h and (on_simple_interest_screen or on_compound_interest_screen or
+                                                           on_present_value_screen) and button_cooldown < 0:
+        arcade.play_sound(back_button_click)
+        on_simple_interest_screen = False
+        on_compound_interest_screen = False
+        on_present_value_screen = False
+        on_money_screen = True
+        button_cooldown = 0.4
+
+        reset_all_variables()
 
 # Setup the thing
 def setup():
