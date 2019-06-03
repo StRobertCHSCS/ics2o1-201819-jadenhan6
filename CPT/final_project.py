@@ -1,9 +1,8 @@
 # TODO: finish money functions
 #   test button functionality; some are a bit wonkier than others.
 #   can leave out the first of each function type... they probably have been verified.
-#   - include formulae for sequences, series and money
-
-
+#   add big texts.
+#   comment on things
 
 # Import necessary modules.
 import arcade
@@ -49,7 +48,7 @@ show_character_right = False        # show the loading screen character's mirror
 transition_alpha = 0                # tracks visibility of transition screen.
 
 
-# Selection screen variables
+# Selection screen variables, including button coordinate sets.
 on_science_screen = False
 on_math_screen = False
 on_compsci_screen = False
@@ -146,11 +145,12 @@ input_variable_3 = 0
 result_1 = 0
 result_2 = 0
 
-# Show answer variable.
+# Boolean that determines if the answer will be drawn to a screen.
+# Will only be set TRUE after needed variables have been entered. If TRUE, draws the concluding statement w/ answer.
 answer_drawn = False
 
 
-# Fake loading screen objects
+# Fake loading screen objects; create a class
 class Shape:
     def __init__(self, x, y, width, height, delta_x, delta_y, color):
         self.x = x
@@ -166,16 +166,19 @@ class Shape:
         self.y += self.delta_y
 
 
+# Create a rectangle subclass to be called.
 class Rectangle(Shape):
     def draw_shape(self):
         arcade.draw_xywh_rectangle_filled(self.x, self.y, self.width, self.height, self.color)
 
 
+# Create an ellipse subclass to be called.
 class Ellipse(Shape):
     def draw_shape(self):
         arcade.draw_ellipse_filled(self.x, self.y, self.width, self.height, self.color)
 
 
+# Create a circle subclass to be called.
 class Circle(Shape):
     def draw_shape(self):
         arcade.draw_circle_filled(self.x, self.y, self.width, self.color)
@@ -190,6 +193,7 @@ for i in range(35):
     color_green_strength = random.randint(0, 256)
     opacity = random.randint(0, 256)
 
+    # Depending on the shape type, render different subclasses of Shape object defined above.
     if shape_type == 1:
         Shape = Rectangle(random.randint(0, WIDTH), random.randint(0, HEIGHT), random.randint(20, 50),
                           random.randint(20, 50), random.randint(-1, 2), random.randint(-1, 2), (color_red_strength,
@@ -211,10 +215,11 @@ for i in range(35):
                                                                                               color_green_strength,
                                                                                               opacity))
 
-    # uploads newly created shape to the shapes_list specificed above.
+    # Uploads newly created shape to the shapes_list specified above.
     shapes_list.append(Shape)
 
 
+# Create Instructions object; textboxes that will find itself on every calculation screen.
 class Instructions:
     def __init__(self, text, x, y, color, size, bold):
         self.text = text
@@ -224,6 +229,7 @@ class Instructions:
         self.size = size
         self.bold = bold
 
+    # Function that will draw the instructions
     def draw_instructions(self):
         arcade.draw_text(self.text, self.x, self.y, self.color, self.size, bold=self.bold)
 
@@ -355,7 +361,7 @@ def on_update(delta_time):
 
     global on_math_screen
 
-    # Fake loading screen updates
+    # Fake loading screen animation.
     if on_fake_loading:
         loading_counter += delta_time           # Add 1/60s to counter.
         if loading_counter >= 8.5:              # Once loading_counter exceeds 8.5s, move to next screen
@@ -386,7 +392,6 @@ def on_update(delta_time):
 
     button_cooldown -= delta_time
 
-
     if W_pressed:
         on_title = False
         on_math_screen = True
@@ -416,7 +421,7 @@ def fake_loading():
     global display_text, on_fake_loading, on_topic_selection
     if on_fake_loading:
         for Shape in shapes_list:       # render each Shape in shapes_list here!
-            Shape.draw_shape()
+            Shape.draw_shape()          # make sure to draw and move the shapes around.
             Shape.move_shape()
 
         # Determines what type of text the user will see, depending on the result of random.randint(1, 8) above.
@@ -539,30 +544,38 @@ def optics_screen():
         # Draw button that paths to Mirror and Magnification
         mirror_button = arcade.load_texture("buttons/mirror_button.png")
         arcade.draw_texture_rectangle(350, 450, 1.4*mirror_button.width, 1.4*mirror_button.height, mirror_button)
+        arcade.draw_text(" - Calculates focal length and magnification factor, \n given object distance and "
+                         "image distance.", 75, 325, arcade.color.BLACK, 22, align="left", font_name='calibri',
+                         bold=True)
 
         # Draw button that paths to Indices of Refraction
         refraction_button = arcade.load_texture("buttons/refraction_button.png")
         arcade.draw_texture_rectangle(1050, 450, 1.4*refraction_button.width, 1.4*refraction_button.height,
                                       refraction_button)
+        arcade.draw_text(" - Calculates an index of refraction \n given the speed of light in a specific medium.",
+                         825, 325, arcade.color.BLACK, 22, align="left", font_name='calibri', bold=True)
 
 
 # Render the mirror and magnification screen.
 def mirror_screen():
     global answer_drawn, mirror_outputs
 
-    if on_mirror_screen:
+    if on_mirror_screen:        # checks if the user is on this screen, before proceeding with the following logic.
         background = arcade.load_texture("background/background_optics.png")
         arcade.draw_texture_rectangle(WIDTH / 2, HEIGHT / 2, 1.7 * background.width, 1.7 * background.height,
                                       background)
 
+        # Load back button and calculator.
         draw_back_button()
         draw_calculator()
 
+        # Load images
         formula_1 = arcade.load_texture("formula/mirror_formula.png")
         arcade.draw_texture_rectangle(400, 500, formula_1.width, formula_1.height, formula_1)
         formula_2 = arcade.load_texture("formula/magnification_formula.png")
         arcade.draw_texture_rectangle(600, 500, formula_2.width, formula_2.height, formula_2)
 
+        # Load instructions
         intro_mirror = Instructions("This screen deals with mirror and magnification equations. \nIs one-way; does"
                                     " not support ho or hi, or finding di or do yet."
                                     "\n Only calculates f and m in this case, given do and di.", 300, 600,
@@ -575,6 +588,7 @@ def mirror_screen():
                                          "derived off the formulae. \n \n Note that entering the same value for both "
                                          "variables \n won't yield results.", 300, 230, arcade.color.BLACK, 18, True)
 
+        # If told so, render the concluding sentence with the answer included.
         if answer_drawn:
             mirror_outputs = Instructions("The focal length is " + str(round(result_1, 2)) + ", and the magnification "
                                           "factor is " + str(round(result_2, 2)) + ", \n when object distance is "
@@ -585,6 +599,7 @@ def mirror_screen():
         if not answer_drawn:
             mirror_outputs = Instructions(" ", 200, 100, arcade.color.BLACK, 22, False)
 
+        # Draw all the above instances of the Instructions class.
         intro_mirror.draw_instructions()
         step_one_mirror.draw_instructions()
         step_two_mirror.draw_instructions()
@@ -601,12 +616,16 @@ def refraction_screen():
         arcade.draw_texture_rectangle(WIDTH / 2, HEIGHT / 2, 1.7 * background.width, 1.7 * background.height,
                                       background)
 
+        # Load back button and calculator. For the next screens, these comments will not appear,
+        # as it's the same thing anyway
         draw_back_button()
         draw_calculator()
 
+        # Load images
         formula = arcade.load_texture("formula/refraction_formula.png")
         arcade.draw_texture_rectangle(500, 520, formula.width, formula.height, formula)
 
+        # Load instructions
         intro_refraction = Instructions("Calculates indices of refraction, given speed of light \n in two different"
                                         " media. Only able to calculate n, not c or v.", 300, 600, arcade.color.BLACK,
                                         18, False)
@@ -646,15 +665,24 @@ def math_screen():
         # Draw button that paths to CAST
         cast_button = arcade.load_texture("buttons/CAST_button.png")
         arcade.draw_texture_rectangle(250, 450, 1.4*cast_button.width, 1.4*cast_button.height, cast_button)
+        arcade.draw_text(" - Given an trigonometric ratio, figures out \n two angles in degrees that yield that ratio. "
+                         "\n 0 ≤ θ ≤ 360. ", 75, 325, arcade.color.BLACK, 18, align="left", font_name='calibri',
+                         bold=True)
 
         # Draw button that paths to Sequences and Series
         seq_series_button = arcade.load_texture("buttons/seq_series_button.png")
         arcade.draw_texture_rectangle(710, 450, 1.4*seq_series_button.width, 1.4*seq_series_button.height,
                                       seq_series_button)
+        arcade.draw_text(" - Calculates a term in a series or the \nsum of a specific amount of terms in a sequence.",
+                         510, 340, arcade.color.BLACK, 18, align="left", font_name='calibri',
+                         bold=True)
 
         # Draw button that paths to Finances
         money_button = arcade.load_texture("buttons/money_button.png")
         arcade.draw_texture_rectangle(1200, 450, 1.4*money_button.width, 1.4*money_button.height, money_button)
+        arcade.draw_text(" - Figures out simple and compound interests, \nincluding the present value.",
+                         1000, 340, arcade.color.BLACK, 18, align="left", font_name='calibri',
+                         bold=True)
 
 
 # Render the CAST (ratio selection) screen.
@@ -668,14 +696,23 @@ def cast_screen():
         # Draw button that paths to sin ratio conversion
         sin_button = arcade.load_texture("buttons/sin_button.png")
         arcade.draw_texture_rectangle(290, 450, 1.4*sin_button.width, 1.4*sin_button.height, sin_button)
+        arcade.draw_text(" - Converts a sine ratio to two \n corresponding angles.",
+                         130, 345, arcade.color.BLACK, 18, align="left", font_name='calibri',
+                         bold=True)
 
         # Draw button that paths to cos ratio conversion
         cos_button = arcade.load_texture("buttons/cos_button.png")
         arcade.draw_texture_rectangle(725, 450, 1.4*cos_button.width, 1.4*cos_button.height, cos_button)
+        arcade.draw_text(" - Converts a cosine ratio to two \n corresponding angles.",
+                         565, 345, arcade.color.BLACK, 18, align="left", font_name='calibri',
+                         bold=True)
 
         # Draw button that paths to tan ratio conversion
         tan_button = arcade.load_texture("buttons/tan_button.png")
         arcade.draw_texture_rectangle(1170, 450, 1.4*tan_button.width, 1.4*tan_button.height, tan_button)
+        arcade.draw_text(" - Converts a tangent ratio to two \n corresponding angles.",
+                         1010, 345, arcade.color.BLACK, 18, align="left", font_name='calibri',
+                         bold=True)
 
 
 # Render the sine ratio screen.
@@ -819,6 +856,14 @@ def sequences_screen():
 
         draw_back_button()
 
+        arcade.draw_text(" - Finds a specific TERM of a sequence, \n given a, d or r, and n.",
+                         100, 525, arcade.color.BLACK, 20, align="left", font_name='calibri',
+                         bold=True)
+
+        arcade.draw_text(" - Finds a specific SUM of a sequence, \n given a, d or r, and n.",
+                         975, 525, arcade.color.BLACK, 20, align="left", font_name='calibri',
+                         bold=True)
+
         # Draw button that paths to arithmetic sequence
         arith_seq_button = arcade.load_texture("buttons/arith_seq_button.png")
         arcade.draw_texture_rectangle(310, 450, 1.4 * arith_seq_button.width, 1.4 * arith_seq_button.height,
@@ -851,10 +896,8 @@ def arithmetic_sequence():
         draw_back_button()
         draw_calculator()
 
-        formula_1 = arcade.load_texture("formula/cast_formula.png")
-        arcade.draw_texture_rectangle(400, 505, 0.4 * formula_1.width, 0.4 * formula_1.height, formula_1)
-        formula_2 = arcade.load_texture("formula/cast_image.png")
-        arcade.draw_texture_rectangle(720, 510, 0.9 * formula_2.width, 0.9 * formula_2.height, formula_2)
+        formula_1 = arcade.load_texture("formula/arith_seq_formula.png")
+        arcade.draw_texture_rectangle(600, 505, 0.9 * formula_1.width, 0.9 * formula_1.height, formula_1)
 
         intro_arith_seq = Instructions("Calculates a TERM of an arithmetic sequence, given the 1st term, \n"
                                        "the common difference, and the number of the term."
@@ -897,10 +940,8 @@ def geometric_sequence():
         draw_back_button()
         draw_calculator()
 
-        formula_1 = arcade.load_texture("formula/cast_formula.png")
-        arcade.draw_texture_rectangle(400, 505, 0.4 * formula_1.width, 0.4 * formula_1.height, formula_1)
-        formula_2 = arcade.load_texture("formula/cast_image.png")
-        arcade.draw_texture_rectangle(720, 510, 0.9 * formula_2.width, 0.9 * formula_2.height, formula_2)
+        formula_1 = arcade.load_texture("formula/geo_seq_formula.png")
+        arcade.draw_texture_rectangle(600, 505, 1.1 * formula_1.width, 1.1 * formula_1.height, formula_1)
 
         intro_geo_seq = Instructions("Calculates a TERM of an arithmetic sequence, given the 1st term, \n" 
                                      "the common ratio, and the number of the term. "
@@ -943,10 +984,8 @@ def arithmetic_series():
         draw_back_button()
         draw_calculator()
 
-        formula_1 = arcade.load_texture("formula/cast_formula.png")
-        arcade.draw_texture_rectangle(400, 505, 0.4 * formula_1.width, 0.4 * formula_1.height, formula_1)
-        formula_2 = arcade.load_texture("formula/cast_image.png")
-        arcade.draw_texture_rectangle(720, 510, 0.9 * formula_2.width, 0.9 * formula_2.height, formula_2)
+        formula_1 = arcade.load_texture("formula/arith_series_formula.png")
+        arcade.draw_texture_rectangle(600, 505, 0.7 * formula_1.width, 0.7 * formula_1.height, formula_1)
 
         intro_arith_series = Instructions("Calculates a SUM of the nth term of an arithmetic sequence, \ngiven the 1st "
                                           "term, the common difference, and the number of \n terms added."
@@ -989,10 +1028,8 @@ def geometric_series():
         draw_back_button()
         draw_calculator()
 
-        formula_1 = arcade.load_texture("formula/cast_formula.png")
-        arcade.draw_texture_rectangle(400, 505, 0.4 * formula_1.width, 0.4 * formula_1.height, formula_1)
-        formula_2 = arcade.load_texture("formula/cast_image.png")
-        arcade.draw_texture_rectangle(720, 510, 0.9 * formula_2.width, 0.9 * formula_2.height, formula_2)
+        formula_1 = arcade.load_texture("formula/geo_series_formula.png")
+        arcade.draw_texture_rectangle(600, 505, 0.75 * formula_1.width, 0.75 * formula_1.height, formula_1)
 
         intro_geo_series = Instructions("Calculates a SUM of the nth term of an geometric sequence, \ngiven the 1st "
                                         "term, the common ratio, and the number of \n terms added."
@@ -1035,17 +1072,25 @@ def money_screen():
         simple_interest_button = arcade.load_texture("buttons/simple_interest_button.png")
         arcade.draw_texture_rectangle(260, 450, 1.2*simple_interest_button.width, 1.2*simple_interest_button.height,
                                       simple_interest_button)
+        arcade.draw_text(" - Simple interest calculator; \n given principle, rate and time.",
+                         100, 340, arcade.color.BLACK, 20, align="left", font_name='calibri',
+                         bold=True)
 
         # Draw button that paths to compound interest calculator
         compound_interest_button = arcade.load_texture("buttons/compound_interest_button.png")
         arcade.draw_texture_rectangle(725, 450, 1.2*compound_interest_button.width, 1.2*compound_interest_button.height,
                                       compound_interest_button)
-
+        arcade.draw_text(" - Compound interest calculator; \n given principle, rate and time.",
+                         550, 340, arcade.color.BLACK, 20, align="left", font_name='calibri',
+                         bold=True)
 
         # Draw button that paths to present value calculator
         present_value_button = arcade.load_texture("buttons/present_value_button.png")
         arcade.draw_texture_rectangle(1185, 450, 1.2*present_value_button.width, 1.2*present_value_button.height,
                                       present_value_button)
+        arcade.draw_text(" - Present value calculator; \n given principle, rate and time.",
+                         1025, 340, arcade.color.BLACK, 20, align="left", font_name='calibri',
+                         bold=True)
 
 
 # Render the simple interest screen
@@ -1060,10 +1105,8 @@ def simple_interest_screen():
         draw_back_button()
         draw_calculator()
 
-        formula_1 = arcade.load_texture("formula/cast_formula.png")
-        arcade.draw_texture_rectangle(400, 505, 0.4 * formula_1.width, 0.4 * formula_1.height, formula_1)
-        formula_2 = arcade.load_texture("formula/cast_image.png")
-        arcade.draw_texture_rectangle(720, 510, 0.9 * formula_2.width, 0.9 * formula_2.height, formula_2)
+        formula_1 = arcade.load_texture("formula/simple_interest_formula.png")
+        arcade.draw_texture_rectangle(600, 505, formula_1.width, formula_1.height, formula_1)
 
         intro_simple_interest = Instructions("Calculates SIMPLE INTEREST given the principle, \n"
                                              "the interest rate, and the amount of YEARS passed."
@@ -1110,10 +1153,8 @@ def compound_interest_screen():
         draw_back_button()
         draw_calculator()
 
-        formula_1 = arcade.load_texture("formula/cast_formula.png")
-        arcade.draw_texture_rectangle(400, 505, 0.4 * formula_1.width, 0.4 * formula_1.height, formula_1)
-        formula_2 = arcade.load_texture("formula/cast_image.png")
-        arcade.draw_texture_rectangle(720, 510, 0.9 * formula_2.width, 0.9 * formula_2.height, formula_2)
+        formula_1 = arcade.load_texture("formula/compound_interest_formula.png")
+        arcade.draw_texture_rectangle(600, 505, 1.3 * formula_1.width, 1.3 * formula_1.height, formula_1)
 
         intro_compound_interest = Instructions("Calculates COMPOUND INTEREST given the principle, \n"
                                                "the interest rate, and the amount of YEARS passed."
@@ -1160,10 +1201,8 @@ def present_value_screen():
         draw_back_button()
         draw_calculator()
 
-        formula_1 = arcade.load_texture("formula/cast_formula.png")
-        arcade.draw_texture_rectangle(400, 505, 0.4 * formula_1.width, 0.4 * formula_1.height, formula_1)
-        formula_2 = arcade.load_texture("formula/cast_image.png")
-        arcade.draw_texture_rectangle(720, 510, 0.9 * formula_2.width, 0.9 * formula_2.height, formula_2)
+        formula_1 = arcade.load_texture("formula/present_value_formula.png")
+        arcade.draw_texture_rectangle(600, 505, formula_1.width, formula_1.height, formula_1)
 
         intro_present_value = Instructions("Calculates the principle needed to fulfill a future amount, \n"
                                            "given the future amount, the rate and years passed."
@@ -1346,7 +1385,7 @@ def calc_input(x, y):
             # Prohibit negatives in all money-related screens.
             if button_negative_x < x < button_negative_x + button_negative_w and button_negative_y < y < \
                     button_negative_y + button_negative_h and button_cooldown < 0 and not negative_placed \
-                    and user_input == " " and not on_refraction_screen and \
+                    and user_input == " " and not on_refraction_screen and not \
                     ((on_arith_seq_screen or on_arith_series_screen or on_geo_seq_screen or on_geo_series_screen)
                      and (input_variable_1 == 0 or input_variable_2 == 0)) and not \
                     (on_simple_interest_screen or on_compound_interest_screen or on_present_value_screen):
@@ -1365,6 +1404,7 @@ def calc_input(x, y):
                 user_input += "."
                 decimal_placed = True
 
+        # Reset button logic.
         if button_AC_x < x < button_AC_x + button_AC_w and button_AC_y < y < button_AC_y + button_AC_h \
                 and button_cooldown < 0:
             arcade.play_sound(select_button_click)
@@ -1378,7 +1418,7 @@ def calc_input(x, y):
                 if result_1 != 0 and result_2 != 0:
                     reset_all_variables()
 
-            # If AC is hit with the calculation already complete, reset all variables.
+            # If AC is hit with the calculation already complete, reset all variables, and so on...
             if on_refraction_screen:
                 if result_1 != 0:
                     reset_all_variables()
@@ -1490,6 +1530,7 @@ def on_mouse_press(x, y, button, modifiers):
     if on_mirror_screen:
         calc_input(x, y)
 
+        # If ENTER pressed:
         if button_ENTER_x < x < button_ENTER_x + button_ENTER_w and button_ENTER_y < y < button_ENTER_y + \
                 button_ENTER_h and button_cooldown < 0:
 
@@ -1510,11 +1551,11 @@ def on_mouse_press(x, y, button, modifiers):
                 decimal_placed = False
                 negative_placed = False
 
-        # If both needed variables are not empty:
+        # If both needed variables are not empty, proceed calculation.
         if input_variable_1 != 0 and input_variable_2 != 0:
-            result_1 = (1/input_variable_2 - 1/input_variable_1) ** -1      # FORMULA for Mirror, shown in line 653.
+            result_1 = (1/input_variable_2 + 1/input_variable_1) ** -1      # FORMULA for Mirror, shown in line 653.
             result_2 = (input_variable_2 * -1) / input_variable_1        # FORMULA for Magnification, shown in line 654.
-            answer_drawn = True
+            answer_drawn = True              # Variable that determines whether the concluder sentence should be drawn.
 
     # REFRACTION BUTTON DETECTION
     if refraction_button_x - 596.4 / 2 < x < (refraction_button_x - 596.4 / 2) + refraction_button_w and \
@@ -1610,12 +1651,12 @@ def on_mouse_press(x, y, button, modifiers):
                     result_2 = 180 - round(math.degrees(math.asin(input_variable_1)))
 
                 if on_cos_screen:
-                    result_1 = round(math.degrees(math.asin(input_variable_1)))
-                    result_2 = 360 - round(math.degrees(math.asin(input_variable_1)))
+                    result_1 = round(math.degrees(math.acos(input_variable_1)))
+                    result_2 = 360 - round(math.degrees(math.acos(input_variable_1)))
 
                 if on_tan_screen:
-                    result_1 = round(math.degrees(math.asin(input_variable_1)))
-                    result_2 = 180 + round(math.degrees(math.asin(input_variable_1)))
+                    result_1 = round(math.degrees(math.atan(input_variable_1)))
+                    result_2 = 180 + round(math.degrees(math.atan(input_variable_1)))
 
                 answer_drawn = True
 
@@ -1625,12 +1666,12 @@ def on_mouse_press(x, y, button, modifiers):
                     result_2 = 360 - round(math.degrees(math.asin(input_variable_1)))
 
                 if on_cos_screen:
-                    result_1 = 180 - round(math.degrees(math.asin(input_variable_1)))
-                    result_2 = 180 + round(math.degrees(math.asin(input_variable_1)))
+                    result_1 = 180 - round(math.degrees(math.acos(input_variable_1)))
+                    result_2 = 180 + round(math.degrees(math.acos(input_variable_1)))
 
                 if on_tan_screen:
-                    result_1 = 180 - round(math.degrees(math.asin(input_variable_1)))
-                    result_2 = 360 - round(math.degrees(math.asin(input_variable_1)))
+                    result_1 = 180 - round(math.degrees(math.atan(input_variable_1)))
+                    result_2 = 360 - round(math.degrees(math.atan(input_variable_1)))
 
                 answer_drawn = True
 
@@ -1686,19 +1727,19 @@ def on_mouse_press(x, y, button, modifiers):
         if button_ENTER_x < x < button_ENTER_x + button_ENTER_w and button_ENTER_y < y < button_ENTER_y + \
                 button_ENTER_h and button_cooldown < 0:
 
-            if input_variable_1 == 0:  # This variable represents the trigonometric ratio of two angles.
-                input_variable_1 = float(user_input)  # Converts user_input to float for calculation
-                user_input = " "  # Resets user_input and decimal_placed
+            if input_variable_1 == 0:  # This variable represents the first term of the sequence.
+                input_variable_1 = float(user_input)
+                user_input = " "
                 decimal_placed = False
                 negative_placed = False
 
-            elif input_variable_2 == 0:
+            elif input_variable_2 == 0: # This variable represents the common difference or ratio of the sequence.
                 input_variable_2 = float(user_input)
                 user_input = " "
                 decimal_placed = False
                 negative_placed = False
 
-            elif input_variable_3 == 0:
+            elif input_variable_3 == 0: # This variable represents the number of terms.
                 input_variable_3 = int(user_input)
                 user_input = " "
                 decimal_placed = False
@@ -1916,6 +1957,7 @@ def on_mouse_press(x, y, button, modifiers):
         button_cooldown = 0.4
 
         reset_all_variables()
+
 
 # Setup the thing
 def setup():
