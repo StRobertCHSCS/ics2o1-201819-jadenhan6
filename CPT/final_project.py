@@ -1,7 +1,8 @@
 # TODO:
 #   add big texts.
 #   comment on things a bit more clearly.
-#   fact-check present annuity screen.
+#   add more images.
+
 
 # Import necessary modules.
 import arcade
@@ -50,21 +51,14 @@ transition_alpha = 0                # tracks visibility of transition screen.
 # Selection screen variables, including button coordinate sets.
 on_science_screen = False
 on_math_screen = False
-on_compsci_screen = False
 select_button_click = arcade.load_sound("sounds/select_button_click.wav")
 
 science_button = [250, 450, 364, 95]
-math_button = [735, 450, 364, 95]
-compsci_button = [1220, 450, 364, 95]
-
+math_button = [1220, 450, 364, 95]
 
 # Science screen variables
-on_bio_screen = False
 on_optics_screen = False
-
-bio_button = [250, 450, 408.8, 138.6]
-optics_button = [1150, 450, 408.8, 138.6]
-
+optics_button = [700, 450, 408.8, 138.6]
 
 # Optics screen variables
 on_mirror_screen = False
@@ -245,11 +239,21 @@ text_4 = "It may be a good time to update your GPU if you have a slow rendering 
 text_5 = "It is recommended to invest in a better CPU if performance lags behind."
 text_6 = "Secure everything. Watch where you upload and submit data."
 text_7 = "Cyberbullying is a stupid and senseless action that does nothing good at all"
-text_8 = "Giraffes are heartless creatures."
+
+text_8 = "A modem converts Internet data to readable things for computer use."
+text_9 = "A Trojan malware disguises itself to be helpful; be on the lookout!"
+text_10 = "Ransomware is a malware that forces you to pay money to save your files."
+text_11 = "A hard disk is where long-term data is processed and stored."
+text_12 = "A motherboard connects hardware parts of a computer like CPU, GPU, and etc."
+text_13 = "A letter (e.g. w) is usually a BYTE; 8 bits worth of space and data."
+text_14 = "The byte progression is 1024x; 1024MB is 1GB, 1024GB is 1TB, so on."
+text_15 = "An Ethernet is a wired Internet connection; usually more stable than wireless"
+text_16 = "Spyware, like the name implies, spies on you, taking in personal information."
+
 
 # Sets a variable that determines what splash text will be shown upon launch.
 # Go to fake_screen() function for application of this variable.
-display_text = random.randint(1, 8)
+display_text = random.randint(1, 16)
 
 
 # FUNCTIONS -----------------------------------------------------------------------------------------------------------
@@ -370,6 +374,7 @@ def on_update(delta_time):
         if loading_counter >= 8.5:              # Once loading_counter exceeds 8.5s, move to next screen
             on_fake_loading = False
             on_topic_selection = True
+
         character_counter += delta_time         # Add 1/60s to character counter
         if 2.3 <= character_counter <= 5.0:     # At 2.3s, show the mirrored version of Mr. Game and Watch.
             show_character_left = False         # These variables here are depicted below under fake_loading().
@@ -394,11 +399,6 @@ def on_update(delta_time):
     # clicking buttons; by -1/60s. (aka delta_time)
 
     button_cooldown -= delta_time
-
-    if W_pressed:
-        on_title = False
-        on_math_screen = True
-
 
 # Render title screen
 def title_screen():
@@ -427,7 +427,8 @@ def fake_loading():
             Shape.draw_shape()          # make sure to draw and move the shapes around.
             Shape.move_shape()
 
-        # Determines what type of text the user will see, depending on the result of random.randint(1, 8) above.
+        # Determines what type of text the user will see, depending on the result of random.randint(1, 16) above.
+
         if display_text == 1:
             arcade.draw_text(text_1, 325, 275, arcade.color.WHITE, 24, align="center", font_name='arial', bold=True)
         elif display_text == 2:
@@ -443,7 +444,23 @@ def fake_loading():
         elif display_text == 7:
             arcade.draw_text(text_7, 270, 275, arcade.color.WHITE, 24, align="center", font_name='arial', bold=True)
         elif display_text == 8:
-            arcade.draw_text(text_8, 500, 275, arcade.color.WHITE, 24, align="center", font_name='arial', bold=True)
+            arcade.draw_text(text_8, 300, 275, arcade.color.WHITE, 24, align="center", font_name='arial', bold=True)
+        elif display_text == 9:
+            arcade.draw_text(text_9, 300, 275, arcade.color.WHITE, 24, align="center", font_name='arial', bold=True)
+        elif display_text == 10:
+            arcade.draw_text(text_10, 300, 275, arcade.color.WHITE, 24, align="center", font_name='arial', bold=True)
+        elif display_text == 11:
+            arcade.draw_text(text_11, 310, 275, arcade.color.WHITE, 24, align="center", font_name='arial', bold=True)
+        elif display_text == 12:
+            arcade.draw_text(text_12, 270, 275, arcade.color.WHITE, 24, align="center", font_name='arial', bold=True)
+        elif display_text == 13:
+            arcade.draw_text(text_13, 300, 275, arcade.color.WHITE, 24, align="center", font_name='arial', bold=True)
+        elif display_text == 14:
+            arcade.draw_text(text_14, 300, 275, arcade.color.WHITE, 24, align="center", font_name='arial', bold=True)
+        elif display_text == 15:
+            arcade.draw_text(text_15, 270, 275, arcade.color.WHITE, 24, align="center", font_name='arial', bold=True)
+        elif display_text == 16:
+            arcade.draw_text(text_16, 270, 275, arcade.color.WHITE, 24, align="center", font_name='arial', bold=True)
 
         # Load character's normal and mirror version, for use for animation in on_update() function.
         loading_character_left = arcade.load_texture("game_n_watch_loading.png")
@@ -488,22 +505,17 @@ def topic_selection():
 
         # Math Button and explanation render -------------------------------------------------------------------------
         math_button = arcade.load_texture("buttons/math_button.png")
-        arcade.draw_texture_rectangle(735, 450, math_button.width, math_button.height, math_button)
+        arcade.draw_texture_rectangle(1220, 450, math_button.width, math_button.height, math_button)
         arcade.draw_text(" - A bunch of formulae that makes life easier. \n - Support for CAST rules, trigonometry,"
-                         "\n sequences, series, and more.", 535, 325, arcade.color.BLACK, 18,
+                         "\n sequences, series, and more.", 1025, 325, arcade.color.BLACK, 18,
                          align="left", font_name='CALIBRI', bold=True)
 
         math_deco_1 = arcade.load_texture("decoration/math_button_deco_1.png")
-        arcade.draw_texture_rectangle(765, 225, 0.8*math_deco_1.width, 0.8*math_deco_1.height, math_deco_1)
+        arcade.draw_texture_rectangle(1250, 225, 0.8*math_deco_1.width, 0.8*math_deco_1.height, math_deco_1)
 
         math_deco_2 = arcade.load_texture("decoration/math_button_deco_2.png")
-        arcade.draw_texture_rectangle(635, 70, 0.7*math_deco_2.width, 0.7*math_deco_2.height, math_deco_2)
+        arcade.draw_texture_rectangle(1150, 70, 0.7*math_deco_2.width, 0.7*math_deco_2.height, math_deco_2)
 
-        # Computer Science Button and explanation render --------------------------------------------------------------
-        compsci_button = arcade.load_texture("buttons/compsci_button.png")
-        arcade.draw_texture_rectangle(1220, 450, compsci_button.width, compsci_button.height, compsci_button)
-        arcade.draw_text(" - Automated code generator, maybe? \n - As well, maybe an odd game \n in here somewhere.",
-                         1045, 325, arcade.color.BLACK, 18, align="left", font_name='CALIBRI', bold=True)
 
 
 # Render SNC2D screen.
@@ -514,26 +526,11 @@ def science_screen():
 
         draw_back_button()
 
-        # Render the biology button.
-        bio_button = arcade.load_texture("buttons/bio_button.png")
-        arcade.draw_texture_rectangle(250, 450, 1.4*bio_button.width, 1.4*bio_button.height, bio_button)
-        arcade.draw_text(" - Includes interactive diagrams for \n organ systems.", 100, 318, arcade.color.BLACK,
-                         18, align="left", font_name='calibri', bold=True)
-
         # Render the optics button.
         optics_button = arcade.load_texture("buttons/optics_button.png")
-        arcade.draw_texture_rectangle(1150, 450, 1.4*optics_button.width, 1.4*optics_button.height, optics_button)
-        arcade.draw_text(" - Formulae calculator; like magnification \n and indices of refraction.", 950, 318,
+        arcade.draw_texture_rectangle(700, 450, 1.4*optics_button.width, 1.4*optics_button.height, optics_button)
+        arcade.draw_text(" - Formulae calculator; like magnification \n and indices of refraction.", 500, 318,
                          arcade.color.BLACK, 18, align="left", font_name='calibri', bold=True)
-
-
-# Render the biology screen.
-def bio_screen():
-    if on_bio_screen:
-        background = arcade.load_texture("background/background_bio.png")
-        arcade.draw_texture_rectangle(WIDTH/2, HEIGHT/2, 1.7*background.width, 1.7*background.height, background)
-
-        draw_back_button()
 
 
 # Render the optics screen.
@@ -1307,7 +1304,7 @@ def future_annuity_screen():
 def present_annuity_screen():
     global answer_drawn, present_annuity_output
 
-    if on_future_annuity_screen:
+    if on_present_annuity_screen:
         background = arcade.load_texture("background/background_math.png")
         arcade.draw_texture_rectangle(WIDTH / 2, HEIGHT / 2, 1.7 * background.width, 1.7 * background.height,
                                       background)
@@ -1316,28 +1313,29 @@ def present_annuity_screen():
         draw_calculator()
 
         formula_1 = arcade.load_texture("formula/present_annuity_formula.png")
-        arcade.draw_texture_rectangle(600, 505, 0.7*formula_1.width, 0.7*formula_1.height, formula_1)
+        arcade.draw_texture_rectangle(600, 505, 1.6*formula_1.width, 1.6*formula_1.height, formula_1)
 
         intro_present_annuity = Instructions("Calculates the amount needed right now for a specific annuity, \n"
-                                             "given the amount to be paid regularly, \n the rate and years passed."
+                                             "given the amount to be paid back regularly, \n the rate and years passed."
                                              "\n -> The interest rate is per year; compounded annually.", 300, 600,
                                              arcade.color.BLACK, 18, False)
 
         step_one_present_annuity = Instructions("1. Enter R (regular payment), i (interest rate), "
-                                               "\n THEN n (amount of years passed)", 300,
-                                               375, arcade.color.BLACK, 18, True)
+                                                "\n THEN n (amount of years passed)", 300,
+                                                375, arcade.color.BLACK, 18, True)
         step_two_present_annuity = Instructions("2. INPUT IN ORDER!! R -> i -> n \n Refrain from entering 0 on any "
-                                               "of them. \nAlso, refrain from having your answer be 0 as well, somehow"
-                                               "\n As well, input interest rate in DECIMALS (8% -> 0.08)", 300, 250,
-                                               arcade.color.BLACK, 18, True)
+                                                "of them. \nAlso, refrain from having your answer be 0 as well, somehow"
+                                                "\n As well, input interest rate in DECIMALS (8% -> 0.08)", 300, 250,
+                                                arcade.color.BLACK, 18, True)
         step_three_present_annuity = Instructions("3. Program will output the present value for your annuity.", 300,
-                                                 200, arcade.color.BLACK, 18, True)
+                                                  200, arcade.color.BLACK, 18, True)
 
         if answer_drawn:
-            present_annuity_output = Instructions("If you regularly pay " + str(input_variable_1) +
+            present_annuity_output = Instructions("If you want to be paid " + str(input_variable_1) +
                                                   " dollars per year, your interest rate being " + str(input_variable_2) +
-                                                  " \nand it will be " + str(input_variable_3) +
-                                                  " years since, your future amount will be " + str(round(result_1, 2))
+                                                  " \nand you will get " + str(input_variable_3) +
+                                                  " annual payments, you need to invest " + str(round(result_1,
+                                                                                                              2))
                                                   + " dollars.", 200, 70, arcade.color.BLACK, 22, True)
 
         if not answer_drawn:
@@ -1357,7 +1355,6 @@ def on_draw():
     fake_loading()
     topic_selection()
     science_screen()
-    bio_screen()
     optics_screen()
     mirror_screen()
     refraction_screen()
@@ -1376,20 +1373,15 @@ def on_draw():
     compound_interest_screen()
     present_value_screen()
     future_annuity_screen()
+    present_annuity_screen()
 
 
 def on_key_press(key, modifiers):
-    global W_pressed
-
-    if key == arcade.key.W:
-        W_pressed = True
+    pass
 
 
 def on_key_release(key, modifiers):
-    global W_pressed
-
-    if key == arcade.key.W:
-        W_pressed = False
+    pass
 
 
 # Custom calculator - button input logic. Will be called upon in all future screens and functions, namely in
@@ -1414,7 +1406,7 @@ def calc_input(x, y):
     button_AC_x, button_AC_y, button_AC_w, button_AC_h = button_AC
 
 
-    # ADD SCREEN VARIABLES!!!!!!!!!!!!!!!!!!!!!!!
+    # Checks if on a calculator-environment screen
     if on_mirror_screen or on_refraction_screen or on_sin_screen or on_cos_screen or on_tan_screen or \
             on_arith_seq_screen or on_geo_seq_screen or on_arith_series_screen or on_geo_series_screen or \
             on_simple_interest_screen or on_compound_interest_screen or on_present_value_screen or \
@@ -1559,8 +1551,8 @@ def calc_input(x, y):
 def on_mouse_press(x, y, button, modifiers):
     global button_cooldown
 
-    global on_title, on_fake_loading, on_topic_selection, on_science_screen, on_math_screen, on_compsci_screen
-    global on_bio_screen, on_optics_screen, on_mirror_screen, on_refraction_screen
+    global on_title, on_fake_loading, on_topic_selection, on_science_screen, on_math_screen
+    global on_optics_screen, on_mirror_screen, on_refraction_screen
     global on_cast_screen, on_sequences_screen, on_money_screen
     global on_sin_screen, on_cos_screen, on_tan_screen
     global on_arith_seq_screen, on_geo_seq_screen, on_arith_series_screen, on_geo_series_screen
@@ -1575,9 +1567,7 @@ def on_mouse_press(x, y, button, modifiers):
     back_button_x, back_button_y, back_button_w, back_button_h = back_button
     science_button_x, science_button_y, science_button_w, science_button_h = science_button
     math_button_x, math_button_y, math_button_w, math_button_h = math_button
-    compsci_button_x, compsci_button_y, compsci_button_w, compsci_button_h = compsci_button
 
-    bio_button_x, bio_button_y, bio_button_w, bio_button_h = bio_button
     optics_button_x, optics_button_y, optics_button_w, optics_button_h = optics_button
     mirror_button_x, mirror_button_y, mirror_button_w, mirror_button_h = mirror_button
     refraction_button_x, refraction_button_y, refraction_button_w, refraction_button_h = refraction_button
@@ -1626,14 +1616,6 @@ def on_mouse_press(x, y, button, modifiers):
         arcade.play_sound(select_button_click)
         on_topic_selection = False
         on_science_screen = True
-        button_cooldown = 0.4
-
-    # BIO BUTTON CLICK DETECTION
-    if bio_button_x - 408.8 / 2 < x < (bio_button_x - 408.8 / 2) + bio_button_w and bio_button_y - 138.6 / 2 < y < \
-            bio_button_y - 138.6 / 2 + bio_button_h and on_science_screen and button_cooldown < 0:
-        arcade.play_sound(select_button_click)
-        on_science_screen = False
-        on_bio_screen = True
         button_cooldown = 0.4
 
     # OPTICS BUTTON CLICK DETECTION
@@ -1930,8 +1912,8 @@ def on_mouse_press(x, y, button, modifiers):
         button_cooldown = 0.4
 
     # PRESENT ANNUITY BUTTON DETECTION
-    if present_value_button_x - 415.2 / 2 < x < (present_value_button_x - 415.2 / 2) + present_value_button_w and \
-            present_value_button_y - 81.6 / 2 < y < (present_value_button_y - 81.6 / 2) + present_value_button_h \
+    if present_annuity_button_x - 415.2 / 2 < x < (present_annuity_button_x - 415.2 / 2) + present_annuity_button_w and\
+            present_annuity_button_y - 81.6 / 2 < y < (present_annuity_button_y - 81.6 / 2) + present_annuity_button_h\
             and on_money_screen and button_cooldown < 0:
         arcade.play_sound(select_button_click)
         on_money_screen = False
@@ -1983,27 +1965,12 @@ def on_mouse_press(x, y, button, modifiers):
 
             answer_drawn = True
 
-    # COMPSCI BUTTON DETECTION
-    if compsci_button_x - 364 / 2 < x < (compsci_button_x - 364 / 2) + compsci_button_w and compsci_button_y - 95 / 2 \
-            < y < (compsci_button_y - 95 / 2) + compsci_button_h and on_topic_selection:
-        arcade.play_sound(select_button_click)
-        on_topic_selection = False
-        on_compsci_screen = True
-
     # BACK BUTTON; Science --> Topic
     if back_button_x - 102.4 / 2 < x < (back_button_x - 102.4 / 2) + back_button_w and back_button_y - 102.4 / 2 < y < \
             back_button_y - 120.4 / 2 + back_button_h and on_science_screen and button_cooldown < 0:
         arcade.play_sound(back_button_click)
         on_science_screen = False
         on_topic_selection = True
-        button_cooldown = 0.4
-
-    # BACK BUTTON; Biology --> Science
-    if back_button_x - 102.4 / 2 < x < (back_button_x - 102.4 / 2) + back_button_w and back_button_y - 102.4 / 2 < y < \
-            back_button_y - 120.4 / 2 + back_button_h and on_bio_screen and button_cooldown < 0:
-        arcade.play_sound(back_button_click)
-        on_bio_screen = False
-        on_science_screen = True
         button_cooldown = 0.4
 
     # BACK BUTTON; Optics --> Science
@@ -2104,6 +2071,8 @@ def on_mouse_press(x, y, button, modifiers):
         on_simple_interest_screen = False
         on_compound_interest_screen = False
         on_present_value_screen = False
+        on_future_annuity_screen = False
+        on_present_annuity_screen = False
         on_money_screen = True
         button_cooldown = 0.4
 
