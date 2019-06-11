@@ -1,7 +1,5 @@
 # TODO:
-#   add big texts.
-#   comment on things a bit more clearly.
-#   add more images.
+#   comment on things a bit more clearly
 
 
 # Import necessary modules.
@@ -17,6 +15,7 @@ HEIGHT = 795
 W_pressed = False
 
 # Set variable that will collect data from various computing functions in program.
+# String is built from user inputs, then converted to 'float' for calculation.
 user_input = " "
 
 
@@ -35,26 +34,31 @@ title_button = [500, 200, 400, 150]
 
 
 # Variable that regulates inadvertent (or user-instigated) button spamming.
+# Counts down to 0 at every screen. At 0, the user can press the button.
+# At every button press, this variable is set to 0.4 seconds again.
 button_cooldown = 0.4
 
 
 # Fake loading screen variables
 on_topic_selection = False          # Boolean to see if program is on topic selection
 loading_counter = 0                 # the counter of the loading screen, measured in seconds.
-shapes_list = []                    # INIT a list for Shape rendering.
 show_character_left = True          # show the loading screen character?
 character_counter = 0               # counts down character's time on screen
 show_character_right = False        # show the loading screen character's mirrored version?
-transition_alpha = 0                # tracks visibility of transition screen.
+transition_alpha = 0                # tracks visibility of transition screen. (the white flash screen)
+
+shapes_list = []                    # INIT a list for Shape rendering.
 
 
 # Selection screen variables, including button coordinate sets.
-on_science_screen = False
+on_science_screen = False           # Boolean to see if program is on the science screen, etc.
 on_math_screen = False
-select_button_click = arcade.load_sound("sounds/select_button_click.wav")
+select_button_click = arcade.load_sound("sounds/select_button_click.wav")   # Loads a button click sound to be used
+# All future screen booleans, from now on, will NOT be commented on as they work the same way.
 
-science_button = [250, 450, 364, 95]
-math_button = [1220, 450, 364, 95]
+science_button = [250, 450, 364, 95]    # Coordinate set for the SNC2D button.
+math_button = [1220, 450, 364, 95]      # Coordinate set for the MCR3U button.
+# All future coordinate sets, from now on, will NOT be commented on as they work the same way.
 
 # Science screen variables
 on_optics_screen = False
@@ -130,19 +134,19 @@ button_AC = [1200, 575, 75, 75]
 button_ENTER = [1200, 175, 75, 75]
 
 
-# Determines if decimal or a negative has been placed.
+# Determines if decimal or a negative has been placed. Used to restrict input in user input sections.
 decimal_placed = False
 negative_placed = False
 
 
-# Variables for calculation.
+# Variables for calculation. Data will be stored here.
 input_variable_1 = 0
 input_variable_2 = 0
 input_variable_3 = 0
 result_1 = 0
 result_2 = 0
 
-# Boolean that determines if the answer will be drawn to a screen.
+# Boolean that determines if the answer will be shown to a screen.
 # Will only be set TRUE after needed variables have been entered. If TRUE, draws the concluding statement w/ answer.
 answer_drawn = False
 
@@ -226,7 +230,7 @@ class Instructions:
         self.size = size
         self.bold = bold
 
-    # Function that will draw the instructions
+    # Function that will draw the instructions.
     def draw_instructions(self):
         arcade.draw_text(self.text, self.x, self.y, self.color, self.size, bold=self.bold)
 
@@ -239,7 +243,6 @@ text_4 = "It may be a good time to update your GPU if you have a slow rendering 
 text_5 = "It is recommended to invest in a better CPU if performance lags behind."
 text_6 = "Secure everything. Watch where you upload and submit data."
 text_7 = "Cyberbullying is a stupid and senseless action that does nothing good at all"
-
 text_8 = "A modem converts Internet data to readable things for computer use."
 text_9 = "A Trojan malware disguises itself to be helpful; be on the lookout!"
 text_10 = "Ransomware is a malware that forces you to pay money to save your files."
@@ -258,7 +261,8 @@ display_text = random.randint(1, 16)
 
 # FUNCTIONS -----------------------------------------------------------------------------------------------------------
 
-# "Calculator" function that will appear where user-input and computation is needed. Click logic is stored below.
+# "Calculator" function that will appear where user-input and computation is needed.
+# Clicking logic is stored in the calc_input() function.
 def draw_calculator():
     # Draw calculator background.
     arcade.draw_xywh_rectangle_filled(950, 150, 375, 625, arcade.color.GRAY)
@@ -338,16 +342,20 @@ def draw_calculator():
     arcade.draw_text("AC", 1217.5, 603, arcade.color.WHITE, 22, bold=True)
 
 
-# Back_button function. Will be called at almost every screen.
+# Back_button function; draws only. Will be called at every screen. Logic is stored in on_mouse_press().
 def draw_back_button():
-    back_button = arcade.load_texture("buttons/back_button.png")
+    back_button = arcade.load_texture("buttons/back_button.png")        # Load texture
     arcade.draw_texture_rectangle(100, 725, 0.4 * back_button.width, 0.4 * back_button.height, back_button)
+    # Draw the texture
 
 
 # Reset variables function when user exits calculator environment.
+# Called whenever the user exits a calculation screen, for a fresh start.
 def reset_all_variables():
     global decimal_placed, user_input, input_variable_1, input_variable_2, input_variable_3, result_1, result_2
     global negative_placed, answer_drawn
+
+    # Set all stored variables to 0, and every other boolean to False, including user input.
 
     decimal_placed = False
     negative_placed = False
@@ -377,7 +385,7 @@ def on_update(delta_time):
 
         character_counter += delta_time         # Add 1/60s to character counter
         if 2.3 <= character_counter <= 5.0:     # At 2.3s, show the mirrored version of Mr. Game and Watch.
-            show_character_left = False         # These variables here are depicted below under fake_loading().
+            show_character_left = False         # These variables here are used below, under fake_loading().
             show_character_right = True
         if 5.1 <= character_counter <= 7.4:     # At 5.1s, show the normal version of character.
             show_character_left = True
@@ -386,9 +394,9 @@ def on_update(delta_time):
             show_character_left = False
             show_character_right = True
         if character_counter >= 5.3 and transition_alpha <= 256:    # At 5.3, slowly make the white screen visible.
-            transition_alpha += 170*delta_time
+            transition_alpha += 170 * delta_time
             if transition_alpha >= 256:                     # At full opacity, attempt to make white screen transparent.
-                transition_alpha -= 170*delta_time
+                transition_alpha -= 170 * delta_time
 
     # On each screen, count down button_cooldown by 1/60s.
     # This is done as Python seems to render clicks quickly; meaning if two buttons share the same coordinates spot
@@ -400,17 +408,18 @@ def on_update(delta_time):
 
     button_cooldown -= delta_time
 
+
 # Render title screen
 def title_screen():
     if on_title:            # variable to see if program is on title_screen
         background = arcade.load_texture("background/background_title.png", 0, 0, 1500, 1134)   # Draw background
         arcade.draw_texture_rectangle(WIDTH / 2, HEIGHT / 2, background.width, background.height, background)
-        arcade.draw_text("TITLE SCREEN", 475, 490, arcade.color.BLACK, 60, align="center", font_name='calibri',
+        arcade.draw_text("PyArcadeFormula", 425, 490, arcade.color.BLACK, 60, align="center", font_name='calibri',
                          bold=True)
         arcade.draw_text("Created by: Jaden Han", 575, 450, arcade.color.BLACK, 18, align="center", font_name='calibri',
                          bold=True)
 
-        # Draws title button, in accordance to the title_button coordinate set defined at the top.
+        # Draws title button, in accordance with the title_button coordinate set defined at the top.
         arcade.draw_xywh_rectangle_filled(title_button[0], title_button[1], title_button[2], title_button[3],
                                           arcade.color.WHITE)
         arcade.draw_xywh_rectangle_outline(title_button[0], title_button[1], title_button[2], title_button[3],
@@ -469,12 +478,12 @@ def fake_loading():
         # Load white-screen transition image.
         transition_screen = arcade.load_texture("transition.png")
 
-        # Render the normal image if told so.
+        # Render the normal image if told so by the on_update() function
         if show_character_left:
             arcade.draw_texture_rectangle(700, 450, 0.6*loading_character_left.width, 0.6*loading_character_left.height,
                                           loading_character_left)
 
-        # Render the mirrored image if told so.
+        # Render the mirrored image if told so by the on_update() function.
         if show_character_right:
             arcade.draw_texture_rectangle(700, 450, 0.6*loading_character_right.width,
                                           0.6*loading_character_right.height, loading_character_right)
@@ -517,13 +526,13 @@ def topic_selection():
         arcade.draw_texture_rectangle(1150, 70, 0.7*math_deco_2.width, 0.7*math_deco_2.height, math_deco_2)
 
 
-
 # Render SNC2D screen.
 def science_screen():
     if on_science_screen:
         background = arcade.load_texture("background/background_selection.png")
         arcade.draw_texture_rectangle(WIDTH/2, HEIGHT/2, 1.7*background.width, 1.7*background.height, background)
 
+        # Draw the back button; once again, logic is stored on on_mouse_press().
         draw_back_button()
 
         # Render the optics button.
@@ -575,7 +584,8 @@ def mirror_screen():
         formula_2 = arcade.load_texture("formula/magnification_formula.png")
         arcade.draw_texture_rectangle(600, 500, formula_2.width, formula_2.height, formula_2)
 
-        # Load instructions
+        # Load instructions, using the Instructions class above.
+        # Set up instances for the Instructions class to be referred to later.
         intro_mirror = Instructions("This screen deals with mirror and magnification equations. \nIs one-way; does"
                                     " not support ho or hi, or finding di or do yet."
                                     "\n Only calculates f and m in this case, given do and di.", 300, 600,
@@ -589,6 +599,8 @@ def mirror_screen():
                                          "variables \n won't yield results.", 300, 230, arcade.color.BLACK, 18, True)
 
         # If told so, render the concluding sentence with the answer included.
+        # answer_drawn is only True when all needed variables are entered.
+        # When user exits screen, answer_drawn is set to False (by the reset_all_variables()).
         if answer_drawn:
             mirror_outputs = Instructions("The focal length is " + str(round(result_1, 2)) + ", and the magnification "
                                           "factor is " + str(round(result_2, 2)) + ", \n when object distance is "
@@ -596,6 +608,7 @@ def mirror_screen():
                                           ". \n Press AC to try another calculation!", 200, 100, arcade.color.BLACK, 22,
                                           False)
 
+        # Draw nothing if answer_drawn is False.
         if not answer_drawn:
             mirror_outputs = Instructions(" ", 200, 100, arcade.color.BLACK, 22, False)
 
@@ -607,7 +620,7 @@ def mirror_screen():
         mirror_outputs.draw_instructions()
 
 
-# Render the refraction screen.
+# Render the refraction screen. The makeup is almost the same to mirror_screen(); thus less explanation will be provided
 def refraction_screen():
     global answer_drawn, refraction_output
 
@@ -616,8 +629,7 @@ def refraction_screen():
         arcade.draw_texture_rectangle(WIDTH / 2, HEIGHT / 2, 1.7 * background.width, 1.7 * background.height,
                                       background)
 
-        # Load back button and calculator. For the next screens, these comments will not appear,
-        # as it's the same thing anyway
+        # Load back button and calculator.
         draw_back_button()
         draw_calculator()
 
@@ -625,7 +637,7 @@ def refraction_screen():
         formula = arcade.load_texture("formula/refraction_formula.png")
         arcade.draw_texture_rectangle(500, 520, formula.width, formula.height, formula)
 
-        # Load instructions
+        # Load instructions, using instances.
         intro_refraction = Instructions("Calculates indices of refraction, given speed of light \n in two different"
                                         " media. Only able to calculate n, not c or v.", 300, 600, arcade.color.BLACK,
                                         18, False)
@@ -1179,7 +1191,7 @@ def compound_interest_screen():
                                                arcade.color.BLACK, 18, False)
 
         step_one_compound_interest = Instructions("1. Enter P (principle), i (interest rate per year), "
-                                                  "\n THEN n (amount of years passed)", 300,
+                                                  "\n THEN n (amount of compounding periods)", 300,
                                                   375, arcade.color.BLACK, 18, True)
         step_two_compound_interest = Instructions("2. INPUT IN ORDER!! P -> i -> n \n Refrain from entering 0 on any "
                                                   "of them. \nAlso, refrain from having your answer be 0 as well, "
@@ -1192,7 +1204,7 @@ def compound_interest_screen():
             compound_interest_output = Instructions("If your principle is " + str(input_variable_1) +
                                                     " dollars, your interest rate " + str(input_variable_2) +
                                                     " \n and it has been " + str(input_variable_3) +
-                                                    " years, your amount is " + str(round(result_1, 2)) +
+                                                    " periods, your amount is " + str(round(result_1, 2)) +
                                                     "; \nyour interest is " + str(round(result_1 - input_variable_1, 2))
                                                     + " dollars.", 200, 75, arcade.color.BLACK, 22, True)
 
@@ -1227,7 +1239,7 @@ def present_value_screen():
                                            arcade.color.BLACK, 18, False)
 
         step_one_present_value = Instructions("1. Enter FV (future amount), r (interest rate), "
-                                              "\n THEN n (amount of years passed)", 300,
+                                              "\n THEN n (amount of compounding periods)", 300,
                                               375, arcade.color.BLACK, 18, True)
         step_two_present_value = Instructions("2. INPUT IN ORDER!! FV -> r -> n \n Refrain from entering 0 on any "
                                               "of them. \nAlso, refrain from having your answer be 0 as well, somehow"
@@ -1239,8 +1251,9 @@ def present_value_screen():
         if answer_drawn:
             present_value_output = Instructions("If your desired future amount is " + str(input_variable_1) +
                                                 " dollars, your interest rate " + str(input_variable_2) +
-                                                " \nand it will be " + str(input_variable_3) +
-                                                " years since, your principle needs to be " + str(round(result_1, 2))
+                                                " \nand it has been " + str(input_variable_3) +
+                                                " compounding periods, your principle \n "
+                                                "needs to be " + str(round(result_1, 2))
                                                 + " dollars.", 200, 70, arcade.color.BLACK, 22, True)
 
         if not answer_drawn:
@@ -1274,7 +1287,7 @@ def future_annuity_screen():
                                             arcade.color.BLACK, 18, False)
 
         step_one_future_annuity = Instructions("1. Enter R (regular payment), i (interest rate), "
-                                               "\n THEN n (amount of years passed)", 300,
+                                               "\n THEN n (amount of compounding periods)", 300,
                                                375, arcade.color.BLACK, 18, True)
         step_two_future_annuity = Instructions("2. INPUT IN ORDER!! R -> i -> n \n Refrain from entering 0 on any "
                                                "of them. \nAlso, refrain from having your answer be 0 as well, somehow"
@@ -1285,9 +1298,9 @@ def future_annuity_screen():
 
         if answer_drawn:
             future_annuity_output = Instructions("If you regularly pay " + str(input_variable_1) +
-                                                 " dollars per year, your interest rate being " + str(input_variable_2) +
-                                                 " \nand it will be " + str(input_variable_3) +
-                                                 " years since, your future amount will be " + str(round(result_1, 2))
+                                                 " dollars a period, your interest rate being " + str(input_variable_2)+
+                                                 " \nand it has been " + str(input_variable_3) +
+                                                 " periods since, your future amount will be " + str(round(result_1, 2))
                                                  + " dollars.", 200, 70, arcade.color.BLACK, 22, True)
 
         if not answer_drawn:
@@ -1321,7 +1334,7 @@ def present_annuity_screen():
                                              arcade.color.BLACK, 18, False)
 
         step_one_present_annuity = Instructions("1. Enter R (regular payment), i (interest rate), "
-                                                "\n THEN n (amount of years passed)", 300,
+                                                "\n THEN n (amount of compounding periods)", 300,
                                                 375, arcade.color.BLACK, 18, True)
         step_two_present_annuity = Instructions("2. INPUT IN ORDER!! R -> i -> n \n Refrain from entering 0 on any "
                                                 "of them. \nAlso, refrain from having your answer be 0 as well, somehow"
@@ -1332,10 +1345,9 @@ def present_annuity_screen():
 
         if answer_drawn:
             present_annuity_output = Instructions("If you want to be paid " + str(input_variable_1) +
-                                                  " dollars per year, your interest rate being " + str(input_variable_2) +
+                                                  " dollars per period, your interest rate being " + str(input_variable_2) +
                                                   " \nand you will get " + str(input_variable_3) +
-                                                  " annual payments, you need to invest " + str(round(result_1,
-                                                                                                              2))
+                                                  " payments, you need to invest " + str(round(result_1, 2))
                                                   + " dollars.", 200, 70, arcade.color.BLACK, 22, True)
 
         if not answer_drawn:
@@ -1405,8 +1417,7 @@ def calc_input(x, y):
     button_negative_x, button_negative_y, button_negative_w, button_negative_h = button_negative
     button_AC_x, button_AC_y, button_AC_w, button_AC_h = button_AC
 
-
-    # Checks if on a calculator-environment screen
+    # Checks if on a screen with a calculator, so that no inputs are made if it isn't.
     if on_mirror_screen or on_refraction_screen or on_sin_screen or on_cos_screen or on_tan_screen or \
             on_arith_seq_screen or on_geo_seq_screen or on_arith_series_screen or on_geo_series_screen or \
             on_simple_interest_screen or on_compound_interest_screen or on_present_value_screen or \
@@ -1416,6 +1427,8 @@ def calc_input(x, y):
         # CAST rules need seven (max) digit characters. Take seven if on those screens.
         # Seq + Series screens need THREE inputs. Take three inputs if on those.
         # Interest and annuity screens also need THREE inputs; take three on these screens.
+
+        # In all cases, this statement evaluates to TRUE until ALL needed variables are enetered in.
         if (len(user_input) <= 5 and input_variable_1 == 0 and not on_mirror_screen) \
                 or (len(user_input) <= 5 and (input_variable_1 == 0 or input_variable_2 == 0) and on_mirror_screen) or \
                 (len(user_input) <= 7 and input_variable_1 == 0 and (on_sin_screen or on_cos_screen or on_tan_screen)) \
@@ -1471,7 +1484,6 @@ def calc_input(x, y):
                 arcade.play_sound(select_button_click)
                 user_input += "9"
 
-            # Only render in zeros, if the character before it is a decimal (...and user_input[-1] == ".":)
             if button_zero_x < x < button_zero_x + button_zero_w and button_zero_y < y < button_zero_y + button_zero_h \
                     and button_cooldown < 0:
                 arcade.play_sound(select_button_click)
@@ -1479,6 +1491,7 @@ def calc_input(x, y):
 
             # Only render in decimals if it hasn't been placed before in the same string (...and not decimal_placed:)
             # Prohibit decimals in sequence and series screens, if asking for NUMBER OF TERMS.
+            # Cannot have "2.4"th term of a sequence; no decimals allowed here.
             if button_decimal_x < x < button_decimal_x + button_decimal_w and button_decimal_y < y < button_decimal_y \
                     + button_decimal_h and button_cooldown < 0 and not decimal_placed and user_input != " " and not \
                     ((on_arith_seq_screen or on_arith_series_screen or on_geo_seq_screen or on_geo_series_screen)
@@ -1505,11 +1518,14 @@ def calc_input(x, y):
                 negative_placed = True
 
             # Automatic decimal placement - refraction. Will always follow the first character.
+            # Refraction has a special decimal placement policy as the speed of light is always measured in
+            # x.yz 10^8m/s. No matter what x is, we need to place a decimal after.
             if on_refraction_screen and len(user_input) > 1 and user_input[1] != " " and not decimal_placed:
                 user_input += "."
                 decimal_placed = True
 
-            # Automatic decimal placement - angle ratios. Will always follow a zero.
+            # Automatic decimal placement for any other screen. With a zero, place a decimal.
+            # Useful for screens that require a 0.xx input, without manually having to press the decimal button.
             if len(user_input) <= 2 and user_input[-1] == "0" and not decimal_placed:
                 user_input += "."
                 decimal_placed = True
@@ -1518,17 +1534,18 @@ def calc_input(x, y):
         if button_AC_x < x < button_AC_x + button_AC_w and button_AC_y < y < button_AC_y + button_AC_h \
                 and button_cooldown < 0:
             arcade.play_sound(select_button_click)
-            # When "reset" hit, reset the user_input string, and decimal_placed variable.
+            # When "reset" hit, reset all user input variables, but NOT the data already entered and processed.
             user_input = " "
             decimal_placed = False
             negative_placed = False
 
             # If AC is hit with the calculation already complete, reset all variables.
+            # There are multiple as some screens have multiple numbers of variables; must check so that
+            # only when ALL needed ones are fulfilled, the reset button starts everything from scratch.
             if on_mirror_screen:
                 if result_1 != 0 and result_2 != 0:
                     reset_all_variables()
 
-            # If AC is hit with the calculation already complete, reset all variables, and so on...
             if on_refraction_screen:
                 if result_1 != 0:
                     reset_all_variables()
@@ -1603,12 +1620,13 @@ def on_mouse_press(x, y, button, modifiers):
     button_ENTER_x, button_ENTER_y, button_ENTER_w, button_ENTER_h, = button_ENTER
 
     # TITLE BUTTON CLICK DETECTION
+    # All other buttons are almost identical in nature in terms of detection. No comments will thus follow.
     if title_button_x < x < title_button_x + title_button_w and title_button_y < y < title_button_y + title_button_h \
             and on_title:
         title_button_click = arcade.load_sound("sounds/title_button_click.wav")
         arcade.play_sound(title_button_click)
-        on_title = False
-        on_fake_loading = True
+        on_title = False                    # If clicked, get off the title screen.
+        on_fake_loading = True              # ... Then move to the fake_loading screen, and so on.
 
     # SCIENCE BUTTON CLICK DETECTION
     if science_button_x - 364/2 < x < (science_button_x - 364/2) + science_button_w and science_button_y - 95/2 \
@@ -1636,13 +1654,15 @@ def on_mouse_press(x, y, button, modifiers):
 
     # MIRROR AND MAGNIFICATION CALCULATION - Uses button detection to enter data into user_input. ----------------------
     if on_mirror_screen:
+        # Load the previously described calc_input function so that players can click on the buttons.
+        # Only called when on a screen with calculation needed.
         calc_input(x, y)
 
         # If ENTER pressed:
         if button_ENTER_x < x < button_ENTER_x + button_ENTER_w and button_ENTER_y < y < button_ENTER_y + \
                 button_ENTER_h and button_cooldown < 0:
 
-            # Assigns first input to input_variable_1; as TWO are required in the Mirror / Mag Equations
+            # Assigns first user_input to input_variable_1; as TWO are required in the Mirror / Mag Equations
             # 1/f = 1/do + 1/di
             # m = -di/do
 
@@ -1659,10 +1679,10 @@ def on_mouse_press(x, y, button, modifiers):
                 decimal_placed = False
                 negative_placed = False
 
-        # If both needed variables are not empty, proceed calculation.
+        # If both needed variables are not empty, proceed with calculation.
         if input_variable_1 != 0 and input_variable_2 != 0:
-            result_1 = (1/input_variable_2 + 1/input_variable_1) ** -1      # FORMULA for Mirror, shown in line 653.
-            result_2 = (input_variable_2 * -1) / input_variable_1        # FORMULA for Magnification, shown in line 654.
+            result_1 = (1/input_variable_2 + 1/input_variable_1) ** -1      # FORMULA for Mirror, shown in line 1666.
+            result_2 = (input_variable_2 * -1) / input_variable_1       # FORMULA for Magnification, shown in line 1667.
             answer_drawn = True              # Variable that determines whether the concluder sentence should be drawn.
 
     # REFRACTION BUTTON DETECTION
@@ -1676,6 +1696,7 @@ def on_mouse_press(x, y, button, modifiers):
 
     # REFRACTION CALCULATION - Uses button detection to enter data into user_input. ------------------------------------
     if on_refraction_screen:
+        # Similar to the mirror screen, load the calc_input() function.
         calc_input(x, y)
 
         if button_ENTER_x < x < button_ENTER_x + button_ENTER_w and button_ENTER_y < y < button_ENTER_y + \
@@ -1694,6 +1715,9 @@ def on_mouse_press(x, y, button, modifiers):
         if input_variable_1 != 0:
             result_1 = 3.00 / input_variable_1
             answer_drawn = True
+
+        # All other calculation screens from now on will not be commented on as they are almost the same,
+        # unless there are exceptions
 
     # MATH BUTTON DETECTION
     if math_button_x - 364/2 < x < (math_button_x - 364/2) + math_button_w and math_button_y - 95/2 < y < \
@@ -1753,6 +1777,10 @@ def on_mouse_press(x, y, button, modifiers):
             if input_variable_1 < -1 or input_variable_1 > 1:
                 reset_all_variables()
 
+            # If ratio is positive, two angles exist; one in Quadrant 1, and the other in a quadrant where it is pos.
+            # sin = positive in Quadrants 1 and 2.
+            # cos = positive in Quadrants 1 and 4.
+            # tan = positive in Quadrants 1 and 3.
             if 0 < input_variable_1 <= 1:
                 if on_sin_screen:
                     result_1 = round(math.degrees(math.asin(input_variable_1)))
@@ -1766,8 +1794,11 @@ def on_mouse_press(x, y, button, modifiers):
                     result_1 = round(math.degrees(math.atan(input_variable_1)))
                     result_2 = 180 + round(math.degrees(math.atan(input_variable_1)))
 
+                # Draw the answer.
                 answer_drawn = True
 
+            # If ratio is negative, two angles exist; the ones that are not positive.
+            # sin = negative in Quadrants 3 and 4, etc.
             if -1 < input_variable_1 < 0:
                 if on_sin_screen:
                     result_1 = 180 + round(math.degrees(math.asin(input_variable_1)))
@@ -1841,13 +1872,13 @@ def on_mouse_press(x, y, button, modifiers):
                 decimal_placed = False
                 negative_placed = False
 
-            elif input_variable_2 == 0: # This variable represents the common difference or ratio of the sequence.
+            elif input_variable_2 == 0:     # This variable represents the common difference or ratio of the sequence.
                 input_variable_2 = float(user_input)
                 user_input = " "
                 decimal_placed = False
                 negative_placed = False
 
-            elif input_variable_3 == 0: # This variable represents the number of terms.
+            elif input_variable_3 == 0:     # This variable represents the number of terms.
                 input_variable_3 = int(user_input)
                 user_input = " "
                 decimal_placed = False
@@ -1929,18 +1960,19 @@ def on_mouse_press(x, y, button, modifiers):
                 button_ENTER_h and button_cooldown < 0:
 
             if input_variable_1 == 0:  # For interest screens, this is P. For present value, this is A.
+                # For annuities, this is the regular payment (R)
                 input_variable_1 = float(user_input)
                 user_input = " "
                 decimal_placed = False
                 negative_placed = False
 
-            elif input_variable_2 == 0: # Represents interest rate PER ANNUM
+            elif input_variable_2 == 0:     # Represents interest rate PER COMPOUNDING PERIOD
                 input_variable_2 = float(user_input)
                 user_input = " "
                 decimal_placed = False
                 negative_placed = False
 
-            elif input_variable_3 == 0: # Represents time elapsed, in YEARS
+            elif input_variable_3 == 0:     # Represents time elapsed, in COMPOUNDING PERIODS
                 input_variable_3 = int(user_input)
                 user_input = " "
                 decimal_placed = False
@@ -1965,6 +1997,8 @@ def on_mouse_press(x, y, button, modifiers):
 
             answer_drawn = True
 
+    # Back button click logic is stored from here on.
+    # Reset all variables via reset_all_variables() function when backing out of a calculator screen.
     # BACK BUTTON; Science --> Topic
     if back_button_x - 102.4 / 2 < x < (back_button_x - 102.4 / 2) + back_button_w and back_button_y - 102.4 / 2 < y < \
             back_button_y - 120.4 / 2 + back_button_h and on_science_screen and button_cooldown < 0:
@@ -2079,9 +2113,9 @@ def on_mouse_press(x, y, button, modifiers):
         reset_all_variables()
 
 
-# Setup the thing
+# Setup the program.
 def setup():
-    arcade.open_window(WIDTH, HEIGHT, "???")
+    arcade.open_window(WIDTH, HEIGHT, "PyArcadeFormula")
     arcade.set_background_color(arcade.color.BLACK)
     arcade.schedule(on_update, 1/60)
 
