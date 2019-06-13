@@ -1388,14 +1388,6 @@ def on_draw():
     present_annuity_screen()
 
 
-def on_key_press(key, modifiers):
-    pass
-
-
-def on_key_release(key, modifiers):
-    pass
-
-
 # Custom calculator - button input logic. Will be called upon in all future screens and functions, namely in
 # on_mouse_press().
 def calc_input(x, y):
@@ -2122,8 +2114,6 @@ def setup():
     window = arcade.get_window()
     window.on_draw = on_draw
     window.on_update = on_update
-    window.on_key_press = on_key_press
-    window.on_key_release = on_key_release
     window.on_mouse_press = on_mouse_press
 
     arcade.run()
