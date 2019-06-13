@@ -7,9 +7,6 @@ import math
 WIDTH = 1450
 HEIGHT = 795
 
-# cheat variable. if pressed, skips the loading screen. meant to be used only in development only
-W_pressed = False
-
 # Set variable that will collect data from various computing functions in program.
 # String is built from user inputs, then converted to 'float' for calculation.
 user_input = " "
