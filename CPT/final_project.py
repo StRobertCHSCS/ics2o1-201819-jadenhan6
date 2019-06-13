@@ -1,7 +1,3 @@
-# TODO:
-#   comment on things a bit more clearly
-
-
 # Import necessary modules.
 import arcade
 import random
